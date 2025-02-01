@@ -1,0 +1,28 @@
+providers:
+  - RalphJSmit\Laravel\SEO\LaravelSEOServiceProvider
+  - Livewire\LivewireServiceProvider
+  - Spatie\Permission\PermissionServiceProvider
+  - Spatie\Health\HealthServiceProvider
+  - Siteman\Cms\CmsServiceProvider
+  - Spatie\LaravelSettings\LaravelSettingsServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+  - Workbench\App\Providers\Filament\AdminPanelProvider
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+env:
+  - APP_URL=http://127.0.0.1:8000
+
+workbench:
+  install: true
+  sync:
+    - from: ./resources/dist/css
+      to: public/css/siteman
+  build:
+    - asset-publish
+    - create-sqlite-db
+    - db-wipe
+    - migrate-fresh
+  assets:
+    - laravel_assets

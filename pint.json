@@ -1,0 +1,8 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "blank_line_after_opening_tag": false,
+        "linebreak_after_opening_tag": false,
+        "not_operator_with_successor_space": false
+    }
+}

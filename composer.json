@@ -1,0 +1,118 @@
+{
+    "name": "siteman/cms",
+    "description": "This package contains the complete siteman CMS",
+    "keywords": [
+        "siteman",
+        "laravel",
+        "filament",
+        "cms"
+    ],
+    "homepage": "https://github.com/siteman-io/cms",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bambamboole",
+            "email": "manuel@christlieb.eu",
+            "homepage": "https://christlieb.eu"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "bezhansalleh/filament-shield": "^3.3",
+        "blade-ui-kit/blade-icons": "^1.7",
+        "echolabsdev/prism": "^0.32.0",
+        "filament/filament": "^3.2.100",
+        "filament/spatie-laravel-media-library-plugin": "^3.2",
+        "filament/spatie-laravel-tags-plugin": "^3.2",
+        "illuminate/cache": "^11.0",
+        "illuminate/contracts": "^11.0",
+        "league/commonmark": "^2.6",
+        "league/flysystem-aws-s3-v3": "^3.29",
+        "mansoor/filament-versionable": "^0.0.12",
+        "pboivin/filament-peek": "^2.2",
+        "ralphjsmit/laravel-seo": "^1.6",
+        "ryangjchandler/commonmark-blade-block": "^1.0",
+        "spatie/laravel-feed": "^4.4",
+        "spatie/laravel-health": "^1.31",
+        "spatie/laravel-package-tools": "^1.16",
+        "spatie/laravel-permission": "^6.10",
+        "spatie/laravel-settings": "^3.4",
+        "symfony/yaml": "^7.2",
+        "torchlight/torchlight-laravel": "^0.6.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0.2",
+        "laravel/pint": "^1.14",
+        "nunomaduro/collision": "^8.1.1",
+        "orchestra/testbench": "^9.0.0",
+        "orchestra/testbench-dusk": "^9.11",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-arch": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/extension-installer": "^1.4.2",
+        "phpstan/phpstan-deprecation-rules": "^2.0.1",
+        "phpstan/phpstan-phpunit": "^2.0.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Siteman\\Cms\\": "src/",
+            "Siteman\\Cms\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Siteman\\Cms\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare",
+            "@dusk:install-chromedriver",
+            "@composer run prepare"
+        ],
+        "prepare": [
+            "@php vendor/bin/testbench package:discover --ansi",
+            "@php vendor/bin/testbench filament:assets",
+            "@php vendor/bin/testbench siteman:publish"
+        ],
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/pint --ansi",
+            "@php vendor/bin/phpstan analyse --verbose --ansi"
+        ],
+        "dusk:install-chromedriver": "@php vendor/bin/dusk-updater detect --auto-update --ansi"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Siteman\\Cms\\CmsServiceProvider"
+            ],
+            "aliases": {
+                "Siteman": "Siteman\\Cms\\Facades\\Siteman"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

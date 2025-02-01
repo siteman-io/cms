@@ -1,0 +1,8 @@
+@config "./../../tailwind.admin-bar.config.js";
+
+@tailwind components;
+@tailwind utilities;
+
+body {
+    padding-top: 34px;
+}
