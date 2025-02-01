@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms\Database\Factories;
 
-use Siteman\Cms\Models\Page;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Siteman\Cms\Models\Page;
 
 /** @extends Factory<Page> */
 class PageFactory extends Factory

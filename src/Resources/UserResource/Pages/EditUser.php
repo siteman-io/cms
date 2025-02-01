@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Resources\UserResource\Pages;
 
-use Siteman\Cms\Resources\UserResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Siteman\Cms\Resources\UserResource;
 
 class EditUser extends EditRecord
 {

@@ -2,11 +2,11 @@
 
 namespace Workbench\Database\Seeders;
 
-use Siteman\Cms\Models\Menu;
-use Siteman\Cms\Models\Page;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Models\Page;
 use Workbench\App\Models\User;
 
 class DatabaseSeeder extends Seeder

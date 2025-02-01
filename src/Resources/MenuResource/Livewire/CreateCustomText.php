@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Livewire;
 
-use Siteman\Cms\Models\Menu;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -11,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Siteman\Cms\Models\Menu;
 
 class CreateCustomText extends Component implements HasForms
 {

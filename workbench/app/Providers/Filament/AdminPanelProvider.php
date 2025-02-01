@@ -2,7 +2,6 @@
 
 namespace Workbench\App\Providers\Filament;
 
-use Siteman\Cms\SitemanPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -16,6 +15,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Siteman\Cms\SitemanPlugin;
 use Workbench\App\Filament\Pages\Login;
 
 class AdminPanelProvider extends PanelProvider

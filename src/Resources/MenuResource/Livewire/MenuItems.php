@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Livewire;
 
-use Siteman\Cms\Resources\MenuResource\LinkTarget;
-use Siteman\Cms\Models\Menu;
-use Siteman\Cms\Models\MenuItem;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -24,6 +21,9 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Models\MenuItem;
+use Siteman\Cms\Resources\MenuResource\LinkTarget;
 
 class MenuItems extends Component implements HasActions, HasForms
 {

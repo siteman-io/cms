@@ -2,8 +2,8 @@
 
 namespace Siteman\Cms\Theme;
 
-use Siteman\Cms\Models\BasePostType;
 use Illuminate\View\Component;
+use Siteman\Cms\Models\BasePostType;
 
 class BaseLayout extends Component
 {

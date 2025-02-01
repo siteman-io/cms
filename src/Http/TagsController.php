@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Http;
 
+use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Post;
-use Illuminate\Support\Facades\Context;
 use Spatie\Tags\Tag;
 
 class TagsController

@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Http;
 
+use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
-use Illuminate\Support\Facades\Context;
 
 class PagesController
 {

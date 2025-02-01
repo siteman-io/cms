@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Policies;
 
-use Siteman\Cms\Models\Post;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User;
+use Siteman\Cms\Models\Post;
 
 class PostPolicy
 {

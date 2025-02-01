@@ -2,13 +2,13 @@
 
 namespace Siteman\Cms\Blocks;
 
-use Siteman\Cms\Models\BasePostType;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Contracts\View\View;
+use Siteman\Cms\Models\BasePostType;
 
 class ImageBlock extends BaseBlock
 {

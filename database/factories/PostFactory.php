@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms\Database\Factories;
 
-use Siteman\Cms\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Siteman\Cms\Models\Post;
 
 /** @extends Factory<Post> */
 class PostFactory extends Factory

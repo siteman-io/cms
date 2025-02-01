@@ -2,12 +2,12 @@
 
 namespace Siteman\Cms\Pages;
 
-use Siteman\Cms\Facades\Siteman;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
+use Siteman\Cms\Facades\Siteman;
 
 class SettingsPage extends Page
 {

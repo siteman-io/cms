@@ -2,11 +2,11 @@
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
-use Siteman\Cms\Resources\HasPreviewModal;
-use Siteman\Cms\Resources\PageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
+use Siteman\Cms\Resources\HasPreviewModal;
+use Siteman\Cms\Resources\PageResource;
 
 class EditPage extends EditRecord
 {

@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
-use Siteman\Cms\Resources\PageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Siteman\Cms\Resources\PageResource;
 
 class ListPages extends ListRecords
 {

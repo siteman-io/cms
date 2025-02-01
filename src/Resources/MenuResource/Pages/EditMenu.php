@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Pages;
 
-use Siteman\Cms\Resources\MenuResource;
-use Siteman\Cms\Resources\MenuResource\HasLocationAction;
 use Filament\Actions;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
+use Siteman\Cms\Resources\MenuResource;
+use Siteman\Cms\Resources\MenuResource\HasLocationAction;
 
 class EditMenu extends EditRecord
 {

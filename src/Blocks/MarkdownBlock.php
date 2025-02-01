@@ -2,13 +2,13 @@
 
 namespace Siteman\Cms\Blocks;
 
-use Siteman\Cms\Models\BasePostType;
-use Siteman\Cms\Torchlight\TorchlightExtension;
 use Filament\Forms\Components\MarkdownEditor;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use League\CommonMark\Extension\Attributes\AttributesExtension;
 use RyanChandler\CommonmarkBladeBlock\BladeExtension;
+use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Torchlight\TorchlightExtension;
 
 class MarkdownBlock extends BaseBlock
 {

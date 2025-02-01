@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms\Theme;
 
-use Siteman\Cms\Models\BasePostType;
-use Siteman\Cms\Siteman;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
+use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Siteman;
 
 class BlankTheme implements ThemeInterface
 {

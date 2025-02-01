@@ -2,7 +2,6 @@
 
 namespace Siteman\Cms\Pages;
 
-use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Carbon\Carbon;
 use Filament\Actions\Action;
@@ -11,6 +10,7 @@ use Filament\Pages\Page;
 use Filament\Widgets\WidgetConfiguration;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Artisan;
+use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\ResultStores\ResultStore;
 

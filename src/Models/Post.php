@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Models;
 
-use Siteman\Cms\Database\Factories\PostFactory;
 use Illuminate\Support\Collection;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Siteman\Cms\Database\Factories\PostFactory;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 use Spatie\Tags\HasTags;

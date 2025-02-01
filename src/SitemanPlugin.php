@@ -4,14 +4,6 @@ declare(strict_types=1);
 
 namespace Siteman\Cms;
 
-use Siteman\Cms\Pages\SettingsPage;
-use Siteman\Cms\Pages\SiteHealthPage;
-use Siteman\Cms\Resources\MenuResource;
-use Siteman\Cms\Resources\PageResource;
-use Siteman\Cms\Resources\PostResource;
-use Siteman\Cms\Resources\RoleResource;
-use Siteman\Cms\Resources\UserResource;
-use Siteman\Cms\Theme\ThemeInterface;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
@@ -21,6 +13,14 @@ use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
+use Siteman\Cms\Pages\SettingsPage;
+use Siteman\Cms\Pages\SiteHealthPage;
+use Siteman\Cms\Resources\MenuResource;
+use Siteman\Cms\Resources\PageResource;
+use Siteman\Cms\Resources\PostResource;
+use Siteman\Cms\Resources\RoleResource;
+use Siteman\Cms\Resources\UserResource;
+use Siteman\Cms\Theme\ThemeInterface;
 
 class SitemanPlugin implements Plugin
 {

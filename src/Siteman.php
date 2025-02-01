@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Siteman\Cms;
 
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Theme\ThemeInterface;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Blade;
 
 class Siteman
 {

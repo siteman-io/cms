@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Policies;
 
-use Siteman\Cms\Models\Page;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User;
+use Siteman\Cms\Models\Page;
 
 class PagePolicy
 {

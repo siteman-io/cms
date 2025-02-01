@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Http;
 
+use Illuminate\Http\Request;
 use Siteman\Cms\Models\Post;
 use Siteman\Cms\Settings\GeneralSettings;
-use Illuminate\Http\Request;
 use Spatie\Feed\Feed;
 use Spatie\Feed\Helpers\ResolveFeedItems;
 

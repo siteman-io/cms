@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Livewire;
 
-use Siteman\Cms\Resources\MenuResource\MenuPanel\MenuPanel as MenuPanelInterface;
-use Siteman\Cms\Models\Menu;
 use Filament\Forms\Components;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -13,6 +11,8 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Resources\MenuResource\MenuPanel\MenuPanel as MenuPanelInterface;
 
 class MenuPanel extends Component implements HasForms
 {

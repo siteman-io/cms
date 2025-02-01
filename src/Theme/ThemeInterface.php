@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Theme;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Siteman\Cms\Models\BasePostType;
 use Siteman\Cms\Siteman;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface ThemeInterface
 {

@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource;
 
-use Siteman\Cms\Facades\Siteman;
-use Siteman\Cms\Models\Menu;
-use Siteman\Cms\Models\MenuLocation;
 use Filament\Actions\Action;
 use Filament\Forms\Components;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Collection;
+use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Models\MenuLocation;
 
 trait HasLocationAction
 {

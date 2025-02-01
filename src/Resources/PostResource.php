@@ -2,10 +2,6 @@
 
 namespace Siteman\Cms\Resources;
 
-use Siteman\Cms\Blocks\BlockBuilder;
-use Siteman\Cms\Facades\Siteman;
-use Siteman\Cms\Resources\PostResource\Pages;
-use Siteman\Cms\Models\Post;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -17,6 +13,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Siteman\Cms\Blocks\BlockBuilder;
+use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Models\Post;
+use Siteman\Cms\Resources\PostResource\Pages;
 
 class PostResource extends Resource
 {

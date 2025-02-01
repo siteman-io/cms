@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources;
 
-use Siteman\Cms\Facades\Siteman;
-use Siteman\Cms\Models\Menu;
 use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Models\Menu;
 
 class MenuResource extends Resource
 {

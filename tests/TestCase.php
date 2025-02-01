@@ -2,13 +2,13 @@
 
 namespace Siteman\Cms\Tests;
 
-use Siteman\Cms\CmsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Siteman\Cms\CmsServiceProvider;
 use Spatie\Health\HealthServiceProvider;
 use Workbench\App\Models\User;
 

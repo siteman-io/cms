@@ -2,12 +2,12 @@
 
 namespace Siteman\Cms\Resources\PostResource\Pages;
 
-use Siteman\Cms\Resources\HasPreviewModal;
-use Siteman\Cms\Resources\PostResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Mansoor\FilamentVersionable\Page\RevisionsAction;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
+use Siteman\Cms\Resources\HasPreviewModal;
+use Siteman\Cms\Resources\PostResource;
 
 class EditPost extends EditRecord
 {

@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\Resources\PostResource\Pages;
 
-use Siteman\Cms\Resources\PostResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Siteman\Cms\Resources\PostResource;
 
 class ListPosts extends ListRecords
 {

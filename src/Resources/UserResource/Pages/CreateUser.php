@@ -2,8 +2,8 @@
 
 namespace Siteman\Cms\Resources\UserResource\Pages;
 
-use Siteman\Cms\Resources\UserResource;
 use Filament\Resources\Pages\CreateRecord;
+use Siteman\Cms\Resources\UserResource;
 
 class CreateUser extends CreateRecord
 {

@@ -2,8 +2,8 @@
 
 namespace Siteman\Cms\Settings;
 
-use Siteman\Cms\Facades\Siteman;
 use Illuminate\Support\Collection;
+use Siteman\Cms\Facades\Siteman;
 use Spatie\LaravelSettings\SettingsContainer;
 
 class SitemanSettingsContainer extends SettingsContainer

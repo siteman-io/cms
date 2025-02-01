@@ -2,11 +2,6 @@
 
 namespace Siteman\Cms\Resources;
 
-use Siteman\Cms\Blocks\BlockBuilder;
-use Siteman\Cms\Facades\Siteman;
-use Siteman\Cms\Resources\PageResource\Pages;
-use Siteman\Cms\Resources\PageResource\Widgets\HomePageWidget;
-use Siteman\Cms\Models\Page;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
@@ -18,6 +13,11 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Siteman\Cms\Blocks\BlockBuilder;
+use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Models\Page;
+use Siteman\Cms\Resources\PageResource\Pages;
+use Siteman\Cms\Resources\PageResource\Widgets\HomePageWidget;
 
 class PageResource extends Resource
 {

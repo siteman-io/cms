@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms\Models;
 
-use Siteman\Cms\Database\Factories\PageFactory;
-use Siteman\Cms\Resources\MenuResource\MenuPanel\MenuPanelable;
 use Illuminate\Database\Eloquent\Builder;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Siteman\Cms\Database\Factories\PageFactory;
+use Siteman\Cms\Resources\MenuResource\MenuPanel\MenuPanelable;
 
 class Page extends BasePostType implements MenuPanelable
 {
