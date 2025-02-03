@@ -20,7 +20,7 @@
         "php": "^8.3",
         "bezhansalleh/filament-shield": "^3.3",
         "blade-ui-kit/blade-icons": "^1.7",
-        "echolabsdev/prism": "^0.33.0",
+        "echolabsdev/prism": "^0.34.0",
         "filament/filament": "^3.2.100",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "filament/spatie-laravel-tags-plugin": "^3.2",
