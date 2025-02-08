@@ -1,24 +1,44 @@
 <?php
 
+use BezhanSalleh\FilamentShield\Support\Utils;
 use Siteman\Cms\Models\Page;
+use Workbench\App\Models\User;
 
-it('shows pages via their slug', function () {
-    $this->withoutExceptionHandling();
-    $title = 'test-title-to-compare';
+use function Pest\Laravel\actingAs;
+
+it('shows only published pages', function () {
+    Page::factory()
+        ->create([
+            'published_at' => null,
+            'slug' => 'draft',
+        ]);
 
     Page::factory()
         ->published()
         ->create([
-            'title' => $title,
-            'slug' => 'test',
+            'slug' => 'published',
         ]);
 
-    $this->get('/test')->assertSeeText($title);
+    $this->get('/draft')->assertStatus(404);
+    $this->get('/published')->assertStatus(200);
 });
 
-it('shows only published pages', function () {})->todo();
+it('needs permission to create pages', function () {
+    $user = User::factory()->create();
 
-it('needs permission to create pages', function () {})->todo();
+    actingAs($user)
+        ->get('/admin/pages/create')
+        ->assertForbidden();
+
+    $permission1 = Utils::getPermissionModel()::create(['name' => 'view_any_page', 'guard' => 'web']);
+    $permission2 = Utils::getPermissionModel()::create(['name' => 'create_page', 'guard' => 'web']);
+    $user->givePermissionTo($permission1, $permission2);
+
+    actingAs($user->refresh())
+        ->get('/admin/pages/create')
+        ->assertOk();
+});
+
 it('can create pages', function () {})->todo();
 
 it('needs permission to update pages', function () {})->todo();
