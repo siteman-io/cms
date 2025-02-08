@@ -14,6 +14,7 @@ use Livewire\Livewire;
 use RalphJSmit\Laravel\SEO\SEOManager;
 use RalphJSmit\Laravel\SEO\TagManager;
 use Siteman\Cms\Blocks\BlockRegistry;
+use Siteman\Cms\Commands\MakeThemeCommand;
 use Siteman\Cms\Commands\InstallCommand;
 use Siteman\Cms\Commands\PublishCommand;
 use Siteman\Cms\Commands\UpdateCommand;
@@ -59,7 +60,12 @@ class CmsServiceProvider extends PackageServiceProvider
                 '../settings/create_general_settings',
             ])
             ->hasTranslations()
-            ->hasCommands([InstallCommand::class, UpdateCommand::class, PublishCommand::class]);
+            ->hasCommands([
+                InstallCommand::class,
+                UpdateCommand::class,
+                PublishCommand::class,
+                MakeThemeCommand::class,
+            ]);
 
     }
 

@@ -1,0 +1,30 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\View\View;
+use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Siteman;
+
+class {{ class }} implements ThemeInterface
+{
+    public function configure(Siteman $siteman): void
+    {
+        $siteman
+            ->registerMenuLocation('header', 'Header')
+            ->registerMenuLocation('footer', 'Footer');
+
+        $siteman->registerLayout(BaseLayout::class);
+    }
+
+    public function render(BasePostType $post): View
+    {
+        return view('{{ themeResourcePath }}.show', ['post' => $post]);
+    }
+
+    public function renderIndex(LengthAwarePaginator $collection): View
+    {
+        return view('{{ themeResourcePath }}.index', ['collection' => $collection]);
+    }
+}
