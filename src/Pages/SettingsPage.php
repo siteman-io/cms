@@ -35,7 +35,7 @@ class SettingsPage extends Page
         if ($this->settingForms !== null) {
             return $this->settingForms;
         }
-        $this->settingForms = collect(Siteman::registeredSettings())->mapWithKeys(function (string $formClass) {
+        $this->settingForms = collect(Siteman::registeredSettingsForms())->mapWithKeys(function (string $formClass) {
             /** @var SettingsFormInterface $form */
             $form = app($formClass);
 
