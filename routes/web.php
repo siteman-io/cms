@@ -6,7 +6,6 @@ use Siteman\Cms\Http\PagesController;
 use Siteman\Cms\Http\PostsController;
 use Siteman\Cms\Http\TagsController;
 use Siteman\Cms\Settings\BlogSettings;
-use Spatie\LaravelSettings\Exceptions\MissingSettings;
 
 Route::middleware(['web', InjectAdminBar::class])->group(function () {
 
