@@ -1,0 +1,26 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Filament\Forms\Components\Textarea;
+use Siteman\Cms\Settings\SettingsFormInterface;
+
+class {{ class }} implements SettingsFormInterface
+{
+    public static function getSettingsClass(): string
+    {
+        return {{ settingsClass }}::class;
+    }
+
+    public function icon(): string
+    {
+        return 'heroicon-o-globe-alt';
+    }
+
+    public function schema(): array
+    {
+        return [
+            Textarea::make('description')->rows(2),
+        ];
+    }
+}
