@@ -72,6 +72,8 @@ class MakeSettingsCommand extends Command
 
         $this->components->info(sprintf('Setting migration [%s] created successfully.', $file));
 
+        $this->components->info('Remember to register the SettingsForm via the configure method in your Theme');
+
         return self::SUCCESS;
     }
 
