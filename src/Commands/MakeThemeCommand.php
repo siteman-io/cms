@@ -37,7 +37,7 @@ class MakeThemeCommand extends Command
             (string) str($theme)->beforeLast('\\') :
             app()->getNamespace().'Themes';
 
-        $relativeViewPath = 'themes/'.str($themeClass)->replace('Theme', '')->kebab();
+        $relativeViewPath = 'themes/'.str($themeClass)->lower()->replace('theme', '')->kebab();
         $themeViewsPath = resource_path('views/'.$relativeViewPath);
         $folderToCopy = dirname(__DIR__, 2).'/resources/views/themes/blank';
 
@@ -49,6 +49,11 @@ class MakeThemeCommand extends Command
         $this->components->info('Theme class created.');
 
         File::copyDirectory($folderToCopy, $themeViewsPath);
+        foreach (File::allFiles($themeViewsPath) as $viewFile) {
+            $content = str($viewFile->getContents())
+                ->replace('siteman::themes.blank', str($relativeViewPath)->replace('/', '.'));
+            File::put($viewFile->getPathname(), $content);
+        }
         $this->components->info('Theme views created.');
 
         $this->components->info('You may change the theme via your config/siteman.php');
