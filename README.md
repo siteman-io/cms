@@ -5,11 +5,8 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/siteman-io/cms/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/siteman-io/cms/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/siteman/cms.svg?style=flat-square)](https://packagist.org/packages/siteman/cms)
 
-Siteman is a package to manage your Website. It is based on Laravel and Filament.  
-Additionally it is a bit of a patch work of different packages.
-My goal for Siteman is to be a simple CMS which can be used as a starting point for a new project.
-Siteman is currently under heavy development and can change quickly.
-
+Siteman gives you the power and Freedom of Laravel and Filament but provides you with a simple but well thought through 
+content  management solution as well as a convenient foundation for individual applications.
 ## Installation
 
 You can install the package via composer:
