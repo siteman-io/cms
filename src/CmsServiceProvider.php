@@ -15,6 +15,7 @@ use RalphJSmit\Laravel\SEO\SEOManager;
 use RalphJSmit\Laravel\SEO\TagManager;
 use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Commands\InstallCommand;
+use Siteman\Cms\Commands\MakeBlockCommand;
 use Siteman\Cms\Commands\MakeThemeCommand;
 use Siteman\Cms\Commands\PublishCommand;
 use Siteman\Cms\Commands\UpdateCommand;
@@ -65,6 +66,7 @@ class CmsServiceProvider extends PackageServiceProvider
                 UpdateCommand::class,
                 PublishCommand::class,
                 MakeThemeCommand::class,
+                MakeBlockCommand::class,
             ]);
 
     }

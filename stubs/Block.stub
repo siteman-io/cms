@@ -1,0 +1,29 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Filament\Forms\Components\TextInput;
+use Illuminate\Contracts\View\View;
+use Siteman\Cms\Blocks\BaseBlock;
+use Siteman\Cms\Models\BasePostType;
+
+class {{ class }} extends BaseBlock
+{
+    public function id(): string
+    {
+        return '{{ id }}';
+    }
+
+    protected function fields(): array
+    {
+        return [
+            TextInput::make('title'),
+        ];
+    }
+
+    public function render(array $data, BasePostType $post): View
+    {
+        return view('blocks.{{ id }}', ['data' => $data]);
+    }
+}
+
