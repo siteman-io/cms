@@ -13,6 +13,7 @@ class PageFactory extends Factory
     use GeneratesBlocks;
 
     protected $model = Page::class;
+
     /** @return array<string, mixed> */
     public function definition(): array
     {
