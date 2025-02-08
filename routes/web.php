@@ -21,7 +21,7 @@ Route::middleware(['web', InjectAdminBar::class])->group(function () {
         if ($settings->rss_enabled) {
             Route::get($settings->rss_endpoint, FeedController::class)->name('siteman.feed');
         }
-    } catch (MissingSettings) {
+    } catch (\Throwable) {
 
     }
 
