@@ -3,6 +3,7 @@
 namespace Siteman\Cms\Pages;
 
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
@@ -48,23 +49,20 @@ class SettingsPage extends Page
     protected function fillForm(): void
     {
         foreach ($this->getSettingForms() as $group => $form) {
-
-            $formName = $group.'SettingsForm';
-            $this->$formName->fill(app($form::getSettingsClass())->toArray());
+            $this->getGroupForm($group)->fill(app($form::getSettingsClass())->toArray());
         }
     }
 
     public function save($group): void
     {
         $settingsForm = $this->getSettingForms()[$group];
-        $formName = $group.'SettingsForm';
-        $data = $this->$formName->getState();
-        if (method_exists($settingsForm, 'mutateBeforeSaving')) {
-            $data = $settingsForm->mutateBeforeSaving($data);
+        $state = $this->getGroupForm($group)->getState();
+        if (method_exists($settingsForm, 'mutateDehydratedState')) {
+            $state = $settingsForm->mutateDehydratedState($state);
         }
         /** @var Settings $settings */
         $settings = app($settingsForm->getSettingsClass());
-        $settings->fill($data);
+        $settings->fill($state);
         $settings->save();
         Notification::make()
             ->success()
@@ -75,9 +73,12 @@ class SettingsPage extends Page
     protected function getForms(): array
     {
         return $this->getSettingForms()
-            ->mapWithKeys(fn (SettingsFormInterface $form, string $group) => [$group.'SettingsForm' => $this->makeForm()
-                ->schema($form->schema())
-                ->statePath('data.'.$group)])
+            ->mapWithKeys(
+                fn (SettingsFormInterface $form, string $group) => [
+                    $this->getFormName($group) => $this->makeForm()
+                        ->schema($form->schema())
+                        ->statePath('data.'.$group),
+                ])
             ->toArray();
     }
 
@@ -109,5 +110,17 @@ class SettingsPage extends Page
     protected function getGroupName(string $class): string
     {
         return method_exists($class, 'group') ? $class::group() : class_basename($class);
+    }
+
+    protected function getFormName(string $group): string
+    {
+        return $group.'SettingsForm';
+    }
+
+    protected function getGroupForm(string $group): ?Form
+    {
+        $formName = $this->getFormName($group);
+
+        return $this->$formName;
     }
 }
