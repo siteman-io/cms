@@ -11,13 +11,16 @@ use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Settings\GeneralSettings;
+use Siteman\Cms\Settings\GeneralSettingsForm;
 use Siteman\Cms\Theme\ThemeInterface;
 
 class Siteman
 {
     protected array $menuLocations = [];
 
-    protected array $settings = [GeneralSettings::class];
+    protected array $settingsForms = [
+        GeneralSettingsForm::class,
+    ];
 
     protected array $defaultBlocks = [
         MarkdownBlock::class,
@@ -34,9 +37,9 @@ class Siteman
         $this->theme->configure($this);
     }
 
-    public function registeredSettings(): array
+    public function registeredSettingsForms(): array
     {
-        return $this->settings;
+        return $this->settingsForms;
     }
 
     public function getGeneralSettings(): GeneralSettings
@@ -73,9 +76,9 @@ class Siteman
         return $this->menuLocations;
     }
 
-    public function registerSettings(string $settingClass): self
+    public function registerSettingsForm(string $settingsFormClass): self
     {
-        $this->settings[] = $settingClass;
+        $this->settingsForms[] = $settingsFormClass;
 
         return $this;
     }
