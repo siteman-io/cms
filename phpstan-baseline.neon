@@ -1,2 +1,37 @@
 parameters:
-	ignoreErrors: []
+	ignoreErrors:
+		-
+			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\PageFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Page, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Page\>\:\:definition\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\PostFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Post, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Post\>\:\:definition\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: database/factories/PostFactory.php
+
+		-
+			message: '#^Method Siteman\\Cms\\Torchlight\\BaseExtension\:\:getTheme\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Torchlight/BaseExtension.php
+
+		-
+			message: '#^Method Siteman\\Cms\\Torchlight\\BaseExtension\:\:renderNode\(\) should return string but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Torchlight/BaseExtension.php
+
+		-
+			message: '#^Property Siteman\\Cms\\Torchlight\\BaseExtension\:\:\$customBlockRenderer \(callable\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: src/Torchlight/BaseExtension.php
+
+		-
+			message: '#^Static method League\\CommonMark\\Util\\Xml\:\:escape\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: src/Torchlight/BaseExtension.php
