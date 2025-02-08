@@ -6,8 +6,11 @@ use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Settings\SettingsFormInterface;
+use Spatie\LaravelSettings\Settings;
 
 class SettingsPage extends Page
 {
@@ -17,43 +20,64 @@ class SettingsPage extends Page
 
     public ?array $data = [];
 
+    protected ?Collection $settingForms = null;
+
     public function mount(): void
     {
         $this->fillForm();
     }
 
-    public function getSettings()
+    /**
+     * @return Collection<string, SettingsFormInterface>
+     */
+    public function getSettingForms(): Collection
     {
-        return collect(Siteman::registeredSettings());
+        if ($this->settingForms !== null) {
+            return $this->settingForms;
+        }
+        $this->settingForms = collect(Siteman::registeredSettings())->mapWithKeys(function (string $formClass) {
+            /** @var SettingsFormInterface $form */
+            $form = app($formClass);
+
+            return [$this->getGroupName($form::getSettingsClass()) => $form];
+        });
+
+        return $this->settingForms;
     }
 
     protected function fillForm(): void
     {
-        foreach ($this->getSettings() as $setting) {
-            $formName = $setting::group().'SettingsForm';
-            $this->$formName->fill(app($setting)->toArray());
+        foreach ($this->getSettingForms() as $group => $form) {
+
+            $formName = $group.'SettingsForm';
+            $this->$formName->fill(app($form::getSettingsClass())->toArray());
         }
     }
 
     public function save($group): void
     {
-        $settingName = $this->getSettings()->first(fn (string $setting) => $this->getGroupName($setting) === $group, '');
-        $instance = app($settingName);
-        $formName = $this->getGroupName($settingName).'SettingsForm';
-        $instance->fill($this->$formName->getState());
-        $instance->save();
+        $settingsForm = $this->getSettingForms()[$group];
+        $formName = $group.'SettingsForm';
+        $data = $this->$formName->getState();
+        if (method_exists($settingsForm, 'mutateBeforeSaving')) {
+            $data = $settingsForm->mutateBeforeSaving($data);
+        }
+        /** @var Settings $settings */
+        $settings = app($settingsForm->getSettingsClass());
+        $settings->fill($data);
+        $settings->save();
         Notification::make()
             ->success()
-            ->title(__('siteman::pages/settings.notifications.saved', ['group' => Str::headline($this->getGroupName($settingName))]))
+            ->title(__('siteman::pages/settings.notifications.saved', ['group' => Str::headline($group)]))
             ->send();
     }
 
     protected function getForms(): array
     {
-        return $this->getSettings()
-            ->mapWithKeys(fn ($setting) => [$setting::group().'SettingsForm' => $this->makeForm()
-                ->schema(app($setting)->form())
-                ->statePath('data.'.$setting::group())])
+        return $this->getSettingForms()
+            ->mapWithKeys(fn (SettingsFormInterface $form, string $group) => [$group.'SettingsForm' => $this->makeForm()
+                ->schema($form->schema())
+                ->statePath('data.'.$group)])
             ->toArray();
     }
 

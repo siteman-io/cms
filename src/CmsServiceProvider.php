@@ -6,7 +6,6 @@ use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\Facades\Gate;
@@ -41,7 +40,6 @@ use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\Facades\Health;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\LaravelSettings\SettingsContainer;
 use Spatie\Permission\Models\Role;
 use Torchlight\Middleware\RenderTorchlight;
 
@@ -77,7 +75,6 @@ class CmsServiceProvider extends PackageServiceProvider
         $this->app->singleton(ThemeInterface::class, fn () => $this->app->make(config('siteman.theme')));
         $this->app->singleton(Siteman::class);
         $this->app->singleton(SitemanPlugin::class);
-        $this->app->bind(SettingsContainer::class, fn () => new Settings\SitemanSettingsContainer($this->app->make(Container::class)));
     }
 
     public function bootingPackage(): void
