@@ -21,10 +21,10 @@ class BlogSettings extends Settings
         return 'blog';
     }
 
-    public static function isEnabled(): bool
+    public static function isEnabled(): mixed
     {
         try {
-            return app(self::class)->enabled;
+            return app(self::class)->blog_index_route;
         } catch (\Throwable) {
             return false;
         }

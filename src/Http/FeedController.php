@@ -4,6 +4,7 @@ namespace Siteman\Cms\Http;
 
 use Illuminate\Http\Request;
 use Siteman\Cms\Models\Post;
+use Siteman\Cms\Settings\BlogSettings;
 use Siteman\Cms\Settings\GeneralSettings;
 use Spatie\Feed\Feed;
 use Spatie\Feed\Helpers\ResolveFeedItems;
@@ -12,6 +13,8 @@ class FeedController
 {
     public function __invoke(Request $request, GeneralSettings $settings): Feed
     {
+        abort_unless(BlogSettings::isEnabled(), 404);
+
         $items = ResolveFeedItems::resolve('main', [Post::class, 'getFeedItems']);
 
         return new Feed(
