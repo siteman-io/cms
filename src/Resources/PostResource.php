@@ -17,6 +17,7 @@ use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Post;
 use Siteman\Cms\Resources\PostResource\Pages;
+use Siteman\Cms\Settings\BlogSettings;
 
 class PostResource extends Resource
 {
@@ -164,5 +165,10 @@ class PostResource extends Resource
     public static function getLabel(): string
     {
         return self::getNavigationLabel();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return app(BlogSettings::class)->enabled;
     }
 }

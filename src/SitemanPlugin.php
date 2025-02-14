@@ -20,7 +20,6 @@ use Siteman\Cms\Resources\PageResource;
 use Siteman\Cms\Resources\PostResource;
 use Siteman\Cms\Resources\RoleResource;
 use Siteman\Cms\Resources\UserResource;
-use Siteman\Cms\Settings\BlogSettings;
 use Siteman\Cms\Theme\ThemeInterface;
 
 class SitemanPlugin implements Plugin
@@ -43,12 +42,9 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
-        $resources = [PageResource::class, UserResource::class, RoleResource::class, MenuResource::class];
-        if (BlogSettings::isEnabled()) {
-            $resources[] = PostResource::class;
-            $panel->widgets([PostResource\Widgets\LatestPostWidget::class]);
-        }
+        $resources = [PageResource::class, UserResource::class, RoleResource::class, MenuResource::class, PostResource::class];
         $panel->resources($resources);
+
         $panel->pages([
             SettingsPage::class,
             SiteHealthPage::class,

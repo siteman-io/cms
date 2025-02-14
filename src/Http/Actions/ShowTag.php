@@ -13,7 +13,7 @@ class ShowTag
 {
     public function __invoke(Request $request, BlogSettings $blogSettings)
     {
-        $tag = Tag::where('slug->en', str_replace($blogSettings->tag_route_prefix, '', $request->path()))->firstOrFail();
+        $tag = Tag::where('slug->en', str_replace($blogSettings->tag_route_prefix.'/', '', $request->path()))->firstOrFail();
         Context::add('current_tag', $tag);
         $posts = Post::published()->withAnyTags([$tag])->paginate(5);
 

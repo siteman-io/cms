@@ -6,9 +6,9 @@ return new class extends SettingsMigration {
     public function up(): void
     {
         $this->migrator->add('blog.enabled', true);
-        $this->migrator->add('blog.blog_index_route', '/blog');
-        $this->migrator->add('blog.tag_route_prefix', '/tags');
+        $this->migrator->add('blog.blog_index_route', 'blog');
+        $this->migrator->add('blog.tag_route_prefix', 'tags');
         $this->migrator->add('blog.rss_enabled', true);
-        $this->migrator->add('blog.rss_endpoint', '/rss');
+        $this->migrator->add('blog.rss_endpoint', 'rss');
     }
 };

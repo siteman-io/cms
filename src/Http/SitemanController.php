@@ -28,17 +28,17 @@ class SitemanController
     {
         $path = $request->path();
         if ($blogSettings->enabled) {
-            if ($path === $blogSettings->getBlogIndexRoute()) {
+            if ($path === $blogSettings->blog_index_route) {
                 return 'post_index';
             }
-            if (str_starts_with($path, $blogSettings->getBlogIndexRoute().'/')) {
+            if (str_starts_with($path, $blogSettings->blog_index_route.'/')) {
                 return 'post';
             }
-            if ($blogSettings->rss_enabled === true && $path === $blogSettings->getRssEndpoint()) {
+            if ($blogSettings->rss_enabled === true && $path === $blogSettings->rss_endpoint) {
                 return 'rss';
             }
 
-            if (str_starts_with($path, $blogSettings->getTagRoutePrefix().'/')) {
+            if (str_starts_with($path, $blogSettings->tag_route_prefix.'/')) {
                 return 'tag';
             }
         }
