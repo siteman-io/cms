@@ -5,11 +5,38 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/siteman-io/cms/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/siteman-io/cms/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/siteman/cms.svg?style=flat-square)](https://packagist.org/packages/siteman/cms)
 
-![Siteman Logo](./art/siteman_logo.png)
+![Siteman Logo](art/siteman_logo.png)
 
 Siteman leverages the power and flexibility of Laravel and Filament to provide a straightforward content management
 solution. It serves as a robust foundation for building custom applications, offering a seamless and efficient
 development experience.
+
+Table of Contents
+=================
+
+   * [Installation](#installation)
+   * [Features](#features)
+      * [Themes](#themes)
+         * [`configure` method](#configure-method)
+         * [`render` method](#render-method)
+         * [`renderIndex` method](#renderindex-method)
+      * [Layouts](#layouts)
+      * [Menus](#menus)
+      * [Blocks](#blocks)
+         * [`image-block`](#image-block)
+         * [`markdown-block`](#markdown-block)
+         * [Create your own blocks](#create-your-own-blocks)
+      * [Settings](#settings)
+         * [General Settings](#general-settings)
+         * [Blog Settings](#blog-settings)
+         * [Create your own settings](#create-your-own-settings)
+      * [Development](#development)
+      * [Testing](#testing)
+      * [Changelog](#changelog)
+      * [Contributing](#contributing)
+      * [Security Vulnerabilities](#security-vulnerabilities)
+      * [Credits](#credits)
+      * [License](#license)
 
 ## Installation
 
@@ -86,13 +113,40 @@ A new layout can be registered via your Themes `configure` method.
     }
 ```
 
+### Menus
+
+Menus are used to define the navigation of your site. Your theme need to provide menu locations. You can define the
+locations in your Themes `configure` method.
+
+```php
+    public function configure(Siteman $siteman): void
+    {
+        //...
+        $siteman->registerMenuLocation('header', __('menu.header'));
+    }
+```
+
+Registered menu locations and their assigned menus can be found via the `Locations` action.
+
+![siteman_menu_locations.png](art/siteman_menu_locations.png)
+
+Menus can be used in your Blade views via the `Siteman` facade.
+
+```bladehtml
+<ul>
+    @foreach(\Siteman\Cms\Facades\Siteman::getMenuItems('header') as $item)
+    <li><a href="{{$item->url}}" class="hover:underline">>{{$item->title}}</a></li>
+    @endforeach
+</ul>
+```
+
 
 ### Blocks
 
 Blocks are the building blocks of your content. They can be used to create complex layouts. Siteman ships with two
 blocks out of the box.
 
-![Page blocks](./art/siteman_page_blocks.png)
+![Page blocks](art/siteman_page_blocks.png)
 
 #### `image-block`
 
@@ -172,13 +226,13 @@ out of the box with the following Settings:
 #### General Settings
 
 The General Settings contain fields to configure the site's name, description.
-![General Settings](./art/siteman_general_settings.png)
+![General Settings](art/siteman_general_settings.png)
 
 
 #### Blog Settings
 
 The Blog Settings contain fields to configure Sitemans blogging capabilities.
-![Blog Settings](./art/siteman_blog_settings.png)
+![Blog Settings](art/siteman_blog_settings.png)
 
 
 #### Create your own settings
