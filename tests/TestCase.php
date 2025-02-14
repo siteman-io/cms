@@ -3,6 +3,7 @@
 namespace Siteman\Cms\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Console\Kernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -55,4 +56,11 @@ class TestCase extends Orchestra
         ], false);
 
     }
+
+    //    protected function resolveApplicationConsoleKernel($app)
+    //    {
+    //        $app->singleton(
+    //            Kernel::class, Kernel::class
+    //        );
+    //    }
 }

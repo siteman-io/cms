@@ -1,6 +1,7 @@
 <?php
 
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\Resources\PageResource\Pages\CreatePage;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -26,13 +27,13 @@ it('needs permission to create pages', function () {
     $user = User::factory()->create();
 
     actingAs($user)
-        ->get('/admin/pages/create')
+        ->get(CreatePage::getUrl())
         ->assertForbidden();
 
     $user2 = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
 
     actingAs($user2)
-        ->get('/admin/pages/create')
+        ->get(CreatePage::getUrl())
         ->assertOk();
 });
 
