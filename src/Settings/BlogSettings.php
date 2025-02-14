@@ -29,4 +29,19 @@ class BlogSettings extends Settings
             return false;
         }
     }
+
+    public function getBlogIndexRoute(): string
+    {
+        return ltrim($this->blog_index_route, '/');
+    }
+
+    public function getRssEndpoint(): string
+    {
+        return ltrim($this->rss_endpoint, '/');
+    }
+
+    public function getTagRoutePrefix()
+    {
+        return ltrim($this->tag_route_prefix, '/');
+    }
 }
