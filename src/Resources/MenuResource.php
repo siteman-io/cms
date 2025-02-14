@@ -38,6 +38,11 @@ class MenuResource extends Resource
         return __('siteman::menu.resource.navigation-group');
     }
 
+    public static function getPluralModelLabel(): string
+    {
+        return __('siteman::menu.resource.navigation-label');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
