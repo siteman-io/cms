@@ -20,6 +20,7 @@ use Siteman\Cms\Resources\PageResource;
 use Siteman\Cms\Resources\PostResource;
 use Siteman\Cms\Resources\RoleResource;
 use Siteman\Cms\Resources\UserResource;
+use Siteman\Cms\Settings\BlogSettings;
 use Siteman\Cms\Theme\ThemeInterface;
 
 class SitemanPlugin implements Plugin
@@ -42,13 +43,16 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
-
-        $panel->resources([PageResource::class, PostResource::class, UserResource::class, RoleResource::class, MenuResource::class]);
+        $resources = [PageResource::class, UserResource::class, RoleResource::class, MenuResource::class];
+        if (BlogSettings::isEnabled()) {
+            $resources[] = PostResource::class;
+            $panel->widgets([PostResource\Widgets\LatestPostWidget::class]);
+        }
+        $panel->resources($resources);
         $panel->pages([
             SettingsPage::class,
             SiteHealthPage::class,
         ]);
-        $panel->widgets([PostResource\Widgets\LatestPostWidget::class]);
 
         $panel->profile(EditProfile::class, false);
         $panel->plugin(FilamentShieldPlugin::make());

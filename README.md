@@ -168,7 +168,13 @@ out of the box with the following Settings:
 #### General Settings
 
 The General Settings contain fields to configure the site's name, description.
-![General Settings](./art/siteman_settings.png)
+![General Settings](./art/siteman_general_settings.png)
+
+
+#### Blog Settings
+
+The Blog Settings contain fields to configure Sitemans blogging capabilities.
+![Blog Settings](./art/siteman_blog_settings.png)
 
 
 #### Create your own settings

@@ -10,6 +10,7 @@ use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
 use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Settings\BlogSettingsForm;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Settings\GeneralSettingsForm;
 use Siteman\Cms\Theme\ThemeInterface;
@@ -20,6 +21,7 @@ class Siteman
 
     protected array $settingsForms = [
         GeneralSettingsForm::class,
+        BlogSettingsForm::class,
     ];
 
     protected array $defaultBlocks = [

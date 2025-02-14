@@ -1,6 +1,7 @@
 <?php
 
 use Siteman\Cms\Models\Post;
+use Siteman\Cms\Settings\BlogSettings;
 
 it('shows posts index on /blog', function () {
     $posts = Post::factory()
@@ -8,7 +9,8 @@ it('shows posts index on /blog', function () {
         ->count(2)
         ->create();
 
-    $this->get('/blog')->assertSeeText($posts->map->title->toArray());
+    \Illuminate\Support\Facades\Route::getRoutes()->refreshNameLookups();
+    $this->get(app(BlogSettings::class)->blog_index_route)->assertSeeText($posts->map->title->toArray());
 });
 
 it('shows only published posts', function () {})->todo();

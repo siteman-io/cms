@@ -26,20 +26,28 @@ return [
                 ],
             ],
         ],
-        'social' => [
-            'label' => 'Social',
+        'blog' => [
+            'label' => 'Blogging',
             'fields' => [
-                'x_username' => [
-                    'label' => 'X User name',
-                    'helper-text' => 'Your X username. Keeping blank will also remove the X icon from the footer.',
+                'enabled' => [
+                    'label' => 'Enable blogging',
+                    'helper-text' => 'This checkbox toggles the whole blogging functionality in Siteman',
                 ],
-                'github_username' => [
-                    'label' => 'GitHub User name',
-                    'helper-text' => 'Your GitHub username. Keeping blank will also remove the GitHub icon from the footer.',
+                'blog_index_route' => [
+                    'label' => 'Blog Route Prefix',
+                    'helper-text' => 'Configure the blog index route. This also serves as a post prefix',
                 ],
-                'linkedin_username' => [
-                    'label' => 'LinkedIn User name',
-                    'helper-text' => 'Your LinkedIn username. Keeping blank will also remove the LinkedIn icon from the footer.',
+                'tag_route_prefix' => [
+                    'label' => 'Tag Route Prefix',
+                    'helper-text' => 'Configure the tag route prefix.',
+                ],
+                'rss_enabled' => [
+                    'label' => 'Enable RSS feed',
+                    'helper-text' => 'This checkbox toggles the RSS feed functionality in Siteman',
+                ],
+                'rss_endpoint' => [
+                    'label' => 'The endpoint of the RSS feed',
+                    'helper-text' => 'Configure the RSS feed endpoint as you like. Defaults to /rss',
                 ],
             ],
         ],
