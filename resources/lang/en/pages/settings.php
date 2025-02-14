@@ -42,8 +42,8 @@ return [
                     'helper-text' => 'Configure the tag route prefix.',
                 ],
                 'rss_enabled' => [
-                    'label' => 'Tag Route Prefix',
-                    'helper-text' => 'Configure the tag route prefix.',
+                    'label' => 'Enable RSS feed',
+                    'helper-text' => 'This checkbox toggles the RSS feed functionality in Siteman',
                 ],
                 'rss_endpoint' => [
                     'label' => 'The endpoint of the RSS feed',
