@@ -92,6 +92,8 @@ A new layout can be registered via your Themes `configure` method.
 Blocks are the building blocks of your content. They can be used to create complex layouts. Siteman ships with two
 blocks out of the box.
 
+![Page blocks](./art/siteman_page_blocks.png)
+
 #### `image-block`
 
 The `image-block` which uses the `Spatie\MediaLibrary` under the hood and provides responsive images out of the box.
@@ -104,6 +106,8 @@ Siteman enabled a few extensions for it out of the box
 * Render blade via `ryangjchandler/commonmark-blade-block`
 * Highlight code via `torchlight/torchlight-laravel` (You need to have a `TORCHLIGHT_TOKEN` configured in your `.env`)
 * Add HTML attributes via the `AttributesExtension` from `league/commonmark`
+
+
 
 #### Create your own blocks
 
