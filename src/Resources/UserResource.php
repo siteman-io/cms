@@ -36,6 +36,12 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
+                TextInput::make('password')
+                    ->label('siteman::resources/user.fields.password.label')
+                    ->translateLabel()
+                    ->helperText(__('siteman::resources/user.fields.password.helper-text'))
+                    ->password()
+                    ->required(),
                 Select::make('roles')
                     ->label(__('siteman::resources/user.fields.roles.label'))
                     ->relationship('roles', 'name')
