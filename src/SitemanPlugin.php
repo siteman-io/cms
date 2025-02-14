@@ -44,11 +44,12 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
         $resources = [PageResource::class, UserResource::class, RoleResource::class, MenuResource::class];
-        if (BlogSettings::isEnabled()) {
-            $resources[] = PostResource::class;
+        $panel->resources($resources);
+        if (app(BlogSettings::class)->enabled) {
+            $panel->resources([PostResource::class]);
             $panel->widgets([PostResource\Widgets\LatestPostWidget::class]);
         }
-        $panel->resources($resources);
+
         $panel->pages([
             SettingsPage::class,
             SiteHealthPage::class,

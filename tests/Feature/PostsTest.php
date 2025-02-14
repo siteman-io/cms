@@ -1,21 +1,41 @@
 <?php
 
 use Siteman\Cms\Models\Post;
-use Siteman\Cms\Settings\BlogSettings;
+use Workbench\App\Models\User;
 
-it('shows posts index on /blog', function () {
-    $posts = Post::factory()
+use function Pest\Laravel\actingAs;
+
+it('shows only published posts', function () {
+    Post::factory()
+        ->create([
+            'published_at' => null,
+            'slug' => 'draft',
+        ]);
+
+    Post::factory()
         ->published()
-        ->count(2)
-        ->create();
+        ->create([
+            'slug' => 'published',
+        ]);
 
-    \Illuminate\Support\Facades\Route::getRoutes()->refreshNameLookups();
-    $this->get(app(BlogSettings::class)->blog_index_route)->assertSeeText($posts->map->title->toArray());
+    $this->get('/blog/draft')->assertStatus(404);
+    $this->get('/blog/published')->assertStatus(200);
 });
 
-it('shows only published posts', function () {})->todo();
+it('needs permission to create posts', function () {
+    $user = User::factory()->create();
 
-it('needs permission to create posts', function () {})->todo();
+    actingAs($user)
+        ->get('/admin/posts/create')
+        ->assertForbidden();
+
+    $user2 = User::factory()->withPermissions(['view_any_post', 'create_post'])->create();
+
+    actingAs($user2)
+        ->get('/admin/posts/create')
+        ->assertOk();
+});
+
 it('can create posts', function () {})->todo();
 
 it('needs permission to update posts', function () {})->todo();

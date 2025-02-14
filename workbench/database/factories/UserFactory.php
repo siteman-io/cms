@@ -2,6 +2,8 @@
 
 namespace Workbench\Database\Factories;
 
+use BezhanSalleh\FilamentShield\Facades\FilamentShield;
+use BezhanSalleh\FilamentShield\Support\Utils;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -50,5 +52,23 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function isSuperAdmin(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $role = FilamentShield::createRole();
+            $user->assignRole($role);
+            $user->refresh();
+        });
+    }
+
+    public function withPermissions(string|array $permissions): static
+    {
+        return $this->afterCreating(function (User $user) use ($permissions) {
+            $createdPermissions = collect($permissions)->map(fn ($permission) => Utils::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard' => 'web']));
+            $user->givePermissionTo($createdPermissions);
+            $user->refresh();
+        });
     }
 }

@@ -14,7 +14,7 @@ class ShowBlogPost
         $post = Post::query()
             ->published()
             ->with('tags')
-            ->where('slug', str_replace($blogSettings->getBlogIndexRoute(), '', $request->path()))
+            ->where('slug', str_replace($blogSettings->blog_index_route.'/', '', $request->path()))
             ->firstOrFail();
 
         return Siteman::theme()->render($post);

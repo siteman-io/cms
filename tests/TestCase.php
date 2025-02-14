@@ -9,6 +9,7 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Siteman\Cms\CmsServiceProvider;
+use Siteman\Cms\Settings\BlogSettings;
 use Spatie\Health\HealthServiceProvider;
 use Workbench\App\Models\User;
 
@@ -41,5 +42,17 @@ class TestCase extends Orchestra
     {
         config()->set('database.connections.sqlite.database', ':memory:');
         config()->set('siteman.models.user', User::class);
+
+        // The settings migrations are executed after the Filament panel
+        // registration. Since we check for the settings in the panel
+        // registration, we need to fake the settings here.
+        BlogSettings::fake([
+            'enabled' => true,
+            'blog_index_route' => 'blog',
+            'tag_route_prefix' => 'tags',
+            'rss_enabled' => true,
+            'rss_endpoint' => 'rss',
+        ], false);
+
     }
 }

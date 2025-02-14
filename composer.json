@@ -73,6 +73,7 @@
             "@composer run prepare"
         ],
         "prepare": [
+            "rm -rf /vendor/orchestra/testbench-core/laravel/database/settings /vendor/orchestra/testbench-core/laravel/database/migrations",
             "@php vendor/bin/testbench package:discover --ansi",
             "@php vendor/bin/testbench filament:assets",
             "@php vendor/bin/testbench siteman:publish"

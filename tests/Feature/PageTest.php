@@ -1,6 +1,5 @@
 <?php
 
-use BezhanSalleh\FilamentShield\Support\Utils;
 use Siteman\Cms\Models\Page;
 use Workbench\App\Models\User;
 
@@ -30,11 +29,9 @@ it('needs permission to create pages', function () {
         ->get('/admin/pages/create')
         ->assertForbidden();
 
-    $permission1 = Utils::getPermissionModel()::create(['name' => 'view_any_page', 'guard' => 'web']);
-    $permission2 = Utils::getPermissionModel()::create(['name' => 'create_page', 'guard' => 'web']);
-    $user->givePermissionTo($permission1, $permission2);
+    $user2 = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
 
-    actingAs($user->refresh())
+    actingAs($user2)
         ->get('/admin/pages/create')
         ->assertOk();
 });
