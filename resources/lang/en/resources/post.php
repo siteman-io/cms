@@ -49,6 +49,7 @@ return [
             'slug' => 'Slug',
             'content' => 'Content',
             'author' => 'Author',
+            'published_at' => 'Published at',
         ],
         'filters' => [
             'search' => 'Search…',
