@@ -25,6 +25,20 @@ it('shows only published pages', function () {
     $this->get('/published')->assertStatus(200);
 });
 
+it('needs permission to list pages', function () {
+    $user = User::factory()->create();
+
+    actingAs($user)
+        ->get(\Siteman\Cms\Resources\PageResource\Pages\ListPages::getUrl())
+        ->assertForbidden();
+
+    $user2 = User::factory()->withPermissions(['view_any_page'])->create();
+
+    actingAs($user2)
+        ->get(\Siteman\Cms\Resources\PageResource\Pages\ListPages::getUrl())
+        ->assertOk();
+});
+
 it('needs permission to create pages', function () {
     $user = User::factory()->create();
 

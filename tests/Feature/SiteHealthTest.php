@@ -5,8 +5,10 @@ use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\ScheduleCheck;
+use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\Facades\Health;
 use Spatie\Health\ResultStores\ResultStore;
+use Spatie\Health\ResultStores\StoredCheckResults\StoredCheckResult;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -56,13 +58,14 @@ it('can execute the site health check', function () {
 it('shows when the last check was executed', function () {
     actingAs(User::factory()->withPermissions(['page_SiteHealthPage'])->create());
 
-    $this->get(SiteHealthPage::getUrl())
-        ->assertOk()
-        ->assertSeeHtml('data-testid="last-ran-at"');
+    Artisan::call(RunHealthChecksCommand::class);
 
-    livewire(SiteHealthPage::class, [])->call('refresh');
+    $component = livewire(SiteHealthPage::class, [])->assertOk();
 
-    $this->get(SiteHealthPage::getUrl())
-        ->assertOk()
-        ->assertSeeHtml('data-testid="last-ran-at"');
+    app(ResultStore::class)
+        ->latestResults()
+        ->storedCheckResults
+        ->each(function (StoredCheckResult $result) use ($component) {
+            $component->assertSee($result->label);
+        });
 });

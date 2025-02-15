@@ -24,7 +24,7 @@ class BlockBuilder extends Builder
 
         $this->blockNumbers(false);
         $this->extraItemActions(actions: [
-            Action::make('Disable')
+            Action::make('disable')
                 ->icon(function (array $arguments, Builder $component) {
                     $fullState = $component->getState();
                     if (($fullState[$arguments['item']]['disabled'] ?? false) === true) {

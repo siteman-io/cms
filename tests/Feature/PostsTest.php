@@ -25,6 +25,20 @@ it('shows only published posts', function () {
     $this->get('/blog/published')->assertStatus(200);
 });
 
+it('needs permission to list posts', function () {
+    $user = User::factory()->create();
+
+    actingAs($user)
+        ->get(\Siteman\Cms\Resources\PostResource\Pages\ListPosts::getUrl())
+        ->assertForbidden();
+
+    $user2 = User::factory()->withPermissions(['view_any_post'])->create();
+
+    actingAs($user2)
+        ->get(\Siteman\Cms\Resources\PostResource\Pages\ListPosts::getUrl())
+        ->assertOk();
+});
+
 it('needs permission to create posts', function () {
     $user = User::factory()->create();
 

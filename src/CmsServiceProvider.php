@@ -8,7 +8,6 @@ use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Http\Kernel;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
 use RalphJSmit\Laravel\SEO\SEOManager;
@@ -32,7 +31,6 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
-use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Checks\Checks\CacheCheck;
@@ -143,8 +141,6 @@ class CmsServiceProvider extends PackageServiceProvider
         Livewire::component('create-custom-text', CreateCustomText::class);
         Livewire::component('create-page-link', CreatePageLink::class);
 
-        Blade::component('base-layout', BaseLayout::class);
-
         Health::checks([
             EnvironmentCheck::new(),
             OptimizedAppCheck::new(),
@@ -161,6 +157,8 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
         });
+
+        \Siteman\Cms\Facades\Siteman::boot();
     }
 
     protected function getAssetPackageName(): ?string

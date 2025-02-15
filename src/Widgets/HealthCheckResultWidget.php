@@ -7,6 +7,8 @@ use Spatie\Health\Enums\Status;
 
 class HealthCheckResultWidget extends Widget
 {
+    protected static bool $isLazy = false;
+
     public array $result = [];
 
     protected static string $view = 'siteman::widgets.health-check-result-widget';

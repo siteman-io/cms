@@ -112,8 +112,6 @@ A new layout can be registered via your Themes `configure` method.
         $siteman->registerLayout(BaseLayout::class);
     }
 ```
-> [!IMPORTANT]  
-> Your layout has to be registered as a blade component with the same alias as the id of the layout.
 
 ### Menus
 
