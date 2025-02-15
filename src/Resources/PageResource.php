@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Facades\Siteman;
@@ -41,6 +42,7 @@ class PageResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->searchable()
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('siteman::resources/page.table.columns.id')
@@ -63,7 +65,9 @@ class PageResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('published')
+                    ->label(__('siteman::resources/page.table.filters.published.label'))
+                    ->query(fn(Builder $query) => $query->scopes(['published'])),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
