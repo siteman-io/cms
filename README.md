@@ -334,6 +334,8 @@ composer serve
 
 ## Testing
 
+We use pest as our testing framework.
+
 ```bash
 composer test
 ```

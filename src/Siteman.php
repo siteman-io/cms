@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms;
 
@@ -31,7 +29,9 @@ class Siteman
 
     protected array $layouts = [];
 
-    public function __construct(protected BlockRegistry $blockRegistry, protected ThemeInterface $theme)
+    public function __construct(protected BlockRegistry $blockRegistry, protected ThemeInterface $theme) {}
+
+    public function boot(): void
     {
         foreach ($this->defaultBlocks as $block) {
             $this->blockRegistry->register(app($block));

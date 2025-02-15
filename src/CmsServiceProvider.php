@@ -29,8 +29,8 @@ use Siteman\Cms\Policies\RolePolicy;
 use Siteman\Cms\Policies\UserPolicy;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
+use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
-use Siteman\Cms\Resources\MenuResource\Livewire\MenuPanel;
 use Siteman\Cms\Theme\ThemeInterface;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Checks\Checks\CacheCheck;
@@ -137,9 +137,9 @@ class CmsServiceProvider extends PackageServiceProvider
         );
         Livewire::component('health-check-result', HealthCheckResultWidget::class);
         Livewire::component('menu-builder-items', MenuItems::class);
-        Livewire::component('menu-builder-panel', MenuPanel::class);
         Livewire::component('create-custom-link', CreateCustomLink::class);
         Livewire::component('create-custom-text', CreateCustomText::class);
+        Livewire::component('create-page-link', CreatePageLink::class);
 
         Health::checks([
             EnvironmentCheck::new(),
@@ -157,6 +157,8 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
         });
+
+        \Siteman\Cms\Facades\Siteman::boot();
     }
 
     protected function getAssetPackageName(): ?string

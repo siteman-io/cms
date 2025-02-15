@@ -1,6 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section>
-        <div>
+        <div class="health-check-result-widget">
 
             <div class="flex justify-center items-center rounded-full p-2 {{ $this->getColor() }}">
                 <x-filament::icon

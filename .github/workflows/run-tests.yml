@@ -44,4 +44,4 @@ jobs:
           composer prepare
 
       - name: Execute tests
-        run: vendor/bin/pest --ci
+        run: composer test -- --ci

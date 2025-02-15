@@ -2,34 +2,12 @@
 
 namespace Siteman\Cms\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Siteman\Cms\Database\Factories\PageFactory;
-use Siteman\Cms\Resources\MenuResource\MenuPanel\MenuPanelable;
 
-class Page extends BasePostType implements MenuPanelable
+class Page extends BasePostType
 {
     protected static string $factory = PageFactory::class;
-
-    public function getMenuPanelTitleColumn(): string
-    {
-        return 'title';
-    }
-
-    public function getMenuPanelUrlUsing(): callable
-    {
-        return fn (self $model) => '/'.ltrim($model->slug, '/');
-    }
-
-    public function getMenuPanelName(): string
-    {
-        return 'Pages';
-    }
-
-    public function getMenuPanelModifyQueryUsing(): callable
-    {
-        return fn (Builder $query) => $query;
-    }
 
     public function getDynamicSEOData(): SEOData
     {

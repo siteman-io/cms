@@ -70,24 +70,25 @@
     "scripts": {
         "post-autoload-dump": [
             "@clear",
-            "@prepare",
-            "@composer run prepare"
+            "@prepare"
         ],
         "prepare": [
-            "rm -rf /vendor/orchestra/testbench-core/laravel/database/settings /vendor/orchestra/testbench-core/laravel/database/migrations",
             "@php vendor/bin/testbench package:discover --ansi",
             "@php vendor/bin/testbench filament:assets",
-            "@php vendor/bin/testbench siteman:publish"
+            "@php vendor/bin/testbench siteman:publish",
+            "@build"
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint",
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "clear": [
+            "@php vendor/bin/testbench package:purge-skeleton --ansi",
+            "rm -rf /vendor/orchestra/testbench-core/laravel/database/settings /vendor/orchestra/testbench-core/laravel/database/migrations"
+        ],
         "build": "@php vendor/bin/testbench workbench:build --ansi",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
-            "@build",
             "@php vendor/bin/testbench serve --ansi"
         ],
         "lint": [

@@ -31,19 +31,23 @@
             @endif
 
             <div class="text-sm font-medium leading-6 text-gray-950 dark:text-white whitespace-nowrap">
-                {{ $item->title }}
+                {{ \Illuminate\Support\Str::of($item->title)->limit(30) }}
             </div>
 
             <div class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">
-                {{ $item->url }}
+                {{ \Illuminate\Support\Str::of($item->url)->limit(30) }}
             </div>
         </div>
         <div class="flex items-center gap-2">
             <x-filament::badge :color="$item->type === 'internal' ? 'primary' : 'gray'" class="hidden sm:block">
                 {{ $item->type }}
             </x-filament::badge>
-            {{ ($this->editAction)(['id' => $item->getKey(), 'title' => $item->title]) }}
-            {{ ($this->deleteAction)(['id' => $item->getKey(), 'title' => $item->title]) }}
+            @php
+                $editAction = ($this->editAction)(['id' => $item->getKey(), 'title' => $item->title]);
+                $deleteAction = ($this->deleteAction)(['id' => $item->getKey(), 'title' => $item->title]);
+            @endphp
+            @if($editAction->isVisible()){{ $editAction }}@endif
+            @if($deleteAction->isVisible()){{ $deleteAction }}@endif
         </div>
     </div>
 
