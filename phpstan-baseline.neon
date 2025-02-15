@@ -1,6 +1,18 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\MenuFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Menu, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Menu\>\:\:definition\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: database/factories/MenuFactory.php
+
+		-
+			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\MenuItemFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\MenuItem, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\MenuItem\>\:\:definition\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: database/factories/MenuItemFactory.php
+
+		-
 			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\PageFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Page, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Page\>\:\:definition\(\)$#'
 			identifier: method.childReturnType
 			count: 1

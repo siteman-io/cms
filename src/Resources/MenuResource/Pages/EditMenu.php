@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Siteman\Cms\Resources\MenuResource;
 use Siteman\Cms\Resources\MenuResource\HasLocationAction;
 
@@ -35,5 +36,10 @@ class EditMenu extends EditRecord
             Actions\DeleteAction::make(),
             $this->getLocationAction(),
         ];
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('siteman::menu.resource.edit.title');
     }
 }

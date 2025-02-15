@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Siteman\Cms\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Siteman\Cms\Database\Factories\MenuFactory;
 
 /**
  * @property int $id
@@ -21,6 +23,10 @@ use Illuminate\Support\Carbon;
  */
 class Menu extends Model
 {
+    use HasFactory;
+
+    protected static string $factory = MenuFactory::class;
+
     protected $guarded = [];
 
     protected function casts(): array

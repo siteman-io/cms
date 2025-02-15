@@ -3,6 +3,7 @@
         :heading="__('siteman::menu.custom_link')"
         :collapsible="true"
         :persist-collapsed="true"
+        :collapsed="true"
         id="create-custom-link"
     >
         {{ $this->form }}

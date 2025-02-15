@@ -45,6 +45,9 @@ return [
         'navigation-group' => 'Admin',
         'navigation-icon' => 'heroicon-o-users',
         'navigation-label' => 'Menus',
+        'edit' => [
+            'title' => 'Edit Menu',
+        ],
         'fields' => [
             'name' => [
                 'label' => 'Name',
@@ -63,6 +66,10 @@ return [
             ],
         ],
         'actions' => [
+            'create' => [
+                'label' => 'New Menu',
+                'heading' => 'Create New Menu',
+            ],
             'add' => [
                 'label' => 'Add to Menu',
             ],
