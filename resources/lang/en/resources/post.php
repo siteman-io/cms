@@ -56,6 +56,9 @@ return [
             'published' => [
                 'label' => 'Published',
             ],
+            'author' => [
+                'label' => 'Author',
+            ],
         ],
         'actions' => [
             'edit' => 'Edit',

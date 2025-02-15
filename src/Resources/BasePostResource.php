@@ -100,12 +100,19 @@ abstract class BasePostResource extends Resource
                     ->label(__('siteman::resources/post.table.columns.published_at'))
                     ->since()
                     ->alignRight()
+                    ->width('12rem')
                     ->sortable(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('published')
                     ->label(__('siteman::resources/post.table.filters.published.label'))
                     ->query(fn (Builder $query) => $query->scopes(['published'])),
+                Tables\Filters\SelectFilter::make('author')
+                    ->label(__('siteman::resources/post.table.filters.author.label'))
+                    ->multiple()
+                    ->relationship('author', 'name')
+                    ->preload()
+                    ->searchable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
