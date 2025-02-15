@@ -1,6 +1,10 @@
 <?php
 
 use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Resources\MenuResource\LinkTarget;
+use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
+use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
+use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
 use Siteman\Cms\Resources\MenuResource\Pages\EditMenu;
 use Siteman\Cms\Resources\MenuResource\Pages\ListMenus;
 use Workbench\App\Models\User;
@@ -78,11 +82,57 @@ it('can delete menus', function () {
     expect(Menu::count())->toBe(0);
 });
 
-it('can create menu items', function () {})->todo();
+it('can create a custom link as a menu item', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->create(['name' => 'Test Menu']);
 
-it('can update menu items', function () {})->todo();
+    livewire(CreateCustomLink::class, ['menu' => $menu])
+        ->fillForm([
+            'title' => 'foo',
+            'url' => 'https://siteman.io',
+            'target' => LinkTarget::Self->value,
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
 
-it('can delete menu items', function () {})->todo();
+    expect($menu->refresh())->menuItems->toHaveCount(1);
+});
+
+it('can create a custom text as a menu item', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->create(['name' => 'Test Menu']);
+
+    livewire(CreateCustomText::class, ['menu' => $menu])
+        ->fillForm([
+            'title' => 'foo',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($menu->refresh())->menuItems->toHaveCount(1);
+});
+
+it('can update menu items', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
+
+    livewire(MenuItems::class, ['menu' => $menu])
+        ->callAction('editAction', ['title' => 'updated'], ['id' => $menu->menuItems->first()->id, 'title' => 'siteman'])
+        ->assertHasNoActionErrors();
+
+    expect($menu->refresh())->menuItems->first()->title->toBe('updated');
+});
+
+it('can delete menu items', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
+
+    livewire(MenuItems::class, ['menu' => $menu])
+        ->callAction('deleteAction', arguments: ['id' => $menu->menuItems->first()->id, 'title' => 'siteman'])
+        ->assertHasNoActionErrors();
+
+    expect($menu->refresh())->menuItems->toHaveCount(0);
+});
 
 it('can update menu location assignments', function () {
     actingAs(User::factory()->withPermissions(['view_any_menu', 'create_menu'])->create());
