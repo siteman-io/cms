@@ -2,9 +2,11 @@
 
 use Siteman\Cms\Models\Post;
 use Siteman\Cms\Resources\PostResource\Pages\CreatePost;
+use Siteman\Cms\Resources\PostResource\Pages\EditPost;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
+use function Pest\Livewire\livewire;
 
 it('shows only published posts', function () {
     Post::factory()
@@ -37,12 +39,62 @@ it('needs permission to create posts', function () {
         ->assertOk();
 });
 
-it('can create posts', function () {})->todo();
+it('can create posts', function () {
+    actingAs(User::factory()->withPermissions(['view_any_post', 'create_post'])->create());
+    livewire(CreatePost::class)
+        ->fillForm([
+            'title' => 'Test',
+            'slug' => 'test',
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
 
-it('needs permission to update posts', function () {})->todo();
-it('can update posts', function () {})->todo();
+    expect(Post::whereSlug('test')->exists())->toBeTrue();
+});
 
-it('needs permission to delete posts', function () {})->todo();
-it('can delete posts', function () {})->todo();
+it('needs permission to update posts', function () {
+    $user = User::factory()->create();
 
-it('properly resizes the featured image', function () {})->todo();
+    $page = Post::factory()->create();
+    actingAs($user)
+        ->get(EditPost::getUrl([$page]))
+        ->assertForbidden();
+
+    $user2 = User::factory()->withPermissions(['view_any_post', 'update_post'])->create();
+
+    actingAs($user2)
+        ->get(EditPost::getUrl([$page]))
+        ->assertOk();
+});
+
+it('can update posts', function () {
+    actingAs(User::factory()->withPermissions(['view_any_post', 'update_post'])->create());
+    $post = Post::factory()->create(['slug' => 'test']);
+
+    livewire(EditPost::class, ['record' => $post->getRouteKey()])
+        ->fillForm([
+            'title' => 'Test123',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($post->refresh())->title->toBe('Test123');
+});
+
+it('needs permission to delete posts', function () {
+    actingAs(User::factory()->withPermissions(['view_any_post', 'update_post'])->create());
+    $post = Post::factory()->create(['slug' => 'test']);
+
+    livewire(EditPost::class, ['record' => $post->getRouteKey()])
+        ->assertActionHidden('delete');
+});
+
+it('can delete posts', function () {
+    actingAs(User::factory()->withPermissions(['view_any_post', 'update_post', 'delete_post'])->create());
+    $post = Post::factory()->create(['slug' => 'test']);
+
+    livewire(EditPost::class, ['record' => $post->getRouteKey()])
+        ->callAction('delete');
+
+    expect(Post::count())->toBe(0);
+});
