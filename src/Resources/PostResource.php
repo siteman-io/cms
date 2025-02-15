@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Facades\Siteman;
@@ -121,7 +122,9 @@ class PostResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('published')
+                    ->label(__('siteman::resources/post.table.filters.published.label'))
+                    ->query(fn (Builder $query) => $query->scopes(['published'])),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

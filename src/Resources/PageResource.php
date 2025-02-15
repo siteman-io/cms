@@ -67,7 +67,7 @@ class PageResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('published')
                     ->label(__('siteman::resources/page.table.filters.published.label'))
-                    ->query(fn(Builder $query) => $query->scopes(['published'])),
+                    ->query(fn (Builder $query) => $query->scopes(['published'])),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

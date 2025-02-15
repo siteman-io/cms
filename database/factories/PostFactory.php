@@ -25,6 +25,7 @@ class PostFactory extends Factory
             'slug' => Str::slug($title),
             'excerpt' => fake()->sentence, // secret
             'blocks' => $this->makeBlocks(rand(1, 3)),
+            'published_at' => null,
         ];
     }
 

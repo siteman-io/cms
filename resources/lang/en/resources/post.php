@@ -52,6 +52,9 @@ return [
         ],
         'filters' => [
             'search' => 'Search…',
+            'published' => [
+                'label' => 'Published',
+            ],
         ],
         'actions' => [
             'edit' => 'Edit',
