@@ -44,9 +44,16 @@ jobs:
           composer prepare
 
       - name: Execute tests
-        run: composer test -- --ci --coverage-clover coverage.xml
+        run: composer test -- --ci --coverage-clover coverage.xml --log-junit junit.xml
 
       - name: Upload coverage to Codecov
+        if: ${{ matrix.php == '8.4' }}
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        if: ${{ (matrix.php == '8.4') && (!cancelled()) }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
