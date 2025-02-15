@@ -20,7 +20,11 @@ class ListMenus extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->authorize('create_menu')
+                ->label(__('siteman::menu.resource.actions.create.label'))
+                ->modalHeading(__('siteman::menu.resource.actions.create.heading'))
+                ->createAnother(false),
             $this->getLocationAction(),
         ];
     }
