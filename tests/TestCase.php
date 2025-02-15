@@ -3,15 +3,11 @@
 namespace Siteman\Cms\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Console\Kernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Siteman\Cms\CmsServiceProvider;
 use Siteman\Cms\Settings\BlogSettings;
-use Spatie\Health\HealthServiceProvider;
 use Workbench\App\Models\User;
 
 #[WithMigration]
@@ -30,15 +26,6 @@ class TestCase extends Orchestra
         );
     }
 
-    protected function getPackageProviders($app)
-    {
-        return [
-            HealthServiceProvider::class,
-            LivewireServiceProvider::class,
-            CmsServiceProvider::class,
-        ];
-    }
-
     public function defineEnvironment($app): void
     {
         config()->set('database.connections.sqlite.database', ':memory:');
@@ -54,13 +41,5 @@ class TestCase extends Orchestra
             'rss_enabled' => true,
             'rss_endpoint' => 'rss',
         ], false);
-
     }
-
-    //    protected function resolveApplicationConsoleKernel($app)
-    //    {
-    //        $app->singleton(
-    //            Kernel::class, Kernel::class
-    //        );
-    //    }
 }
