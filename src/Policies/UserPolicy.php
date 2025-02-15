@@ -38,34 +38,4 @@ class UserPolicy
     {
         return $user->can('delete_any_user');
     }
-
-    public function forceDelete(User $user): bool
-    {
-        return $user->can('force_delete_user');
-    }
-
-    public function forceDeleteAny(User $user): bool
-    {
-        return $user->can('force_delete_any_user');
-    }
-
-    public function restore(User $user): bool
-    {
-        return $user->can('restore_user');
-    }
-
-    public function restoreAny(User $user): bool
-    {
-        return $user->can('restore_any_user');
-    }
-
-    public function replicate(User $user): bool
-    {
-        return $user->can('replicate_user');
-    }
-
-    public function reorder(User $user): bool
-    {
-        return $user->can('reorder_user');
-    }
 }

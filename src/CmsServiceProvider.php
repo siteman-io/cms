@@ -95,10 +95,9 @@ class CmsServiceProvider extends PackageServiceProvider
 
         $config->set('filament-shield.shield_resource.show_model_path', false);
         $config->set('filament-shield.permission_prefixes.resource', [
-            'view',
             'view_any',
+            'view',
             'create',
-            'replicate',
             'update',
             'delete',
             'delete_any',

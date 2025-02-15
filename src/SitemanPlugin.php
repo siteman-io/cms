@@ -51,7 +51,7 @@ class SitemanPlugin implements Plugin
         ]);
 
         $panel->profile(EditProfile::class, false);
-        $panel->plugin(FilamentShieldPlugin::make());
+        $panel->plugin(FilamentShieldPlugin::make()->checkboxListColumns(3));
         $panel->plugin(FilamentPeekPlugin::make());
         $panel->renderHook(
             PanelsRenderHook::TOPBAR_START,

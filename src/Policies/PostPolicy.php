@@ -2,14 +2,11 @@
 
 namespace Siteman\Cms\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User;
 use Siteman\Cms\Models\Post;
 
 class PostPolicy
 {
-    use HandlesAuthorization;
-
     public function viewAny(User $user): bool
     {
         return $user->can('view_any_post');
@@ -38,35 +35,5 @@ class PostPolicy
     public function deleteAny(User $user): bool
     {
         return $user->can('delete_any_post');
-    }
-
-    public function forceDelete(User $user, Post $post): bool
-    {
-        return $user->can('force_delete_post');
-    }
-
-    public function forceDeleteAny(User $user): bool
-    {
-        return $user->can('force_delete_any_post');
-    }
-
-    public function restore(User $user, Post $post): bool
-    {
-        return $user->can('restore_post');
-    }
-
-    public function restoreAny(User $user): bool
-    {
-        return $user->can('restore_any_post');
-    }
-
-    public function replicate(User $user, Post $post): bool
-    {
-        return $user->can('replicate_post');
-    }
-
-    public function reorder(User $user): bool
-    {
-        return $user->can('reorder_post');
     }
 }

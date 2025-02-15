@@ -2,14 +2,11 @@
 
 namespace Siteman\Cms\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User;
 use Siteman\Cms\Models\Page;
 
 class PagePolicy
 {
-    use HandlesAuthorization;
-
     public function viewAny(User $user): bool
     {
         return $user->can('view_any_page');
@@ -38,35 +35,5 @@ class PagePolicy
     public function deleteAny(User $user): bool
     {
         return $user->can('delete_any_page');
-    }
-
-    public function forceDelete(User $user, Page $page): bool
-    {
-        return $user->can('force_delete_page');
-    }
-
-    public function forceDeleteAny(User $user): bool
-    {
-        return $user->can('force_delete_any_page');
-    }
-
-    public function restore(User $user, Page $page): bool
-    {
-        return $user->can('restore_page');
-    }
-
-    public function restoreAny(User $user): bool
-    {
-        return $user->can('restore_any_page');
-    }
-
-    public function replicate(User $user, Page $page): bool
-    {
-        return $user->can('replicate_page');
-    }
-
-    public function reorder(User $user): bool
-    {
-        return $user->can('reorder_page');
     }
 }
