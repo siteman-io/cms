@@ -3,9 +3,11 @@
 return [
 
     'item' => [
-        'custom_text' => 'Custom Text',
+        'page_link' => 'Page Link',
         'custom_link' => 'Custom Link',
+        'custom_text' => 'Custom Text',
     ],
+    'page_link' => 'Page Link',
     'custom_link' => 'Custom Link',
     'custom_text' => 'Custom Text',
     'open_in' => [

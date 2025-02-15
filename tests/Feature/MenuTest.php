@@ -1,9 +1,11 @@
 <?php
 
 use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\MenuResource\LinkTarget;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
+use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
 use Siteman\Cms\Resources\MenuResource\Pages\EditMenu;
 use Siteman\Cms\Resources\MenuResource\Pages\ListMenus;
@@ -80,6 +82,21 @@ it('can delete menus', function () {
         ->assertHasNoActionErrors();
 
     expect(Menu::count())->toBe(0);
+});
+
+it('can create a page link as a menu item', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->create(['name' => 'Test Menu']);
+    $page = Page::factory()->create();
+
+    livewire(CreatePageLink::class, ['menu' => $menu])
+        ->fillForm([
+            'pageId' => $page->id,
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($menu->refresh()->menuItems->first()->linkable_id)->toBe($page->id);
 });
 
 it('can create a custom link as a menu item', function () {
