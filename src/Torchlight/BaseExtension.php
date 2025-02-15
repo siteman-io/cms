@@ -8,6 +8,9 @@ use League\CommonMark\Util\Xml;
 use Torchlight\Block;
 use Torchlight\Torchlight;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class BaseExtension
 {
     /**

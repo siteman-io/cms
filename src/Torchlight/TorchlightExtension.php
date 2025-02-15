@@ -10,6 +10,9 @@ use League\CommonMark\Node\Node;
 use League\CommonMark\Renderer\ChildNodeRendererInterface;
 use League\CommonMark\Renderer\NodeRendererInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TorchlightExtension extends BaseExtension implements ExtensionInterface, NodeRendererInterface
 {
     /**
