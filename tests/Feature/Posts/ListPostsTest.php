@@ -33,3 +33,17 @@ it('can filter for published posts', function () {
     $page->filterTable('published');
     $page->assertCountTableRecords(1);
 });
+
+it('can filter by author', function () {
+    $this->withoutExceptionHandling();
+    actingAs(User::factory()->withPermissions(['view_any_post'])->create());
+
+    Post::factory()->count(2)->create();
+
+    $page = livewire(ListPosts::class);
+
+    $page->assertCountTableRecords(2);
+    // We use author id 2 since we have created one user to log in
+    $page->filterTable('author', [2]);
+    $page->assertCountTableRecords(1);
+});
