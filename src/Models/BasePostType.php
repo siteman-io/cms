@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -36,6 +37,7 @@ abstract class BasePostType extends Model implements HasMedia
     use HasFactory;
     use HasSEO;
     use InteractsWithMedia;
+    use SoftDeletes;
     use Versionable;
 
     protected array $versionable = ['title', 'slug', 'blocks', 'content', 'published_at'];
@@ -92,5 +94,10 @@ abstract class BasePostType extends Model implements HasMedia
             'published_at' => 'datetime',
             'blocks' => 'collection',
         ];
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->published_at && $this->published_at->isPast();
     }
 }

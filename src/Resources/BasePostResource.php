@@ -11,11 +11,15 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Concerns\HasFormHooks;
 use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Models\BasePostType;
 
 abstract class BasePostResource extends Resource
 {
@@ -80,16 +84,23 @@ abstract class BasePostResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('author')->latest('created_at'))
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label(__('siteman::resources/post.table.columns.id'))
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label(__('siteman::resources/post.table.columns.title'))
                     ->searchable()
+                    ->formatStateUsing(fn (BasePostType $record) => $record->slug === '/' ? new HtmlString(Blade::render("<div class='flex'><span>$record->title &nbsp&nbsp-&nbsp&nbsp</span><x-filament::badge class='inline-block'>Homepage</x-filament::badge></div>")) : $record->title)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('author.name')
                     ->label(__('siteman::resources/post.table.columns.author'))
@@ -99,11 +110,13 @@ abstract class BasePostResource extends Resource
                 Tables\Columns\TextColumn::make('published_at')
                     ->label(__('siteman::resources/post.table.columns.published_at'))
                     ->since()
+                    ->dateTimeTooltip()
                     ->alignRight()
-                    ->width('12rem')
+                    ->width('10rem')
                     ->sortable(),
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\Filter::make('published')
                     ->label(__('siteman::resources/post.table.filters.published.label'))
                     ->query(fn (Builder $query) => $query->scopes(['published'])),
@@ -115,15 +128,18 @@ abstract class BasePostResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label('siteman::resources/post.table.actions.edit')
-                    ->translateLabel(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make()->label(__('siteman::resources/post.table.actions.edit')),
+                    Tables\Actions\DeleteAction::make()->label(__('siteman::resources/post.table.actions.delete'))->color('gray'),
+                    Tables\Actions\ForceDeleteAction::make()->color('gray'),
+                    Tables\Actions\RestoreAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->label('siteman::resources/post.table.bulk-actions.delete')
-                        ->translateLabel(),
+                    Tables\Actions\DeleteBulkAction::make()->label(__('siteman::resources/post.table.actions.delete')),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

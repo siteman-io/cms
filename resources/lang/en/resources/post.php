@@ -62,8 +62,6 @@ return [
         ],
         'actions' => [
             'edit' => 'Edit',
-        ],
-        'bulk-actions' => [
             'delete' => 'Delete',
         ],
     ],
