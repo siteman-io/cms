@@ -44,8 +44,8 @@ return [
         'linkable_id' => 'ID',
     ],
     'resource' => [
-        'navigation-group' => 'Admin',
-        'navigation-icon' => 'heroicon-o-users',
+        'navigation-group' => 'Content',
+        'navigation-icon' => 'heroicon-o-bars-3-bottom-left',
         'navigation-label' => 'Menus',
         'edit' => [
             'title' => 'Edit Menu',
