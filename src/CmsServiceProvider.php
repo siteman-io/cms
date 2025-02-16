@@ -107,7 +107,6 @@ class CmsServiceProvider extends PackageServiceProvider
             $siteName = \Siteman\Cms\Facades\Siteman::getGeneralSettings()->site_name;
             config()->set('seo.title.homepage_title', $siteName);
             config()->set('seo.title.suffix', ' | '.$siteName);
-            config()->set('seo.description.fallback', \Siteman\Cms\Facades\Siteman::getGeneralSettings()->description);
 
             return $seoManager;
         });
@@ -115,7 +114,6 @@ class CmsServiceProvider extends PackageServiceProvider
             $siteName = \Siteman\Cms\Facades\Siteman::getGeneralSettings()->site_name;
             config()->set('seo.title.homepage_title', $siteName);
             config()->set('seo.title.suffix', ' | '.$siteName);
-            config()->set('seo.description.fallback', \Siteman\Cms\Facades\Siteman::getGeneralSettings()->description);
 
             return $tagManager;
         });

@@ -14,6 +14,8 @@ use Overtrue\LaravelVersionable\Versionable;
 use Overtrue\LaravelVersionable\VersionStrategy;
 use RalphJSmit\Laravel\SEO\Models\SEO;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Siteman\Cms\Facades\Siteman;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -99,5 +101,16 @@ abstract class BasePostType extends Model implements HasMedia
     public function isPublished(): bool
     {
         return $this->published_at && $this->published_at->isPast();
+    }
+
+    public function getDynamicSEOData(): SEOData
+    {
+        return new SEOData(
+            title: $this->title,
+            description: Siteman::getGeneralSettings()->description,
+            author: property_exists($this->author, 'name') ? $this->author->name : null,
+            published_time: $this->published_at,
+            modified_time: $this->updated_at,
+        );
     }
 }
