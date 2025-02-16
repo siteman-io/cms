@@ -24,6 +24,9 @@ return [
         ],
         'filters' => [
             'search' => 'Search…',
+            'role' => [
+                'label' => 'Role',
+            ],
         ],
         'actions' => [
             'edit' => 'Edit',

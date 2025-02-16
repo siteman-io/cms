@@ -50,13 +50,11 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('siteman::resources/user.table.columns.name')
-                    ->translateLabel()
+                    ->label(__('siteman::resources/user.table.columns.name'))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->label('siteman::resources/user.table.columns.email')
-                    ->translateLabel()
+                    ->label(__('siteman::resources/user.table.columns.email'))
                     ->copyable()
                     ->sortable()
                     ->searchable(),
@@ -75,18 +73,21 @@ class UserResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('roles')
+                    ->label(__('siteman::resources/user.table.filters.role.label'))
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload()
+                    ->searchable(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label('siteman::resources/user.table.actions.edit')
-                    ->translateLabel(),
-            ])
+            ->actions(
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make()->label(__('siteman::resources/user.table.actions.edit')),
+                ]),
+            )
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->label('siteman::resources/user.table.bulk-actions.delete')
-                        ->translateLabel(),
+                    Tables\Actions\DeleteBulkAction::make()->label(__('siteman::resources/user.table.bulk-actions.delete')),
                 ]),
             ]);
     }
