@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             'url' => '/blog',
             'order' => 2,
         ]);
-        //        Page::factory()->count(10)->published()->create();
-        //        Post::factory()->count(10)->published()->create();
+        Page::factory()->count(10)->published()->create();
+        Post::factory()->count(10)->published()->create();
     }
 }

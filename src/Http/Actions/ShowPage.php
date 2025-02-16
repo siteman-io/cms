@@ -2,14 +2,17 @@
 
 namespace Siteman\Cms\Http\Actions;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
-use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\View\Renderer;
 
 class ShowPage
 {
-    public function __invoke(Request $request)
+    public function __construct(private readonly Renderer $renderer) {}
+
+    public function __invoke(Request $request): View
     {
         $page = Page::query()
             ->published()
@@ -17,6 +20,6 @@ class ShowPage
             ->firstOrFail();
         Context::add('current_page', $page);
 
-        return Siteman::theme()->render($page);
+        return $this->renderer->renderPostType($page);
     }
 }

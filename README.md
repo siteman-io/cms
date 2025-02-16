@@ -15,29 +15,29 @@ development experience.
 Table of Contents
 =================
 
-   * [Installation](#installation)
-   * [Features](#features)
-      * [Themes](#themes)
-         * [`configure` method](#configure-method)
-         * [`render` method](#render-method)
-         * [`renderIndex` method](#renderindex-method)
-      * [Layouts](#layouts)
-      * [Menus](#menus)
-      * [Blocks](#blocks)
-         * [`image-block`](#image-block)
-         * [`markdown-block`](#markdown-block)
-         * [Create your own blocks](#create-your-own-blocks)
-      * [Settings](#settings)
-         * [General Settings](#general-settings)
-         * [Blog Settings](#blog-settings)
-         * [Create your own settings](#create-your-own-settings)
-      * [Development](#development)
-      * [Testing](#testing)
-      * [Changelog](#changelog)
-      * [Contributing](#contributing)
-      * [Security Vulnerabilities](#security-vulnerabilities)
-      * [Credits](#credits)
-      * [License](#license)
+* [Installation](#installation)
+* [Features](#features)
+    * [Themes](#themes)
+        * [`configure` method](#configure-method)
+        * [`render` method](#render-method)
+        * [`renderIndex` method](#renderindex-method)
+    * [Layouts](#layouts)
+    * [Menus](#menus)
+    * [Blocks](#blocks)
+        * [`image-block`](#image-block)
+        * [`markdown-block`](#markdown-block)
+        * [Create your own blocks](#create-your-own-blocks)
+    * [Settings](#settings)
+        * [General Settings](#general-settings)
+        * [Blog Settings](#blog-settings)
+        * [Create your own settings](#create-your-own-settings)
+    * [Development](#development)
+    * [Testing](#testing)
+    * [Changelog](#changelog)
+    * [Contributing](#contributing)
+    * [Security Vulnerabilities](#security-vulnerabilities)
+    * [Credits](#credits)
+    * [License](#license)
 
 ## Installation
 
@@ -80,25 +80,47 @@ The theme can be enabled via your `config/siteman.php` file.
 ```php 
 return [
     // ...
-    'theme' => \Siteman\Cms\Theme\BlankTheme::class,
+    'themes' => [
+        \Siteman\Cms\Theme\BlankTheme::class,
+    ],
     // ...
 ];
 ``` 
 
-A Siteman theme is a PHP class which implements the `Siteman\Cms\Theme\ThemeInterface`. It defines three methods:
+A Siteman theme is a PHP class which implements the `Siteman\Cms\Theme\ThemeInterface`. It defines two methods:
+
+#### `getName` method
+
+The `getName` method is used to return a human-readable name of the theme.
 
 #### `configure` method
 
 The Themes `configure` method is used to define the theme's configuration. It gets the `Siteman\Cms\Siteman` instance as
 a dependency, which allows for easy access and manipulation of the Siteman configuration.
 
-#### `render` method
+> [!IMPORTANT]  
+> If you are proving a theme via a composer package you need to implement a `getViewPrefix` method.
 
-The `render` method is used to render a post or a page.
+#### Default view files
 
-#### `renderIndex` method
+Siteman renders different content through different cascades of view options. The first existing one is taken.
 
-The `renderIndex` method is used to render index pages like the `/blog` page. or the `/tags/{tag}` page.
+* Pages
+    1. Layout if set on the Page
+    2. `{theme}.pages.{slug}`
+    3. `{theme}.pages.show`
+    4. `siteman::themes.blank.pages.show`
+* Posts
+    1. `{theme}.posts.{slug}`
+    2. `{theme}.posts.show`
+    3. `siteman::themes.blank.posts.show`
+* Post Index
+    1. `{theme}.posts.index`
+    2. `siteman::themes.blank.posts.index`
+* Tags
+    1. `{theme}.tags.{slug}`
+    2. `{theme}.tags.show`
+    3. `siteman::themes.blank.tags.show`
 
 ### Layouts
 
@@ -113,6 +135,7 @@ A new layout can be registered via your Themes `configure` method.
         $siteman->registerLayout(BaseLayout::class);
     }
 ```
+
 > [!IMPORTANT]  
 > Layouts have to be registered as Blade components by your package/application. This
 > is done by calling `Blade::component` method to your package's service provider.
@@ -139,13 +162,13 @@ Registered menu locations and their assigned menus can be found via the `Locatio
 Menus can be used in your Blade views via the `Siteman` facade.
 
 ```bladehtml
+
 <ul>
     @foreach(\Siteman\Cms\Facades\Siteman::getMenuItems('header') as $item)
     <li><a href="{{$item->url}}" class="hover:underline">>{{$item->title}}</a></li>
     @endforeach
 </ul>
 ```
-
 
 ### Blocks
 
@@ -166,8 +189,6 @@ Siteman enabled a few extensions for it out of the box
 * Render blade via `ryangjchandler/commonmark-blade-block`
 * Highlight code via `torchlight/torchlight-laravel` (You need to have a `TORCHLIGHT_TOKEN` configured in your `.env`)
 * Add HTML attributes via the `AttributesExtension` from `league/commonmark`
-
-
 
 #### Create your own blocks
 
@@ -226,7 +247,8 @@ A block needs to be registered via the Themes `configure` method.
 
 ### Settings
 
-Siteman comes with a settings implementation which is built on top of the [`spatie/laravel-settings` package](https://github.com/spatie/laravel-settings) package. It ships
+Siteman comes with a settings implementation which is built on top of the [
+`spatie/laravel-settings` package](https://github.com/spatie/laravel-settings) package. It ships
 out of the box with the following Settings:
 
 #### General Settings
@@ -234,12 +256,10 @@ out of the box with the following Settings:
 The General Settings contain fields to configure the site's name, description.
 ![General Settings](art/siteman_general_settings.png)
 
-
 #### Blog Settings
 
 The Blog Settings contain fields to configure Sitemans blogging capabilities.
 ![Blog Settings](art/siteman_blog_settings.png)
-
 
 #### Create your own settings
 
@@ -282,7 +302,9 @@ return new class extends SettingsMigration
     }
 };
 ```
-You can find out more about how to do this in the [Spatie documentation](https://github.com/spatie/laravel-settings#usage).
+
+You can find out more about how to do this in
+the [Spatie documentation](https://github.com/spatie/laravel-settings#usage).
 
 To integrate this into Siteman we also generate a `App\Settings\ThemeSettingsForm` class which is used to define the
 fields for the settings form.
@@ -315,6 +337,7 @@ class ThemeSettingsForm implements SettingsFormInterface
     }
 }
 ```
+
 It contains the dummy field `description` which you may delete. You can add more fields to the schema to fit your needs.
 
 The settings need to be registered via the Themes `configure` method.

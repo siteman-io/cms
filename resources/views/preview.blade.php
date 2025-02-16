@@ -1,2 +1,2 @@
 @props(['post'])
-{!! \Siteman\Cms\Facades\Siteman::theme()->render($post)  !!}
+{!! app(\Siteman\Cms\View\Renderer::class)->renderPostType($post) !!}
