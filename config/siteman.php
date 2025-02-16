@@ -20,9 +20,12 @@ return [
     | Theme
     |--------------------------------------------------------------------------
     |
-    | Siteman uses a theme to render content. You can specify the theme here.
+    | Siteman uses themes to render content. Your available themes are defined
+    | here. Installed packages can add themes to this configuration as well.
     |
     */
 
-    'theme' => \Siteman\Cms\Theme\BlankTheme::class,
+    'themes' => [
+        \Siteman\Cms\Theme\BlankTheme::class,
+    ],
 ];

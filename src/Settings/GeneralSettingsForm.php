@@ -5,7 +5,7 @@ namespace Siteman\Cms\Settings;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Siteman\Cms\Theme\BlankTheme;
+use Siteman\Cms\Theme\ThemeRegistry;
 
 class GeneralSettingsForm implements SettingsFormInterface
 {
@@ -33,9 +33,7 @@ class GeneralSettingsForm implements SettingsFormInterface
             Select::make('theme')
                 ->label(__('siteman::pages/settings.groups.general.fields.theme.label'))
                 ->helperText(__('siteman::pages/settings.groups.general.fields.theme.helper-text'))
-                ->options([
-                    BlankTheme::class => BlankTheme::getName(),
-                ])
+                ->options(fn () => collect(app(ThemeRegistry::class)->getThemes())->mapWithKeys(fn ($theme) => [$theme => $theme::getName()]))
                 ->required(),
         ];
     }

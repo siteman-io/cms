@@ -7,6 +7,7 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
@@ -32,6 +33,7 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
 use Siteman\Cms\Theme\ThemeInterface;
+use Siteman\Cms\Theme\ThemeRegistry;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
@@ -75,6 +77,11 @@ class CmsServiceProvider extends PackageServiceProvider
     public function registeringPackage()
     {
         $this->app->singleton(BlockRegistry::class);
+        $this->app->singleton(ThemeRegistry::class, fn () => new ThemeRegistry(
+            new Filesystem,
+            $this->app->basePath('vendor'),
+            config('siteman.themes', []),
+        ));
         $this->app->singleton(ThemeInterface::class, fn () => \Siteman\Cms\Facades\Siteman::theme());
         $this->app->singleton(Siteman::class);
         $this->app->singleton(SitemanPlugin::class);
