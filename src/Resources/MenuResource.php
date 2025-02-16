@@ -100,11 +100,18 @@ class MenuResource extends Resource
                 Tables\Columns\IconColumn::make('is_visible')
                     ->label(__('siteman::menu.resource.fields.is_visible.label'))
                     ->sortable()
+                    ->alignCenter()
                     ->boolean(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('filament-shield::filament-shield.column.updated_at'))
+                    ->alignRight()
+                    ->dateTimeTooltip()
+                    ->since(),
             ])
-            ->actions([
+            ->actions(Tables\Actions\ActionGroup::make([
                 Tables\Actions\EditAction::make(),
-            ])
+                Tables\Actions\DeleteAction::make()->color('gray'),
+            ]))
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

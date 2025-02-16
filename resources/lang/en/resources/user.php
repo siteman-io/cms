@@ -19,9 +19,14 @@ return [
             'id' => 'ID',
             'name' => 'Name',
             'email' => 'Email',
+            'roles' => 'Roles',
+            'created_at' => 'Created at',
         ],
         'filters' => [
             'search' => 'Search…',
+            'role' => [
+                'label' => 'Role',
+            ],
         ],
         'actions' => [
             'edit' => 'Edit',

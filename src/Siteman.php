@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Blade;
 use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
+use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Settings\BlogSettingsForm;
 use Siteman\Cms\Settings\GeneralSettings;
@@ -26,6 +27,8 @@ class Siteman
         MarkdownBlock::class,
         ImageBlock::class,
     ];
+
+    protected array $formFieldHooks = [];
 
     protected array $layouts = [];
 
@@ -96,5 +99,15 @@ class Siteman
     public function getLayouts(): array
     {
         return $this->layouts;
+    }
+
+    public function registerFormHook(FormHook $hook, \Closure $callback): void
+    {
+        $this->formFieldHooks[$hook->value] = array_merge($this->formFieldHooks[$hook->value] ?? [], [$callback]);
+    }
+
+    public function getFormHooks(?FormHook $hook = null): array
+    {
+        return $hook ? $this->formFieldHooks[$hook->value] ?? [] : $this->formFieldHooks;
     }
 }

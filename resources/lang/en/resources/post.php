@@ -4,6 +4,12 @@ return [
     'navigation-group' => 'Content',
     'navigation-icon' => 'heroicon-o-newspaper',
     'navigation-label' => 'Posts',
+    'label' => 'Post',
+    'notifications' => [
+        'deleted' => [
+            'title' => 'Moved to trash',
+        ],
+    ],
     'fields' => [
         'title' => [
             'label' => 'Title',
@@ -49,15 +55,20 @@ return [
             'slug' => 'Slug',
             'content' => 'Content',
             'author' => 'Author',
+            'published_at' => 'Published at',
         ],
         'filters' => [
             'search' => 'Search…',
+            'published' => [
+                'label' => 'Published',
+            ],
+            'author' => [
+                'label' => 'Author',
+            ],
         ],
         'actions' => [
             'edit' => 'Edit',
-        ],
-        'bulk-actions' => [
-            'delete' => 'Delete',
+            'delete' => 'Move to trash',
         ],
     ],
 ];

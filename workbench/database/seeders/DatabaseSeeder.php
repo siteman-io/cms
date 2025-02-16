@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\Models\Post;
 use Workbench\App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -40,5 +41,7 @@ class DatabaseSeeder extends Seeder
             'url' => '/blog',
             'order' => 2,
         ]);
+        //        Page::factory()->count(10)->published()->create();
+        //        Post::factory()->count(10)->published()->create();
     }
 }
