@@ -7,6 +7,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -130,7 +131,9 @@ abstract class BasePostResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()->label(__('siteman::resources/post.table.actions.edit')),
-                    Tables\Actions\DeleteAction::make()->label(__('siteman::resources/post.table.actions.delete'))->color('gray'),
+                    Tables\Actions\DeleteAction::make()->label(__('siteman::resources/post.table.actions.delete'))
+                        ->color('gray')
+                        ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::resources/post.notifications.deleted.title'))),
                     Tables\Actions\ForceDeleteAction::make()->color('gray'),
                     Tables\Actions\RestoreAction::make(),
                 ]),
@@ -161,6 +164,6 @@ abstract class BasePostResource extends Resource
 
     public static function getLabel(): string
     {
-        return self::getNavigationLabel();
+        return __('siteman::resources/post.label');
     }
 }

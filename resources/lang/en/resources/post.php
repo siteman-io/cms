@@ -4,6 +4,12 @@ return [
     'navigation-group' => 'Content',
     'navigation-icon' => 'heroicon-o-newspaper',
     'navigation-label' => 'Posts',
+    'label' => 'Post',
+    'notifications' => [
+        'deleted' => [
+            'title' => 'Moved to trash',
+        ],
+    ],
     'fields' => [
         'title' => [
             'label' => 'Title',
@@ -62,7 +68,7 @@ return [
         ],
         'actions' => [
             'edit' => 'Edit',
-            'delete' => 'Delete',
+            'delete' => 'Move to trash',
         ],
     ],
 ];

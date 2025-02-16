@@ -77,4 +77,9 @@ class PageResource extends BasePostResource
     {
         return __('siteman::resources/page.navigation-label');
     }
+
+    public static function getLabel(): string
+    {
+        return __('siteman::resources/page.label');
+    }
 }

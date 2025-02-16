@@ -4,6 +4,7 @@ return [
     'navigation-group' => 'Content',
     'navigation-icon' => 'heroicon-o-book-open',
     'navigation-label' => 'Pages',
+    'label' => 'Page',
     'fields' => [
         'title' => [
             'label' => 'Title',
