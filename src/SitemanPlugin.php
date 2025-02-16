@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms;
 
@@ -24,8 +22,6 @@ use Siteman\Cms\Theme\ThemeInterface;
 
 class SitemanPlugin implements Plugin
 {
-    public function __construct(protected ThemeInterface $theme) {}
-
     public static function make(): self
     {
         return app(static::class);
@@ -72,15 +68,14 @@ class SitemanPlugin implements Plugin
             ]);
         });
 
-        if (method_exists($this->theme, 'configurePanel')) {
-            $this->theme->configurePanel($panel);
-        }
-
         $panel->sidebarFullyCollapsibleOnDesktop()->sidebarWidth('14rem');
     }
 
     public function boot(Panel $panel): void
     {
-        //
+        $theme = app(ThemeInterface::class);
+        if (method_exists($theme, 'configurePanel')) {
+            $theme->configurePanel($panel);
+        }
     }
 }
