@@ -100,7 +100,9 @@ class Siteman
 
     public function registerLayout(string $className): self
     {
-        Blade::component($className::getId(), $className);
+        if (!array_key_exists($className::getId(), Blade::getClassComponentAliases())) {
+            throw new \RuntimeException('Layout must be registered as Blade component');
+        }
         $this->layouts[$className::getId()] = $className;
 
         return $this;

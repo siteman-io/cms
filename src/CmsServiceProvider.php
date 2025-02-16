@@ -9,6 +9,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Http\Kernel;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
 use RalphJSmit\Laravel\SEO\SEOManager;
@@ -32,6 +33,7 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
+use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
 use Siteman\Cms\Theme\ThemeRegistry;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
@@ -139,6 +141,9 @@ class CmsServiceProvider extends PackageServiceProvider
             $this->getAssets(),
             $this->getAssetPackageName(),
         );
+
+        Blade::component('base-layout', BaseLayout::class);
+
         Livewire::component('health-check-result', HealthCheckResultWidget::class);
         Livewire::component('menu-builder-items', MenuItems::class);
         Livewire::component('create-custom-link', CreateCustomLink::class);
