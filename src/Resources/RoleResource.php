@@ -92,4 +92,9 @@ class RoleResource extends FilamentShieldRoleResource
     {
         return self::getNavigationLabel();
     }
+
+    public static function getNavigationBadge(): null
+    {
+        return null;
+    }
 }
