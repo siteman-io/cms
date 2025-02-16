@@ -117,10 +117,6 @@ abstract class BasePostResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
-                Tables\Filters\Filter::make('published')
-                    ->label(__('siteman::resources/post.table.filters.published.label'))
-                    ->query(fn (Builder $query) => $query->scopes(['published'])),
                 Tables\Filters\SelectFilter::make('author')
                     ->label(__('siteman::resources/post.table.filters.author.label'))
                     ->multiple()

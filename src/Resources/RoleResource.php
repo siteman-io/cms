@@ -20,14 +20,14 @@ class RoleResource extends FilamentShieldRoleResource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->weight('font-medium')
-                    ->label(__('filament-shield::filament-shield.column.name'))
+                    ->label(__('siteman::resources/role.table.columns.name'))
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('guard_name')
                     ->badge()
                     ->alignCenter()
                     ->color('warning')
-                    ->label(__('filament-shield::filament-shield.column.guard_name')),
+                    ->label(__('siteman::resources/role.table.columns.guard_name')),
                 Tables\Columns\TextColumn::make('team.name')
                     ->default('Global')
                     ->badge()
@@ -37,16 +37,16 @@ class RoleResource extends FilamentShieldRoleResource
                     ->visible(fn (): bool => static::shield()->isCentralApp() && Utils::isTenancyEnabled()),
                 Tables\Columns\TextColumn::make('permissions_count')
                     ->badge()
-                    ->label(__('filament-shield::filament-shield.column.permissions'))
+                    ->label(__('siteman::resources/role.table.columns.permissions_count'))
                     ->counts('permissions')
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('users_count')
                     ->badge()
-                    ->label(__('filament-shield::filament-shield.column.permissions'))
+                    ->label(__('siteman::resources/role.table.columns.users_count'))
                     ->counts('users')
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('filament-shield::filament-shield.column.updated_at'))
+                    ->label(__('siteman::resources/role.table.columns.updated_at'))
                     ->alignRight()
                     ->dateTimeTooltip()
                     ->since(),
