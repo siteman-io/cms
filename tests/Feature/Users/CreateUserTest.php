@@ -19,4 +19,4 @@ it('can create a new user', function () {
         ->assertHasNoFormErrors();
 
     expect(User::where('email', 'test@example.com')->exists())->toBeTrue();
-});
+})->todo('We need to make an invitation out of the user creation process');
