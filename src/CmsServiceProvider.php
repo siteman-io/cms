@@ -75,7 +75,7 @@ class CmsServiceProvider extends PackageServiceProvider
     public function registeringPackage()
     {
         $this->app->singleton(BlockRegistry::class);
-        $this->app->singleton(ThemeInterface::class, fn () => $this->app->make(config('siteman.theme')));
+        $this->app->singleton(ThemeInterface::class, fn () => \Siteman\Cms\Facades\Siteman::theme());
         $this->app->singleton(Siteman::class);
         $this->app->singleton(SitemanPlugin::class);
     }
@@ -154,8 +154,6 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
         });
-
-        \Siteman\Cms\Facades\Siteman::boot();
     }
 
     protected function getAssetPackageName(): ?string
