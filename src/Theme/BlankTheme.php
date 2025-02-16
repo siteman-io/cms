@@ -9,6 +9,11 @@ use Siteman\Cms\Siteman;
 
 class BlankTheme implements ThemeInterface
 {
+    public static function getName(): string
+    {
+        return 'Blank Theme';
+    }
+
     public function configure(Siteman $siteman): void
     {
         $siteman

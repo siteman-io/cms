@@ -8,6 +8,8 @@ use Siteman\Cms\Siteman;
 
 interface ThemeInterface
 {
+    public static function getName(): string;
+
     public function configure(Siteman $siteman): void;
 
     public function render(BasePostType $post);
