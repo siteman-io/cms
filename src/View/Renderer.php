@@ -2,6 +2,7 @@
 
 namespace Siteman\Cms\View;
 
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
@@ -13,7 +14,7 @@ use Spatie\Tags\Tag;
 
 class Renderer
 {
-    public function __construct(private readonly ThemeInterface $theme) {}
+    public function __construct(private readonly ThemeInterface $theme, private readonly Factory $view) {}
 
     public function renderPostType(BasePostType $post): View
     {
@@ -82,8 +83,8 @@ class Renderer
         $views = Arr::wrap($views);
 
         foreach ($views as $view) {
-            if (view()->exists($view)) {
-                return view($view, $data);
+            if ($this->view->exists($view)) {
+                return $this->view->make($view, $data);
             }
         }
         throw new \Exception('No view found for the keys: '.implode(', ', $views));
@@ -91,6 +92,9 @@ class Renderer
 
     protected function renderLayout(?string $layout, array $data = []): View
     {
-        return view('siteman::themes.layout', array_merge($data, ['layout' => $layout ?? 'base-layout']));
+        return $this->view->make(
+            'siteman::themes.layout',
+            array_merge($data, ['layout' => $layout ?? 'base-layout']),
+        );
     }
 }
