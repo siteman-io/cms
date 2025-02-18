@@ -1,13 +1,13 @@
 @extends('siteman::themes.blank.wrapper')
 @php
     /**
-    * @var \Siteman\Cms\Models\Page $page
+    * @var \Siteman\Cms\Models\Post $post
     */
     $renderer = app(\Siteman\Cms\Blocks\BlockRenderer::class)
 @endphp
 
 @section('seo')
-    {!! seo()->for($page) !!}
+    {!! seo()->for($post) !!}
 @endsection
 
 @section('content')
@@ -19,8 +19,8 @@
         </ul>
     </header>
     <main>
-        @foreach($page->blocks ?? [] as $block)
-            {!! $renderer->render($block, $page)  !!}
+        @foreach($post->blocks ?? [] as $block)
+            {!! $renderer->render($block, $post)  !!}
         @endforeach
     </main>
     <footer>

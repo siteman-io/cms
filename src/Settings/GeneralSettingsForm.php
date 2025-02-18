@@ -2,8 +2,10 @@
 
 namespace Siteman\Cms\Settings;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Siteman\Cms\Theme\ThemeRegistry;
 
 class GeneralSettingsForm implements SettingsFormInterface
 {
@@ -21,15 +23,18 @@ class GeneralSettingsForm implements SettingsFormInterface
     {
         return [
             TextInput::make('site_name')
-                ->label('siteman::pages/settings.groups.general.fields.site_name.label')
-                ->translateLabel()
+                ->label(__('siteman::pages/settings.groups.general.fields.site_name.label'))
                 ->helperText(__('siteman::pages/settings.groups.general.fields.site_name.helper-text'))
                 ->required(),
             Textarea::make('description')
-                ->label('siteman::pages/settings.groups.general.fields.description.label')
-                ->translateLabel()
+                ->label(__('siteman::pages/settings.groups.general.fields.description.label'))
                 ->helperText(__('siteman::pages/settings.groups.general.fields.description.helper-text'))
                 ->rows(2),
+            Select::make('theme')
+                ->label(__('siteman::pages/settings.groups.general.fields.theme.label'))
+                ->helperText(__('siteman::pages/settings.groups.general.fields.theme.helper-text'))
+                ->options(fn () => collect(app(ThemeRegistry::class)->getThemes())->mapWithKeys(fn ($theme) => [$theme => $theme::getName()]))
+                ->required(),
         ];
     }
 }

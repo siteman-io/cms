@@ -16,6 +16,8 @@ use Siteman\Cms\Theme\ThemeInterface;
 
 class Siteman
 {
+    protected ?ThemeInterface $theme = null;
+
     protected array $menuLocations = [];
 
     protected array $settingsForms = [
@@ -32,10 +34,18 @@ class Siteman
 
     protected array $layouts = [];
 
-    public function __construct(protected BlockRegistry $blockRegistry, protected ThemeInterface $theme) {}
+    public function __construct(protected BlockRegistry $blockRegistry, protected GeneralSettings $settings)
+    {
+        $this->boot();
+    }
 
     public function boot(): void
     {
+        $theme = app($this->settings->theme);
+        if (!$theme instanceof ThemeInterface) {
+            throw new \RuntimeException('Theme must implement ThemeInterface');
+        }
+        $this->theme = $theme;
         foreach ($this->defaultBlocks as $block) {
             $this->registerBlock($block);
         }
@@ -49,7 +59,7 @@ class Siteman
 
     public function getGeneralSettings(): GeneralSettings
     {
-        return app(GeneralSettings::class);
+        return $this->settings;
     }
 
     public function getMenuItems(string $location): Collection
@@ -90,7 +100,9 @@ class Siteman
 
     public function registerLayout(string $className): self
     {
-        Blade::component($className::getId(), $className);
+        if (!array_key_exists($className::getId(), Blade::getClassComponentAliases())) {
+            throw new \RuntimeException('Layout must be registered as Blade component');
+        }
         $this->layouts[$className::getId()] = $className;
 
         return $this;

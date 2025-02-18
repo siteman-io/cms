@@ -25,6 +25,9 @@ class PostResource extends BasePostResource
                 ->rows(3), ...$fields];
         });
         Siteman::registerFormHook(FormHook::POST_SIDEBAR, function ($fields) {
+            // We remove the last field, which is the layout field
+            array_pop($fields);
+
             return array_merge($fields, [
                 SpatieMediaLibraryFileUpload::make('Image')
                     ->label('siteman::resources/post.fields.image.label')

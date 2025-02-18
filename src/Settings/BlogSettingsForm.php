@@ -14,7 +14,7 @@ class BlogSettingsForm implements SettingsFormInterface
 
     public function icon(): string
     {
-        return 'heroicon-o-globe-alt';
+        return 'heroicon-o-newspaper';
     }
 
     public function schema(): array

@@ -2,13 +2,15 @@
 
 namespace Siteman\Cms\Theme;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\View\View;
-use Siteman\Cms\Models\BasePostType;
 use Siteman\Cms\Siteman;
 
 class BlankTheme implements ThemeInterface
 {
+    public static function getName(): string
+    {
+        return 'Blank Theme';
+    }
+
     public function configure(Siteman $siteman): void
     {
         $siteman
@@ -18,13 +20,8 @@ class BlankTheme implements ThemeInterface
         $siteman->registerLayout(BaseLayout::class);
     }
 
-    public function render(BasePostType $post): View
+    public function getViewPrefix(): string
     {
-        return view('siteman::themes.blank.show', ['post' => $post]);
-    }
-
-    public function renderIndex(LengthAwarePaginator $collection): View
-    {
-        return view('siteman::themes.blank.index', ['collection' => $collection]);
+        return 'siteman::themes.blank';
     }
 }

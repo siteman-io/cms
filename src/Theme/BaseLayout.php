@@ -3,11 +3,11 @@
 namespace Siteman\Cms\Theme;
 
 use Illuminate\View\Component;
-use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Models\Page;
 
 class BaseLayout extends Component
 {
-    public function __construct(protected BasePostType $post) {}
+    public function __construct(protected Page $page) {}
 
     public static function getId()
     {
@@ -16,6 +16,6 @@ class BaseLayout extends Component
 
     public function render()
     {
-        return $this->view('siteman::themes.blank.layouts.base', ['post' => $this->post]);
+        return $this->view('siteman::themes.blank.layouts.base', ['page' => $this->page]);
     }
 }

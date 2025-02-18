@@ -7,5 +7,6 @@ return new class extends SettingsMigration {
     {
         $this->migrator->add('general.site_name', 'Siteman Site');
         $this->migrator->add('general.description', 'This is my personal Site built with Siteman');
+        $this->migrator->add('general.theme', \Siteman\Cms\Theme\BlankTheme::class);
     }
 };

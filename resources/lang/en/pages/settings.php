@@ -24,6 +24,10 @@ return [
                     'label' => 'Description',
                     'helper-text' => 'The description of your site. This will be used for the description and other Open Graph tags',
                 ],
+                'theme' => [
+                    'label' => 'Theme',
+                    'helper-text' => 'Choose a theme for your site',
+                ],
             ],
         ],
         'blog' => [

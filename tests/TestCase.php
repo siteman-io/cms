@@ -8,6 +8,8 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Siteman\Cms\Settings\BlogSettings;
+use Siteman\Cms\Settings\GeneralSettings;
+use Siteman\Cms\Theme\BlankTheme;
 use Workbench\App\Models\User;
 
 #[WithMigration]
@@ -34,6 +36,11 @@ class TestCase extends Orchestra
         // The settings migrations are executed after the Filament panel
         // registration. Since we check for the settings in the panel
         // registration, we need to fake the settings here.
+        GeneralSettings::fake([
+            'site_name' => 'Siteman',
+            'description' => 'Siteman Test Environment',
+            'theme' => BlankTheme::class,
+        ], false);
         BlogSettings::fake([
             'enabled' => true,
             'blog_index_route' => 'blog',

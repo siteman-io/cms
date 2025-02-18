@@ -2,12 +2,15 @@
 
 namespace Siteman\Cms\Http\Actions;
 
-use Siteman\Cms\Facades\Siteman;
+use Illuminate\Contracts\View\View;
 use Siteman\Cms\Models\Post;
+use Siteman\Cms\View\Renderer;
 
 class ShowBlogIndex
 {
-    public function __invoke()
+    public function __construct(private readonly Renderer $renderer) {}
+
+    public function __invoke(): View
     {
         $posts = Post::query()
             ->published()
@@ -15,6 +18,6 @@ class ShowBlogIndex
             ->orderBy('published_at')
             ->paginate(5);
 
-        return Siteman::theme()->renderIndex($posts);
+        return $this->renderer->renderPostIndex($posts);
     }
 }

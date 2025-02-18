@@ -25,6 +25,30 @@ parameters:
 			path: database/factories/PostFactory.php
 
 		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Resources/PageResource/Pages/ListPages.php
+
+		-
+			message: '#^Call to an undefined static method Illuminate\\Database\\Eloquent\\Model\:\:onlyTrashed\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Resources/PageResource/Pages/ListPages.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Resources/PostResource/Pages/ListPosts.php
+
+		-
+			message: '#^Call to an undefined static method Illuminate\\Database\\Eloquent\\Model\:\:onlyTrashed\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Resources/PostResource/Pages/ListPosts.php
+
+		-
 			message: '#^Method Siteman\\Cms\\Torchlight\\BaseExtension\:\:getTheme\(\) should return string but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1

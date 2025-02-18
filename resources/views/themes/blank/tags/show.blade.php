@@ -1,19 +1,20 @@
 @extends('siteman::themes.blank.wrapper')
 @php
     /**
-    * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $collection
+    * @var \Spatie\Tags\Tag $tag
+    * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $posts
     */
 @endphp
 
 @section('content')
 
     <ul>
-        @foreach($collection as $post)
+        @foreach($posts as $post)
             <li>
                 <a href="{{$post->path()}}">{!! $post->title !!}</a>
             </li>
         @endforeach
     </ul>
-    {{$collection->links()}}
+    {{$posts->links('pagination::simple-default')}}
 
 @endsection

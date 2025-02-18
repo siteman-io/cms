@@ -7,7 +7,9 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Http\Kernel;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
 use RalphJSmit\Laravel\SEO\SEOManager;
@@ -31,7 +33,9 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
+use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
+use Siteman\Cms\Theme\ThemeRegistry;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
@@ -75,7 +79,12 @@ class CmsServiceProvider extends PackageServiceProvider
     public function registeringPackage()
     {
         $this->app->singleton(BlockRegistry::class);
-        $this->app->singleton(ThemeInterface::class, fn () => $this->app->make(config('siteman.theme')));
+        $this->app->singleton(ThemeRegistry::class, fn () => new ThemeRegistry(
+            new Filesystem,
+            $this->app->basePath('vendor'),
+            config('siteman.themes', []),
+        ));
+        $this->app->singleton(ThemeInterface::class, fn () => \Siteman\Cms\Facades\Siteman::theme());
         $this->app->singleton(Siteman::class);
         $this->app->singleton(SitemanPlugin::class);
     }
@@ -107,7 +116,6 @@ class CmsServiceProvider extends PackageServiceProvider
             $siteName = \Siteman\Cms\Facades\Siteman::getGeneralSettings()->site_name;
             config()->set('seo.title.homepage_title', $siteName);
             config()->set('seo.title.suffix', ' | '.$siteName);
-            config()->set('seo.description.fallback', \Siteman\Cms\Facades\Siteman::getGeneralSettings()->description);
 
             return $seoManager;
         });
@@ -115,7 +123,6 @@ class CmsServiceProvider extends PackageServiceProvider
             $siteName = \Siteman\Cms\Facades\Siteman::getGeneralSettings()->site_name;
             config()->set('seo.title.homepage_title', $siteName);
             config()->set('seo.title.suffix', ' | '.$siteName);
-            config()->set('seo.description.fallback', \Siteman\Cms\Facades\Siteman::getGeneralSettings()->description);
 
             return $tagManager;
         });
@@ -134,6 +141,9 @@ class CmsServiceProvider extends PackageServiceProvider
             $this->getAssets(),
             $this->getAssetPackageName(),
         );
+
+        Blade::component('base-layout', BaseLayout::class);
+
         Livewire::component('health-check-result', HealthCheckResultWidget::class);
         Livewire::component('menu-builder-items', MenuItems::class);
         Livewire::component('create-custom-link', CreateCustomLink::class);
@@ -156,8 +166,6 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
         });
-
-        \Siteman\Cms\Facades\Siteman::boot();
     }
 
     protected function getAssetPackageName(): ?string

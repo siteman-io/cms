@@ -2,21 +2,25 @@
 
 namespace Siteman\Cms\Http\Actions;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
-use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Post;
 use Siteman\Cms\Settings\BlogSettings;
+use Siteman\Cms\View\Renderer;
 use Spatie\Tags\Tag;
 
 class ShowTag
 {
-    public function __invoke(Request $request, BlogSettings $blogSettings)
+    public function __construct(private readonly Renderer $renderer) {}
+
+    public function __invoke(Request $request, BlogSettings $blogSettings): View
     {
-        $tag = Tag::where('slug->en', str_replace($blogSettings->tag_route_prefix.'/', '', $request->path()))->firstOrFail();
+        $slug = str_replace($blogSettings->tag_route_prefix.'/', '', $request->path());
+        $tag = Tag::where('slug->en', $slug)->firstOrFail();
         Context::add('current_tag', $tag);
         $posts = Post::published()->withAnyTags([$tag])->paginate(5);
 
-        return Siteman::theme()->renderIndex($posts);
+        return $this->renderer->renderTag($tag, $posts);
     }
 }

@@ -30,6 +30,6 @@ it('can filter for published pages', function () {
     $page = livewire(ListPages::class);
 
     $page->assertCountTableRecords(2);
-    $page->filterTable('published');
+    $page->set('activeTab', 'published');
     $page->assertCountTableRecords(1);
 });
