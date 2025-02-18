@@ -37,7 +37,7 @@ class Siteman
     public function boot(): void
     {
         foreach ($this->defaultBlocks as $block) {
-            $this->blockRegistry->register(app($block));
+            $this->registerBlock($block);
         }
         $this->theme->configure($this);
     }
@@ -92,6 +92,13 @@ class Siteman
     {
         Blade::component($className::getId(), $className);
         $this->layouts[$className::getId()] = $className;
+
+        return $this;
+    }
+
+    public function registerBlock(string $className): self
+    {
+        $this->blockRegistry->register(app($className));
 
         return $this;
     }
