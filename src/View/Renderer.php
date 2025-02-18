@@ -2,9 +2,9 @@
 
 namespace Siteman\Cms\View;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Siteman\Cms\Models\BasePostType;
@@ -47,7 +47,7 @@ class Renderer
     {
         return $this->render(
             [
-                $this->getViewPath(str($tag->slug)->replace('/', '.')->toString()),
+                $this->getViewPath('tags.'.str($tag->slug)->replace('/', '.')->toString()),
                 $this->getViewPath('tags.show'),
                 'siteman::themes.blank.tags.show',
             ],
