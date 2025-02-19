@@ -14,30 +14,24 @@ development experience.
 
 Table of Contents
 =================
+# Table of Contents
 
-* [Installation](#installation)
-* [Features](#features)
-    * [Themes](#themes)
-        * [`configure` method](#configure-method)
-        * [`render` method](#render-method)
-        * [`renderIndex` method](#renderindex-method)
-    * [Layouts](#layouts)
-    * [Menus](#menus)
-    * [Blocks](#blocks)
-        * [`image-block`](#image-block)
-        * [`markdown-block`](#markdown-block)
-        * [Create your own blocks](#create-your-own-blocks)
-    * [Settings](#settings)
-        * [General Settings](#general-settings)
-        * [Blog Settings](#blog-settings)
-        * [Create your own settings](#create-your-own-settings)
-    * [Development](#development)
-    * [Testing](#testing)
-    * [Changelog](#changelog)
-    * [Contributing](#contributing)
-    * [Security Vulnerabilities](#security-vulnerabilities)
-    * [Credits](#credits)
-    * [License](#license)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Features](#features)
+    1. [Themes](#themes)
+    2. [Layouts](#layouts)
+    3. [Menus](#menus)
+    4. [Blocks](#blocks)
+5. [Settings](#settings)
+6. [Development](#development)
+7. [Testing](#testing)
+8. [Changelog](#changelog)
+9. [Contributing](#contributing)
+10. [Security Vulnerabilities](#security-vulnerabilities)
+11. [Credits](#credits)
+12. [License](#license)
+13. [Reasoning About the Improvements](#reasoning-about-the-improvements)
 
 ## Installation
 
