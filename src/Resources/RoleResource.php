@@ -22,14 +22,14 @@ class RoleResource extends FilamentShieldRoleResource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->weight('font-medium')
-                    ->label(__('siteman::resources/role.table.columns.name'))
+                    ->label(__('siteman::role.table.columns.name'))
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('guard_name')
                     ->badge()
                     ->alignCenter()
                     ->color('warning')
-                    ->label(__('siteman::resources/role.table.columns.guard_name')),
+                    ->label(__('siteman::role.table.columns.guard_name')),
                 Tables\Columns\TextColumn::make('team.name')
                     ->default('Global')
                     ->badge()
@@ -39,16 +39,16 @@ class RoleResource extends FilamentShieldRoleResource
                     ->visible(fn (): bool => static::shield()->isCentralApp() && Utils::isTenancyEnabled()),
                 Tables\Columns\TextColumn::make('permissions_count')
                     ->badge()
-                    ->label(__('siteman::resources/role.table.columns.permissions_count'))
+                    ->label(__('siteman::role.table.columns.permissions_count'))
                     ->counts('permissions')
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('users_count')
                     ->badge()
-                    ->label(__('siteman::resources/role.table.columns.users_count'))
+                    ->label(__('siteman::role.table.columns.users_count'))
                     ->counts('users')
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('siteman::resources/role.table.columns.updated_at'))
+                    ->label(__('siteman::role.table.columns.updated_at'))
                     ->alignRight()
                     ->dateTimeTooltip()
                     ->since(),
@@ -77,17 +77,17 @@ class RoleResource extends FilamentShieldRoleResource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('siteman::resources/role.navigation-group');
+        return __('siteman::role.navigation.group');
     }
 
     public static function getNavigationIcon(): string
     {
-        return __('siteman::resources/role.navigation-icon');
+        return __('siteman::role.navigation.icon');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('siteman::resources/role.navigation-label');
+        return __('siteman::role.plural-label');
     }
 
     public static function getLabel(): string
@@ -98,5 +98,9 @@ class RoleResource extends FilamentShieldRoleResource
     public static function getNavigationBadge(): null
     {
         return null;
+    }
+    public static function canGloballySearch(): bool
+    {
+        return count(static::getGloballySearchableAttributes()) && static::canViewAny();
     }
 }
