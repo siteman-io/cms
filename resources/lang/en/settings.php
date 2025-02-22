@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'navigation-group' => 'Admin',
-    'navigation-icon' => 'heroicon-o-cog',
-    'navigation-label' => 'Settings',
-    'heading' => 'Settings',
+    'label' => 'Settings',
+    'navigation' => [
+        'group' => 'Admin',
+        'icon' => 'heroicon-o-cog',
+    ],
     'subheading' => 'Configure your Siteman site',
     'notifications' => [
         'saved' => ':group Settings successfully saved!',

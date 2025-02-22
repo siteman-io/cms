@@ -23,16 +23,16 @@ class GeneralSettingsForm implements SettingsFormInterface
     {
         return [
             TextInput::make('site_name')
-                ->label(__('siteman::pages/settings.groups.general.fields.site_name.label'))
-                ->helperText(__('siteman::pages/settings.groups.general.fields.site_name.helper-text'))
+                ->label(__('siteman::settings.groups.general.fields.site_name.label'))
+                ->helperText(__('siteman::settings.groups.general.fields.site_name.helper-text'))
                 ->required(),
             Textarea::make('description')
-                ->label(__('siteman::pages/settings.groups.general.fields.description.label'))
-                ->helperText(__('siteman::pages/settings.groups.general.fields.description.helper-text'))
+                ->label(__('siteman::settings.groups.general.fields.description.label'))
+                ->helperText(__('siteman::settings.groups.general.fields.description.helper-text'))
                 ->rows(2),
             Select::make('theme')
-                ->label(__('siteman::pages/settings.groups.general.fields.theme.label'))
-                ->helperText(__('siteman::pages/settings.groups.general.fields.theme.helper-text'))
+                ->label(__('siteman::settings.groups.general.fields.theme.label'))
+                ->helperText(__('siteman::settings.groups.general.fields.theme.helper-text'))
                 ->options(fn () => collect(app(ThemeRegistry::class)->getThemes())->mapWithKeys(fn ($theme) => [$theme => $theme::getName()]))
                 ->required(),
         ];
