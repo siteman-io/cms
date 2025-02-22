@@ -31,7 +31,6 @@ Table of Contents
 10. [Security Vulnerabilities](#security-vulnerabilities)
 11. [Credits](#credits)
 12. [License](#license)
-13. [Reasoning About the Improvements](#reasoning-about-the-improvements)
 
 ## Installation
 
