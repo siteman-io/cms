@@ -4,14 +4,14 @@ namespace Siteman\Cms\Database\Factories;
 
 trait GeneratesBlocks
 {
-    public function withMarkdownBlock(): static
+    public function withMarkdownBlock(bool $showToc = false, ?array $elements = null): static
     {
         return $this->state(fn (array $attributes) => [
             'blocks' => [
                 [
                     'type' => 'markdown-block',
                     'data' => [
-                        'content' => implode("\n\n", [
+                        'content' => implode("\n\n", $elements ?: [
                             fake()->markdownH1(),
                             fake()->markdownP(),
                             fake()->markdownH2(),
@@ -37,6 +37,7 @@ trait GeneratesBlocks
                             fake()->markdownH3(),
                             fake()->markdownP(),
                         ]),
+                        'show_toc' => $showToc,
                     ],
                 ],
             ],
