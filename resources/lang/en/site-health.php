@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'navigation-group' => 'Admin',
-    'navigation-icon' => 'heroicon-o-information-circle',
-    'navigation-label' => 'Site Health',
-    'heading' => 'Site Health',
+    'label' => 'Site Health',
+    'navigation' => [
+        'group' => 'Admin',
+        'icon' => 'heroicon-o-information-circle',
+    ],
     'subheading' => 'See the health of your site on one view',
     'buttons' => [
         'refresh' => 'Refresh',

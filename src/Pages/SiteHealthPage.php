@@ -25,7 +25,7 @@ class SiteHealthPage extends Page
     protected function getActions(): array
     {
         return [
-            Action::make(__('siteman::pages/site-health.buttons.refresh'))
+            Action::make(__('siteman::site-health.buttons.refresh'))
                 ->button()
                 ->action('refresh'),
         ];
@@ -33,27 +33,27 @@ class SiteHealthPage extends Page
 
     public static function getNavigationGroup(): ?string
     {
-        return parent::getNavigationGroup() ?? __('siteman::pages/site-health.navigation-group');
+        return parent::getNavigationGroup() ?? __('siteman::site-health.navigation.group');
     }
 
     public static function getNavigationIcon(): string|Htmlable|null
     {
-        return parent::getNavigationIcon() ?? __('siteman::pages/site-health.navigation-icon');
+        return parent::getNavigationIcon() ?? __('siteman::site-health.navigation.icon');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('siteman::pages/site-health.navigation-label');
+        return __('siteman::site-health.label');
     }
 
     public function getHeading(): string|Htmlable
     {
-        return __('siteman::pages/site-health.heading');
+        return __('siteman::site-health.label');
     }
 
     public function getSubheading(): string|Htmlable|null
     {
-        return __('siteman::pages/site-health.subheading');
+        return __('siteman::site-health.subheading');
     }
 
     protected function getViewData(): array
@@ -73,7 +73,7 @@ class SiteHealthPage extends Page
         $this->dispatch('refresh-component');
 
         Notification::make()
-            ->title(__('siteman::pages/site-health.notifications.results_refreshed'))
+            ->title(__('siteman::site-health.notifications.results_refreshed'))
             ->success()
             ->send();
     }
