@@ -5,7 +5,7 @@
                 icon="{{ $settingForm->icon() }}"
                 alpine-active="activeTab === '{{ $group }}'"
                 x-on:click="activeTab = '{{ $group }}'">
-                {{ __(sprintf('siteman::settings.groups.%s.label', $group)) }}
+                {{ __(sprintf('siteman::settings.%s.label', $group)) }}
             </x-filament::tabs.item>
 
         @endforeach

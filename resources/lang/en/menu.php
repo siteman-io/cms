@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'item' => [
         'page_link' => 'Page Link',
         'custom_link' => 'Custom Link',
