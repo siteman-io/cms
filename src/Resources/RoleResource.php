@@ -14,6 +14,8 @@ use Siteman\Cms\Resources\RoleResource\Pages\ListRoles;
 
 class RoleResource extends FilamentShieldRoleResource
 {
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function table(Table $table): Table
     {
         return $table
