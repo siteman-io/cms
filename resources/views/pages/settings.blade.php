@@ -1,5 +1,13 @@
-<x-filament-panels::page x-data="{ activeTab: 'general' }">
-    <x-filament::tabs>
+<x-filament-panels::page x-data="{
+    activeTab: '{{ request()->query('group', 'general') }}',
+    init() {
+        this.$watch('activeTab', value => {
+            const url = new URL(window.location);
+            url.searchParams.set('group', value);
+            window.history.pushState({}, '', url);
+        });
+    }
+}">    <x-filament::tabs>
         @foreach($this->getSettingForms() as $group => $settingForm)
             <x-filament::tabs.item
                 icon="{{ $settingForm->icon() }}"
