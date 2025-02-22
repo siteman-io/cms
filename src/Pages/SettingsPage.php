@@ -17,7 +17,7 @@ class SettingsPage extends Page
 {
     use HasPageShield;
 
-    protected static string $view = 'siteman::pages.settings-page';
+    protected static string $view = 'siteman::pages.settings';
 
     public ?array $data = [];
 
@@ -66,7 +66,7 @@ class SettingsPage extends Page
         $settings->save();
         Notification::make()
             ->success()
-            ->title(__('siteman::pages/settings.notifications.saved', ['group' => Str::headline($group)]))
+            ->title(__('siteman::settings.notifications.saved', ['group' => Str::headline($group)]))
             ->send();
     }
 
@@ -84,27 +84,27 @@ class SettingsPage extends Page
 
     public static function getNavigationGroup(): ?string
     {
-        return parent::getNavigationGroup() ?? __('siteman::pages/settings.navigation-group');
+        return parent::getNavigationGroup() ?? __('siteman::settings.navigation.group');
     }
 
     public static function getNavigationIcon(): ?string
     {
-        return parent::getNavigationIcon() ?? __('siteman::pages/settings.navigation-icon');
+        return parent::getNavigationIcon() ?? __('siteman::settings.navigation.icon');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('siteman::pages/settings.navigation-label');
+        return __('siteman::settings.label');
     }
 
     public function getHeading(): string|Htmlable
     {
-        return __('siteman::pages/settings.heading');
+        return __('siteman::settings.label');
     }
 
     public function getSubheading(): string|Htmlable|null
     {
-        return __('siteman::pages/settings.subheading');
+        return __('siteman::settings.subheading');
     }
 
     protected function getGroupName(string $class): string

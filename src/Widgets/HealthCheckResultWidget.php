@@ -15,7 +15,7 @@ class HealthCheckResultWidget extends Widget
 
     public function getIcon(): string
     {
-        return 'heroicon-o-'.match ($this->result['status'] ?? null) {
+        return 'heroicon-m-'.match ($this->result['status'] ?? null) {
             Status::ok()->value => 'check-circle',
             Status::warning()->value => 'exclamation-circle',
             Status::skipped()->value => 'arrow-circle-right',

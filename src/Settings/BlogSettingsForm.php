@@ -21,20 +21,20 @@ class BlogSettingsForm implements SettingsFormInterface
     {
         return [
             Checkbox::make('enabled')
-                ->label(__('siteman::pages/settings.groups.blog.fields.enabled.label'))
-                ->helperText(__('siteman::pages/settings.groups.blog.fields.enabled.helper-text')),
+                ->label(__('siteman::settings.blog.fields.enabled.label'))
+                ->helperText(__('siteman::settings.blog.fields.enabled.helper-text')),
             TextInput::make('blog_index_route')
-                ->label(__('siteman::pages/settings.groups.blog.fields.blog_index_route.label'))
-                ->helperText(__('siteman::pages/settings.groups.blog.fields.blog_index_route.helper-text')),
+                ->label(__('siteman::settings.blog.fields.blog_index_route.label'))
+                ->helperText(__('siteman::settings.blog.fields.blog_index_route.helper-text')),
             TextInput::make('tag_route_prefix')
-                ->label(__('siteman::pages/settings.groups.blog.fields.tag_route_prefix.label'))
-                ->helperText(__('siteman::pages/settings.groups.blog.fields.tag_route_prefix.helper-text')),
+                ->label(__('siteman::settings.blog.fields.tag_route_prefix.label'))
+                ->helperText(__('siteman::settings.blog.fields.tag_route_prefix.helper-text')),
             Checkbox::make('rss_enabled')
-                ->label(__('siteman::pages/settings.groups.blog.fields.rss_enabled.label'))
-                ->helperText(__('siteman::pages/settings.groups.blog.fields.rss_enabled.helper-text')),
+                ->label(__('siteman::settings.blog.fields.rss_enabled.label'))
+                ->helperText(__('siteman::settings.blog.fields.rss_enabled.helper-text')),
             TextInput::make('rss_endpoint')
-                ->label(__('siteman::pages/settings.groups.blog.fields.rss_endpoint.label'))
-                ->helperText(__('siteman::pages/settings.groups.blog.fields.rss_endpoint.helper-text')),
+                ->label(__('siteman::settings.blog.fields.rss_endpoint.label'))
+                ->helperText(__('siteman::settings.blog.fields.rss_endpoint.helper-text')),
         ];
     }
 }

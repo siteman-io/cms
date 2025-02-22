@@ -1,10 +1,17 @@
 <?php
 
 return [
-    'navigation-group' => 'Content',
-    'navigation-icon' => 'heroicon-o-book-open',
-    'navigation-label' => 'Pages',
-    'label' => 'Page',
+    'label' => 'Post',
+    'plural-label' => 'Post',
+    'navigation' => [
+        'group' => 'Content',
+        'icon' => 'heroicon-o-newspaper',
+    ],
+    'notifications' => [
+        'deleted' => [
+            'title' => 'Moved to trash',
+        ],
+    ],
     'fields' => [
         'title' => [
             'label' => 'Title',
@@ -12,7 +19,7 @@ return [
         ],
         'slug' => [
             'label' => 'Slug',
-            'helper-text' => 'This attribute will be used to generate the URL of your page.',
+            'helper-text' => 'This attribute will be used to generate the URL of your post.',
         ],
         'content' => [
             'label' => 'Content',
@@ -24,15 +31,23 @@ return [
         ],
         'published_at' => [
             'label' => 'Published at',
-            'helper-text' => 'The date when the page will be published.',
+            'helper-text' => 'The date when the post will be published.',
         ],
         'layout' => [
             'label' => 'Layout',
-            'helper-text' => 'Choose the lout for the page',
+            'helper-text' => 'Choose the lout for the post',
         ],
-        'description' => [
-            'label' => 'SEO description',
-            'helper-text' => 'This value will be used for SEO purposes like meta description and OpenGraph tags.',
+        'excerpt' => [
+            'label' => 'Excerpt',
+            'helper-text' => 'A kicker of your blog post. It will be used on index pages and in Meta tags',
+        ],
+        'image' => [
+            'label' => 'Featured Image',
+            'helper-text' => 'An optional image which will be used as a featured image.',
+        ],
+        'tags' => [
+            'label' => 'Tags',
+            'helper-text' => 'Tags are an option to loosely categorise your blog posts',
         ],
     ],
     'table' => [
@@ -42,18 +57,20 @@ return [
             'slug' => 'Slug',
             'content' => 'Content',
             'author' => 'Author',
+            'published_at' => 'Published at',
         ],
         'filters' => [
             'search' => 'Search…',
             'published' => [
                 'label' => 'Published',
             ],
+            'author' => [
+                'label' => 'Author',
+            ],
         ],
         'actions' => [
             'edit' => 'Edit',
-        ],
-        'bulk-actions' => [
-            'delete' => 'Delete',
+            'delete' => 'Move to trash',
         ],
     ],
 ];

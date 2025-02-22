@@ -38,21 +38,21 @@
         <a class="flex items-center space-x-2 pr-2 mr-2 text-white no-underline hover:underline"
            href="{{$panel->getUrl()}}">
             @svg('heroicon-o-wrench-screwdriver', 'h-4 w-4')
-            <span>{{ __('siteman::general.back-to-dashboard') }}</span>
+            <span>{{ __('siteman::admin-bar.back-to-dashboard') }}</span>
         </a>
 
         @if($currentPage && $currentUser->can('update_page', $currentPage))
             <a class="flex items-center space-x-2 text-white no-underline hover:underline"
                href="{{$panel->getResourceUrl($currentPage, 'edit')}}">
                 @svg('heroicon-o-paint-brush', 'h-4 w-4')
-                <span>{{ __('siteman::general.edit-page') }}</span>
+                <span>{{ __('siteman::admin-bar.edit-page') }}</span>
             </a>
         @endif
         @if($currentPost && $currentUser->can('update_post', $currentPost))
             <a class="flex items-center space-x-2 text-white no-underline hover:underline"
                href="{{$panel->getResourceUrl($currentPost, 'edit')}}">
                 @svg('heroicon-o-paint-brush', 'h-4 w-4')
-                <span>{{ __('siteman::general.edit-post') }}</span>
+                <span>{{ __('siteman::admin-bar.edit-post') }}</span>
             </a>
         @endif
         <button id="admin-bar-hide-btn" class="ml-auto cursor-pointer border-0 bg-transparent text-white">

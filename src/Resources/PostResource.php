@@ -20,8 +20,8 @@ class PostResource extends BasePostResource
     {
         Siteman::registerFormHook(FormHook::POST_MAIN, function ($fields) {
             return [array_shift($fields), Forms\Components\Textarea::make('excerpt')
-                ->label(__('siteman::resources/post.fields.excerpt.label'))
-                ->helperText(__('siteman::resources/post.fields.excerpt.helper-text'))
+                ->label(__('siteman::post.fields.excerpt.label'))
+                ->helperText(__('siteman::post.fields.excerpt.helper-text'))
                 ->rows(3), ...$fields];
         });
         Siteman::registerFormHook(FormHook::POST_SIDEBAR, function ($fields) {
@@ -30,15 +30,15 @@ class PostResource extends BasePostResource
 
             return array_merge($fields, [
                 SpatieMediaLibraryFileUpload::make('Image')
-                    ->label('siteman::resources/post.fields.image.label')
+                    ->label('siteman::post.fields.image.label')
                     ->translateLabel()
-                    ->helperText(__('siteman::resources/post.fields.image.helper-text'))
+                    ->helperText(__('siteman::post.fields.image.helper-text'))
                     ->collection('featured_image')
                     ->imageEditor(),
                 SpatieTagsInput::make('tags')
-                    ->label('siteman::resources/post.fields.tags.label')
+                    ->label('siteman::post.fields.tags.label')
                     ->translateLabel()
-                    ->helperText(__('siteman::resources/post.fields.tags.helper-text')),
+                    ->helperText(__('siteman::post.fields.tags.helper-text')),
             ]);
         });
 

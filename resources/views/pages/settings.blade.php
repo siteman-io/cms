@@ -5,7 +5,7 @@
                 icon="{{ $settingForm->icon() }}"
                 alpine-active="activeTab === '{{ $group }}'"
                 x-on:click="activeTab = '{{ $group }}'">
-                {{ __(sprintf('siteman::pages/settings.groups.%s.label', $group)) }}
+                {{ __(sprintf('siteman::settings.%s.label', $group)) }}
             </x-filament::tabs.item>
 
         @endforeach
@@ -20,7 +20,7 @@
                 {{ $this->$formProp }}
                 <div>
                     <x-filament::button type="submit" size="sm">
-                        {{ __('siteman::pages/settings.form.submit') }}
+                        {{ __('siteman::settings.form.submit') }}
                     </x-filament::button>
                 </div>
             </x-filament-panels::form>

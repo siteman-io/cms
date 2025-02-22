@@ -13,6 +13,8 @@ use Siteman\Cms\Models\Menu;
 
 class MenuResource extends Resource
 {
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function getModel(): string
     {
         return Menu::class;
