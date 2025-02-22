@@ -23,8 +23,7 @@ class PostFactory extends Factory
             'author_id' => config('siteman.models.user')::factory(),
             'title' => $title,
             'slug' => Str::slug($title),
-            'excerpt' => fake()->sentence, // secret
-            'blocks' => $this->makeBlocks(rand(1, 3)),
+            'blocks' => [],
             'published_at' => null,
         ];
     }
