@@ -18,6 +18,7 @@ use Siteman\Cms\Resources\PageResource;
 use Siteman\Cms\Resources\PostResource;
 use Siteman\Cms\Resources\RoleResource;
 use Siteman\Cms\Resources\UserResource;
+use Siteman\Cms\Search\SitemanSearchProvider;
 use Siteman\Cms\Theme\ThemeInterface;
 
 class SitemanPlugin implements Plugin
@@ -53,6 +54,7 @@ class SitemanPlugin implements Plugin
             PanelsRenderHook::TOPBAR_START,
             fn () => Blade::render(sprintf('<x-filament::link href="/">%s</x-filament::link>', __('siteman::dashboard.go-to-site'))),
         );
+        $panel->globalSearch(SitemanSearchProvider::class);
 
         $panel->renderHook('panels::global-search.before', function () {
             $env = app()->environment();
