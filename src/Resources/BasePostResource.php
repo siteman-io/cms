@@ -78,8 +78,8 @@ abstract class BasePostResource extends Resource
                             ->helperText(__('siteman::resources/post.fields.published_at.helper-text'))
                             ->seconds(false),
                         Forms\Components\Select::make('layout')
-                            ->label(__('siteman::resources/page.fields.layout.label'))
-                            ->helperText(__('siteman::resources/page.fields.layout.helper-text'))
+                            ->label(__('siteman::page.fields.layout.label'))
+                            ->helperText(__('siteman::page.fields.layout.helper-text'))
                             ->options(array_keys(Siteman::getLayouts())),
                     ], FormHook::POST_SIDEBAR)),
             ]);

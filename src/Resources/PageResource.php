@@ -20,9 +20,9 @@ class PageResource extends BasePostResource
         Siteman::registerFormHook(FormHook::POST_SIDEBAR, function ($fields) {
             return array_merge($fields, [Group::make([
                 Textarea::make('description')
-                    ->label('siteman::resources/page.fields.description.label')
+                    ->label('siteman::page.fields.description.label')
                     ->translateLabel()
-                    ->helperText(__('siteman::resources/page.fields.description.helper-text'))
+                    ->helperText(__('siteman::page.fields.description.helper-text'))
                     ->columnSpan(2),
                 // here we can add further SEO fields
             ])
@@ -65,21 +65,21 @@ class PageResource extends BasePostResource
 
     public static function getNavigationIcon(): string
     {
-        return __('siteman::resources/page.navigation-icon');
+        return __('siteman::page.navigation.icon');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('siteman::resources/page.navigation-label');
+        return __('siteman::page.plural-label');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('siteman::resources/page.navigation-label');
+        return __('siteman::page.plural-label');
     }
 
     public static function getLabel(): string
     {
-        return __('siteman::resources/page.label');
+        return __('siteman::page.label');
     }
 }
