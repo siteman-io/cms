@@ -1,9 +1,12 @@
 <?php
 
 return [
-    'navigation-group' => 'Admin',
-    'navigation-icon' => 'heroicon-o-users',
-    'navigation-label' => 'Users',
+    'label' => 'User',
+    'plural-label' => 'Users',
+    'navigation' => [
+        'group' => 'Admin',
+        'icon' => 'heroicon-o-users',
+    ],
     'fields' => [
         'name' => [
             'label' => 'Name',
