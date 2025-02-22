@@ -1,0 +1,9 @@
+name: Feature request
+description: Request a feature or just an idea
+title: "[FEATURE]: "
+labels: ["feature"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Describe the feature as detailed as possible and share also implementation ideas
