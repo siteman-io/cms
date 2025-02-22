@@ -63,7 +63,7 @@ BLADE;
         File::put("{$viewsPath}/{$blockId}.blade.php", $viewContent);
         $this->components->info("View file created at: resources/views/blocks/{$blockId}.blade.php");
 
-        $this->components->info('Remember to register your block in a service provider using Siteman::blocks()->register()');
+        $this->components->info('Remember to register your block in the configure method of your theme.');
 
         return self::SUCCESS;
     }

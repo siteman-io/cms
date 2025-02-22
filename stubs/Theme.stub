@@ -6,6 +6,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Siteman\Cms\Models\BasePostType;
 use Siteman\Cms\Siteman;
+use Siteman\Cms\Theme\ThemeInterface;
+use Siteman\Cms\Theme\BaseLayout;
 
 class {{ class }} implements ThemeInterface
 {
@@ -16,15 +18,5 @@ class {{ class }} implements ThemeInterface
             ->registerMenuLocation('footer', 'Footer');
 
         $siteman->registerLayout(BaseLayout::class);
-    }
-
-    public function render(BasePostType $post): View
-    {
-        return view('{{ themeResourcePath }}.show', ['post' => $post]);
-    }
-
-    public function renderIndex(LengthAwarePaginator $collection): View
-    {
-        return view('{{ themeResourcePath }}.index', ['collection' => $collection]);
     }
 }

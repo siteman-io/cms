@@ -4,7 +4,7 @@ namespace Siteman\Cms\Commands;
 
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
+use Siteman\Cms\Commands\Generator\ThemeGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\text;
@@ -16,9 +16,9 @@ class MakeThemeCommand extends Command
 
     public $signature = 'make:siteman-theme {name?}';
 
-    public $description = 'Create siteman theme';
+    public $description = 'Create new Siteman Theme';
 
-    public function handle(): int
+    public function handle(ThemeGenerator $generator): int
     {
         $theme = (string) str(
             $this->argument('name') ??
@@ -32,32 +32,26 @@ class MakeThemeCommand extends Command
             ->trim('\\')
             ->trim(' ')
             ->replace('/', '\\');
-        $themeClass = (string) str($theme)->afterLast('\\');
+        $themeClass = $this->prepareClassName($theme, 'Theme');
         $themeNamespace = str($theme)->contains('\\') ?
             (string) str($theme)->beforeLast('\\') :
             app()->getNamespace().'Themes';
 
-        $relativeViewPath = 'themes/'.str($themeClass)->lower()->replace('theme', '')->kebab();
-        $themeViewsPath = resource_path('views/'.$relativeViewPath);
-        $folderToCopy = dirname(__DIR__, 2).'/resources/views/themes/blank';
+        $generator->generate($themeClass, $themeNamespace);
 
-        $this->copyStubToApp('Theme', base_path(str($themeNamespace)->replace('\\', '/').'/'.$themeClass.'.php'), [
-            'class' => $themeClass,
-            'namespace' => $themeNamespace,
-            'themeResourcePath' => str($relativeViewPath)->replace('/', '.'),
-        ]);
         $this->components->info('Theme class created.');
-
-        File::copyDirectory($folderToCopy, $themeViewsPath);
-        foreach (File::allFiles($themeViewsPath) as $viewFile) {
-            $content = str($viewFile->getContents())
-                ->replace('siteman::themes.blank', str($relativeViewPath)->replace('/', '.'));
-            File::put($viewFile->getPathname(), $content);
-        }
         $this->components->info('Theme views created.');
-
-        $this->components->info('You may change the theme via your config/siteman.php');
+        $this->components->info('You may add the theme in your config/siteman.php');
 
         return self::SUCCESS;
+    }
+
+    private function prepareClassName(string $name, string $suffix): string
+    {
+        return (string) str($name)
+            ->afterLast('\\')
+            ->studly()
+            ->replace($suffix, '')
+            ->append($suffix);
     }
 }
