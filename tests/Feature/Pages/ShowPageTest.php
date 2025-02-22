@@ -11,7 +11,6 @@ it('shows only published pages', function () {
 
     Page::factory()
         ->published()
-        ->withMarkdownBlock(true)
         ->create([
             'slug' => 'published',
         ]);

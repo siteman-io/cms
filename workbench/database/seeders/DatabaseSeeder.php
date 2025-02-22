@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
         $page = Page::factory()
             ->published()
-            ->withMarkdownBlock()
+            ->withMarkdownBlock(true)
             ->create(['title' => 'home', 'slug' => '/', 'author_id' => $user->id]);
         $mainMenu->menuItems()->create([
             'title' => 'Home',
