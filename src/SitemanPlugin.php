@@ -51,7 +51,7 @@ class SitemanPlugin implements Plugin
         $panel->plugin(FilamentPeekPlugin::make());
         $panel->renderHook(
             PanelsRenderHook::TOPBAR_START,
-            fn () => Blade::render(sprintf('<x-filament::link href="/">%s</x-filament::link>', __('siteman::general.go-to-site-link'))),
+            fn () => Blade::render(sprintf('<x-filament::link href="/">%s</x-filament::link>', __('siteman::dashboard.go-to-site'))),
         );
 
         $panel->renderHook('panels::global-search.before', function () {
