@@ -13,10 +13,82 @@ parameters:
 			path: database/factories/MenuItemFactory.php
 
 		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBlockquote\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBulletedList\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH1\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH2\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH3\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownP\(\)\.$#'
+			identifier: method.notFound
+			count: 11
+			path: database/factories/PageFactory.php
+
+		-
 			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\PageFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Page, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Page\>\:\:definition\(\)$#'
 			identifier: method.childReturnType
 			count: 1
 			path: database/factories/PageFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBlockquote\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: database/factories/PostFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBulletedList\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: database/factories/PostFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH1\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: database/factories/PostFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH2\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: database/factories/PostFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH3\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: database/factories/PostFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:markdownP\(\)\.$#'
+			identifier: method.notFound
+			count: 11
+			path: database/factories/PostFactory.php
 
 		-
 			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\PostFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Post, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Post\>\:\:definition\(\)$#'

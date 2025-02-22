@@ -29,7 +29,10 @@ class DatabaseSeeder extends Seeder
         $mainMenu = Menu::create(['name' => 'Main Menu', 'is_visible' => true]);
         $mainMenu->locations()->create(['location' => 'header']);
 
-        $page = Page::factory()->published()->create(['title' => 'home', 'slug' => '/', 'author_id' => $user->id]);
+        $page = Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'home', 'slug' => '/', 'author_id' => $user->id]);
         $mainMenu->menuItems()->create([
             'title' => 'Home',
             'linkable_type' => Page::class,

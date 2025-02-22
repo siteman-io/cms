@@ -1,21 +1,46 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms\Database\Factories;
 
 trait GeneratesBlocks
 {
-    protected function makeBlocks(int $count = 1): array
+    public function withMarkdownBlock(bool $showToc = false, ?array $elements = null): static
     {
-        $blocks = [];
-        foreach (range(1, $count) as $index) {
-            $blocks[] = [
-                'type' => 'markdown-block',
-                'data' => [
-                    'content' => fake()->paragraphs(rand(3, 10), true),
+        return $this->state(fn (array $attributes) => [
+            'blocks' => [
+                [
+                    'type' => 'markdown-block',
+                    'data' => [
+                        'content' => implode("\n\n", $elements ?: [
+                            fake()->markdownH1(),
+                            fake()->markdownP(),
+                            fake()->markdownH2(),
+                            fake()->markdownBlockquote(),
+                            fake()->markdownP(),
+                            fake()->markdownH2(),
+                            fake()->markdownP(),
+                            fake()->markdownP(),
+                            fake()->markdownH3(),
+                            fake()->markdownP(),
+                            fake()->markdownBlockquote(),
+                            fake()->markdownH3(),
+                            fake()->markdownP(),
+                            fake()->markdownBulletedList(),
+                            fake()->markdownH3(),
+                            fake()->markdownP(),
+                            fake()->markdownH2(),
+                            fake()->markdownP(),
+                            fake()->markdownH3(),
+                            fake()->markdownP(),
+                            fake()->markdownH3(),
+                            fake()->markdownP(),
+                            fake()->markdownH3(),
+                            fake()->markdownP(),
+                        ]),
+                        'show_toc' => $showToc,
+                    ],
                 ],
-            ];
-        }
-
-        return $blocks;
+            ],
+        ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Siteman\Cms;
 
+use DavidBadura\FakerMarkdownGenerator\FakerProvider;
+use Faker\Generator;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
@@ -133,6 +135,11 @@ class CmsServiceProvider extends PackageServiceProvider
                 fn (Kernel $kernel) => $kernel->prependMiddleware(RenderTorchlight::class),
             );
         }
+        $this->app->afterResolving(Generator::class, function (Generator $generator) {
+            $generator->addProvider(new FakerProvider($generator));
+
+            return $generator;
+        });
     }
 
     public function packageBooted(): void

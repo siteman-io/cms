@@ -20,6 +20,7 @@
         "php": "^8.3",
         "bezhansalleh/filament-shield": "^3.3",
         "blade-ui-kit/blade-icons": "^1.7",
+        "davidbadura/faker-markdown-generator": "^1.1",
         "echolabsdev/prism": "^0.37.0",
         "filament/filament": "^3.2.100",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
