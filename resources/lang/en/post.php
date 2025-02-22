@@ -1,10 +1,12 @@
 <?php
 
 return [
-    'navigation-group' => 'Content',
-    'navigation-icon' => 'heroicon-o-newspaper',
-    'navigation-label' => 'Posts',
     'label' => 'Post',
+    'plural-label' => 'Post',
+    'navigation' => [
+        'group' => 'Content',
+        'icon' => 'heroicon-o-newspaper',
+    ],
     'notifications' => [
         'deleted' => [
             'title' => 'Moved to trash',

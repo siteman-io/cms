@@ -47,8 +47,8 @@ abstract class BasePostResource extends Resource
                     ->columnSpan(3)
                     ->schema(self::hook([
                         TextInput::make('title')
-                            ->label(__('siteman::resources/post.fields.title.label'))
-                            ->helperText(__('siteman::resources/post.fields.title.helper-text'))
+                            ->label(__('siteman::post.fields.title.label'))
+                            ->helperText(__('siteman::post.fields.title.helper-text'))
                             ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
                                 if (!$get('is_slug_changed_manually') && filled($state)) {
                                     $set('slug', Str::slug($state));
@@ -62,9 +62,9 @@ abstract class BasePostResource extends Resource
                     ->columnSpan(1)
                     ->schema(self::hook([
                         TextInput::make('slug')
-                            ->label('siteman::resources/post.fields.slug.label')
+                            ->label('siteman::post.fields.slug.label')
                             ->translateLabel()
-                            ->helperText(__('siteman::resources/post.fields.slug.helper-text'))
+                            ->helperText(__('siteman::post.fields.slug.helper-text'))
                             ->afterStateUpdated(function (Forms\Set $set) {
                                 $set('is_slug_changed_manually', true);
                             })
@@ -73,9 +73,9 @@ abstract class BasePostResource extends Resource
                             ->default(false)
                             ->dehydrated(false),
                         Forms\Components\DateTimePicker::make('published_at')
-                            ->label('siteman::resources/post.fields.published_at.label')
+                            ->label('siteman::post.fields.published_at.label')
                             ->translateLabel()
-                            ->helperText(__('siteman::resources/post.fields.published_at.helper-text'))
+                            ->helperText(__('siteman::post.fields.published_at.helper-text'))
                             ->seconds(false),
                         Forms\Components\Select::make('layout')
                             ->label(__('siteman::page.fields.layout.label'))
@@ -99,17 +99,17 @@ abstract class BasePostResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->with('author')->latest('created_at'))
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label(__('siteman::resources/post.table.columns.title'))
+                    ->label(__('siteman::post.table.columns.title'))
                     ->searchable()
                     ->formatStateUsing(fn (BasePostType $record) => $record->slug === '/' ? new HtmlString(Blade::render("<div class='flex'><span>$record->title &nbsp&nbsp-&nbsp&nbsp</span><x-filament::badge class='inline-block'>Homepage</x-filament::badge></div>")) : $record->title)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('author.name')
-                    ->label(__('siteman::resources/post.table.columns.author'))
+                    ->label(__('siteman::post.table.columns.author'))
                     ->searchable()
                     ->alignRight()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('published_at')
-                    ->label(__('siteman::resources/post.table.columns.published_at'))
+                    ->label(__('siteman::post.table.columns.published_at'))
                     ->since()
                     ->dateTimeTooltip()
                     ->alignRight()
@@ -118,7 +118,7 @@ abstract class BasePostResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('author')
-                    ->label(__('siteman::resources/post.table.filters.author.label'))
+                    ->label(__('siteman::post.table.filters.author.label'))
                     ->multiple()
                     ->relationship('author', 'name')
                     ->preload()
@@ -126,17 +126,17 @@ abstract class BasePostResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()->label(__('siteman::resources/post.table.actions.edit')),
-                    Tables\Actions\DeleteAction::make()->label(__('siteman::resources/post.table.actions.delete'))
+                    Tables\Actions\EditAction::make()->label(__('siteman::post.table.actions.edit')),
+                    Tables\Actions\DeleteAction::make()->label(__('siteman::post.table.actions.delete'))
                         ->color('gray')
-                        ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::resources/post.notifications.deleted.title'))),
+                        ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::post.notifications.deleted.title'))),
                     Tables\Actions\ForceDeleteAction::make()->color('gray'),
                     Tables\Actions\RestoreAction::make(),
                 ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()->label(__('siteman::resources/post.table.actions.delete')),
+                    Tables\Actions\DeleteBulkAction::make()->label(__('siteman::post.table.actions.delete')),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
@@ -145,21 +145,21 @@ abstract class BasePostResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('siteman::resources/post.navigation-group');
+        return __('siteman::post.navigation.group');
     }
 
     public static function getNavigationIcon(): string
     {
-        return __('siteman::resources/post.navigation-icon');
+        return __('siteman::post.navigation.icon');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('siteman::resources/post.navigation-label');
+        return __('siteman::post.plural-label');
     }
 
     public static function getLabel(): string
     {
-        return __('siteman::resources/post.label');
+        return __('siteman::post.label');
     }
 }

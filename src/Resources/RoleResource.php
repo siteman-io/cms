@@ -99,6 +99,7 @@ class RoleResource extends FilamentShieldRoleResource
     {
         return null;
     }
+
     public static function canGloballySearch(): bool
     {
         return count(static::getGloballySearchableAttributes()) && static::canViewAny();
