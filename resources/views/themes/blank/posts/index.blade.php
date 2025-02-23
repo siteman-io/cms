@@ -9,6 +9,11 @@
 
     <ul>
         @foreach($posts as $post)
+            @php
+                /**
+                * @var \Siteman\Cms\Models\Post $post
+                */
+            @endphp
             <li>
                 <a href="{{$post->path()}}">{!! $post->title !!}</a>
             </li>

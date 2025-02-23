@@ -1,7 +1,7 @@
 @extends('siteman::themes.blank.wrapper')
 @php
     /**
-    * @var \Spatie\Tags\Tag $tag
+    * @var \Siteman\Cms\Models\Tag $tag
     * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $posts
     */
 @endphp

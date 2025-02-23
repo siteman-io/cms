@@ -34,16 +34,19 @@ return [
         'label' => 'Blogging',
         'fields' => [
             'enabled' => [
-                'label' => 'Enable blogging',
+                'label' => 'Enable Blogging',
                 'helper-text' => 'This checkbox toggles the whole blogging functionality in Siteman',
             ],
             'blog_index_route' => [
                 'label' => 'Blog Route Prefix',
                 'helper-text' => 'Configure the blog index route. This also serves as a post prefix',
             ],
-            'tag_route_prefix' => [
+            'tag_index_route' => [
                 'label' => 'Tag Route Prefix',
                 'helper-text' => 'Configure the tag route prefix.',
+            ],
+            'fieldsets' => [
+                'rss' => 'RSS Feed',
             ],
             'rss_enabled' => [
                 'label' => 'Enable RSS feed',

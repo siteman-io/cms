@@ -1,5 +1,5 @@
 <x-filament-panels::page x-data="{
-    activeTab: '{{ request()->query('group', 'general') }}',
+    activeTab: '{{ $activeTab }}',
     init() {
         this.$watch('activeTab', value => {
             const url = new URL(window.location);

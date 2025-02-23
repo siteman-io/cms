@@ -44,7 +44,7 @@ class TestCase extends Orchestra
         BlogSettings::fake([
             'enabled' => true,
             'blog_index_route' => 'blog',
-            'tag_route_prefix' => 'tags',
+            'tag_index_route' => 'tags',
             'rss_enabled' => true,
             'rss_endpoint' => 'rss',
         ], false);

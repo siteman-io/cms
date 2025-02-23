@@ -28,4 +28,18 @@ return [
     'themes' => [
         \Siteman\Cms\Theme\BlankTheme::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Middleware
+    |--------------------------------------------------------------------------
+    |
+    | These middleware are applied to all Siteman routes in the Frontend.
+    |
+    */
+
+    'middleware' => [
+        'web',
+        \Siteman\Cms\Http\Middleware\InjectAdminBar::class,
+    ],
 ];

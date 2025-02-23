@@ -5,9 +5,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Models\Post;
+use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Tests\Fixtures\DummyTheme;
 use Siteman\Cms\View\Renderer;
-use Spatie\Tags\Tag;
 
 beforeEach(function () {
     $this->viewFactory = mock(Factory::class);
