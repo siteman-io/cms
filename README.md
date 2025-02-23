@@ -12,8 +12,6 @@ Siteman leverages the power and flexibility of Laravel and Filament to provide a
 solution. It serves as a robust foundation for building custom applications, offering a seamless and efficient
 development experience.
 
-Table of Contents
-=================
 # Table of Contents
 
 2. [Installation](#installation)
