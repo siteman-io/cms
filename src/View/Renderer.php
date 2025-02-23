@@ -9,8 +9,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Siteman\Cms\Models\BasePostType;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Theme\ThemeInterface;
-use Spatie\Tags\Tag;
 
 class Renderer
 {
@@ -55,6 +55,17 @@ class Renderer
                 'tag' => $tag,
                 'posts' => $posts,
             ],
+        );
+    }
+
+    public function renderTagIndex(LengthAwarePaginator $tags): View
+    {
+        return $this->render(
+            [
+                $this->getViewPath('tags.index'),
+                'siteman::themes.blank.tags.index',
+            ],
+            ['tags' => $tags],
         );
     }
 
