@@ -65,6 +65,6 @@ class CreatePageLink extends Component implements HasForms
 
     public function render(): View
     {
-        return view('siteman::menu.livewire.create-page-link');
+        return view('siteman::resources.menu.livewire.create-page-link');
     }
 }

@@ -15,7 +15,7 @@ class EditMenu extends EditRecord
 {
     use HasLocationAction;
 
-    protected static string $view = 'siteman::menu.edit-record';
+    protected static string $view = 'siteman::resources.menu.pages.edit-record';
 
     public static function getResource(): string
     {
