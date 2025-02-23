@@ -4,7 +4,7 @@
         'fi-resource-' . str_replace('/', '-', $this->getResource()::getSlug()),
     ])
 >
-    test123
+    <livewire:page-tree />
     <div class="flex flex-col gap-y-6">
         <x-filament-panels::resources.tabs />
 

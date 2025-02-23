@@ -36,6 +36,7 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
+use Siteman\Cms\Resources\PageResource\Livewire\PageTree;
 use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
 use Siteman\Cms\Theme\ThemeRegistry;
@@ -158,6 +159,7 @@ class CmsServiceProvider extends PackageServiceProvider
         Livewire::component('create-custom-link', CreateCustomLink::class);
         Livewire::component('create-custom-text', CreateCustomText::class);
         Livewire::component('create-page-link', CreatePageLink::class);
+        Livewire::component('page-tree', PageTree::class);
 
         Health::checks([
             EnvironmentCheck::new(),
