@@ -21,10 +21,13 @@ class SettingsPage extends Page
 
     public ?array $data = [];
 
+    public ?string $activeTab = null;
+
     protected ?Collection $settingForms = null;
 
     public function mount(): void
     {
+        $this->activeTab = request()->query('group', 'general');
         $this->fillForm();
     }
 
