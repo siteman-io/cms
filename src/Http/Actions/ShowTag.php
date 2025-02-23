@@ -6,9 +6,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Models\Post;
+use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Settings\BlogSettings;
 use Siteman\Cms\View\Renderer;
-use Spatie\Tags\Tag;
 
 class ShowTag
 {

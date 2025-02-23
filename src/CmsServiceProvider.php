@@ -26,6 +26,7 @@ use Siteman\Cms\Commands\UpdateCommand;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Models\Post;
+use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Policies\MenuPolicy;
 use Siteman\Cms\Policies\PagePolicy;
 use Siteman\Cms\Policies\PostPolicy;
@@ -104,6 +105,7 @@ class CmsServiceProvider extends PackageServiceProvider
             [$this->getPackageBaseDir().'/database/settings'],
         ));
 
+        $config->set('tags.tag_model', Tag::class);
         $config->set('filament-shield.shield_resource.show_model_path', false);
         $config->set('filament-shield.permission_prefixes.resource', [
             'view_any',
