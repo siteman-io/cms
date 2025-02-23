@@ -54,6 +54,6 @@ class CreateCustomText extends Component implements HasForms
 
     public function render(): View
     {
-        return view('siteman::menu.livewire.create-custom-text');
+        return view('siteman::resources.menu.livewire.create-custom-text');
     }
 }

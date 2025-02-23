@@ -60,7 +60,7 @@
         </div>
         <div class="col-span-12 sm:col-span-8">
             <x-filament::section>
-                <livewire:menu-builder-items :menu="$record"/>
+                <livewire:menu-items :menu="$record"/>
             </x-filament::section>
         </div>
     </div>
