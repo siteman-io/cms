@@ -154,7 +154,7 @@ class CmsServiceProvider extends PackageServiceProvider
         Blade::component('base-layout', BaseLayout::class);
 
         Livewire::component('health-check-result', HealthCheckResultWidget::class);
-        Livewire::component('menu-builder-items', MenuItems::class);
+        Livewire::component('menu-items', MenuItems::class);
         Livewire::component('create-custom-link', CreateCustomLink::class);
         Livewire::component('create-custom-text', CreateCustomText::class);
         Livewire::component('create-page-link', CreatePageLink::class);

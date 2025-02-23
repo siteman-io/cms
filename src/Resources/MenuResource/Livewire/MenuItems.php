@@ -134,6 +134,6 @@ class MenuItems extends Component implements HasActions, HasForms
 
     public function render(): View
     {
-        return view('siteman::menu.livewire.menu-items');
+        return view('siteman::resources.menu.livewire.menu-items');
     }
 }
