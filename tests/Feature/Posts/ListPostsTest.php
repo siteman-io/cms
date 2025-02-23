@@ -47,3 +47,12 @@ it('can filter by author', function () {
     $page->filterTable('author', [2]);
     $page->assertCountTableRecords(1);
 });
+
+it('can list published posts', function () {
+    $posts = Post::factory()->count(2)->published()->create();
+
+    $this->get('/blog')
+        ->assertOk()
+        ->assertSee($posts[0]->title)
+        ->assertSee($posts[1]->title);
+});
