@@ -7,7 +7,7 @@ use Siteman\Cms\Settings\BlogSettings;
 
 class LatestPostWidget extends Widget
 {
-    protected static string $view = 'siteman::resources.post-resource.widgets.latest-post-widget';
+    protected static string $view = 'siteman::resources.post.widgets.latest-post-widget';
 
     public static function isDiscovered(): bool
     {
