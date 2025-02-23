@@ -10,7 +10,7 @@ class BlogSettings extends Settings
 
     public string $blog_index_route;
 
-    public string $tag_route_prefix;
+    public string $tag_index_route;
 
     public bool $rss_enabled;
 
