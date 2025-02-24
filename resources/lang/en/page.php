@@ -7,6 +7,13 @@ return [
         'group' => 'Content',
         'icon' => 'heroicon-o-book-open',
     ],
+    'tree' => [
+        'empty' => 'No pages found.',
+        'items' => [
+            'collapse' => 'Collapse',
+            'expand' => 'Expand',
+        ],
+    ],
     'fields' => [
         'description' => [
             'label' => 'SEO description',
