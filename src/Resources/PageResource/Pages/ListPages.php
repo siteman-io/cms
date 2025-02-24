@@ -12,7 +12,7 @@ class ListPages extends ListRecords
 {
     protected static string $resource = PageResource::class;
 
-    protected static string $view = 'siteman::resources.page-resource.list-records';
+    protected static string $view = 'siteman::resources.page.list-records';
 
     protected function getHeaderActions(): array
     {
