@@ -7,16 +7,26 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Siteman\Cms\Models\Page;
 
-class PageTree extends Component implements HasActions, HasForms {
+class PageTree extends Component implements HasActions, HasForms
+{
     use InteractsWithActions;
     use InteractsWithForms;
 
-    public ?Collection $pages = null;
+    #[Computed]
+    public function pages(): Collection
+    {
+        return Page::query()
+            ->doesntHave('parent')
+            ->withCount('children')
+            ->get();
+    }
 
     public function render()
     {
-        return view('siteman::resources.page-resource.livewire.page-tree');
+        return view('siteman::resources.page.livewire.page-tree');
     }
 }
