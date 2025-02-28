@@ -8,6 +8,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Siteman\Cms\Models\Page;
 
@@ -16,6 +17,8 @@ class PageTree extends Component implements HasActions, HasForms
     use InteractsWithActions;
     use InteractsWithForms;
 
+//    protected $listeners = ['page:deleted' => '$refresh'];
+
     #[Computed]
     public function pages(): Collection
     {
@@ -23,6 +26,12 @@ class PageTree extends Component implements HasActions, HasForms
             ->doesntHave('parent')
             ->withCount('children')
             ->get();
+    }
+
+    #[On('page:deleted')]
+    public function onPageDeleted()
+    {
+        unset($this->pages);
     }
 
     public function render()

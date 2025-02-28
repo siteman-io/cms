@@ -8,6 +8,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Auth\EditProfile;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
@@ -70,7 +71,9 @@ class SitemanPlugin implements Plugin
             ]);
         });
 
-        $panel->sidebarFullyCollapsibleOnDesktop()->sidebarWidth('14rem');
+        $panel->sidebarFullyCollapsibleOnDesktop()
+            ->sidebarWidth('14rem')
+            ->maxContentWidth(MaxWidth::Full);
     }
 
     public function boot(Panel $panel): void

@@ -8,6 +8,7 @@ return [
         'icon' => 'heroicon-o-book-open',
     ],
     'tree' => [
+        'title' => 'Page Tree',
         'empty' => 'No pages found.',
         'items' => [
             'collapse' => 'Collapse',

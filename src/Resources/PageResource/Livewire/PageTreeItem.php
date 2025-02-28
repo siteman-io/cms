@@ -18,6 +18,8 @@ class PageTreeItem extends Component implements HasActions, HasForms
     use InteractsWithActions;
     use InteractsWithForms;
 
+//    protected $listeners = ['page:deleted' => '$refresh'];
+
     public Page $item;
 
     public ?Collection $children = null;
@@ -32,8 +34,14 @@ class PageTreeItem extends Component implements HasActions, HasForms
 
     public function loadChildren(): void
     {
-        $this->children = $this->item->children;
+        $this->children = $this->item->children()->withCount('children')->get();
         $this->childrenLoaded = true;
+        $this->selectPage();
+    }
+
+    public function selectPage(): void
+    {
+        $this->dispatch('page-selected', pageId: $this->item->id);
     }
 
     public function resetChildrenLoaded(): void
@@ -48,11 +56,12 @@ class PageTreeItem extends Component implements HasActions, HasForms
 
     public function deleteAction()
     {
-        return Action::make('reorder')
-            ->label(__('filament-forms::components.builder.actions.reorder.label'))
-            ->icon('heroicon-m-arrows-up-down')
+        return Action::make('delete')
             ->color('gray')
-            ->iconButton()
+            ->action(function () {
+                $this->item->delete();
+                $this->dispatch('page:deleted');
+            })
             ->size(ActionSize::Small);
     }
 }

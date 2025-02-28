@@ -1,18 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
 use Filament\Actions;
-use Filament\Resources\Components\Tab;
-use Filament\Resources\Pages\ListRecords;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\Pages\Page;
+use Livewire\Attributes\On;
 use Siteman\Cms\Resources\PageResource;
 
-class ListPages extends ListRecords
+class ListPages extends Page
 {
     protected static string $resource = PageResource::class;
 
-    protected static string $view = 'siteman::resources.page.list-records';
+    protected static string $view = 'siteman::resources.page.pages.list-pages';
+
+    public ?int $selectedPageId = null;
+
+    #[On('page-selected')]
+    public function onPageSelected(int $pageId): void
+    {
+        $this->selectedPageId = $pageId;
+    }
 
     protected function getHeaderActions(): array
     {
@@ -25,15 +32,6 @@ class ListPages extends ListRecords
     {
         return [
             PageResource\Widgets\HomePageWidget::class,
-        ];
-    }
-
-    public function getTabs(): array
-    {
-        return [
-            'all' => Tab::make(),
-            'published' => Tab::make()->modifyQueryUsing(fn (Builder $query) => $query->scopes('published')),
-            'trashed' => Tab::make()->modifyQueryUsing(fn (Builder $query) => $query->onlyTrashed())->badge(fn () => self::getModel()::onlyTrashed()->count()),
         ];
     }
 }

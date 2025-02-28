@@ -16,7 +16,7 @@
         <div class="flex items-center gap-2">
             <x-filament::icon-button
                 icon="heroicon-o-chevron-right"
-                x-on:click="open = !open; if (open) { $wire.loadChildren() } else { $wire.resetChildrenLoaded() }"
+                x-on:click.stop="open = !open; if (open) { $wire.loadChildren() } else { $wire.resetChildrenLoaded() }"
                 x-bind:title="open ? '{{ __('siteman::page.tree.items.collapse') }}' : '{{ __('siteman::page.tree.items.expand') }}'"
                 color="gray"
                 class="transition duration-200 ease-in-out"
@@ -24,14 +24,16 @@
                 size="sm"
             />
 
-            <div class="text-sm font-medium leading-6 text-gray-950 dark:text-white whitespace-nowrap">
-                {{ \Illuminate\Support\Str::of($item->title)->limit(30) }}
-            </div>
+            <button
+                wire:click="selectPage"
+                class="flex items-center gap-2 text-left hover:text-primary-500 focus:outline-none focus:text-primary-500"
+            >
 
-            <div
-                class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">
-                {{ \Illuminate\Support\Str::of($item->slug)->limit(30) }}
-            </div>
+                <div
+                    class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">
+                    {{ \Illuminate\Support\Str::of($item->slug)->limit(20) }}
+                </div>
+            </button>
         </div>
         <div class="flex items-center gap-2">
             <x-filament::badge :color="$item->type === 'internal' ? 'primary' : 'gray'" class="hidden sm:block">
