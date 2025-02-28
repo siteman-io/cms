@@ -3,7 +3,7 @@
         <div class="col-span-2">
             <div class="p-4 border-b border-gray-200 dark:border-gray-800">
                 <h2 class="text-lg font-medium text-gray-950 dark:text-white">
-                    {{ __('siteman::page.tree.title') }}
+{{--                    {{ __('siteman::page.tree.title') }}--}}
                 </h2>
             </div>
             <div class="p-4">
@@ -13,7 +13,9 @@
 
         <div class="col-span-4">
 
-                <livewire:page-details :pageId="$this->selectedPageId"/>
+            @if($this->selectedPageId)
+                <livewire:view-page :record="$this->selectedPageId"/>
+            @endif
         </div>
     </div>
 
