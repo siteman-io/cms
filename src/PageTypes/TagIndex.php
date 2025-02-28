@@ -6,30 +6,44 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Str;
 use Siteman\Cms\Models\Page as PageModel;
+use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Theme\ThemeInterface;
 
-class Page implements PageTypeInterface
+class TagIndex implements PageTypeInterface
 {
     public function __construct(private readonly ThemeInterface $theme, private readonly Factory $view) {}
 
     public function render(Request $request, PageModel $page)
     {
-        if ($page->layout) {
-            return $this->view->make(
-                'siteman::themes.layout',
-                ['page' => $page, 'layout' => $page->layout],
+        $tag = str_replace($page->computed_slug, '', '/'.ltrim($request->path(), '/'));
+        if ($tag !== '') {
+            $tag = Tag::where('slug->en', ltrim($tag, '/'))->firstOrFail();
+            Context::add('current_tag', $tag);
+            $posts = PageModel::published()->withAnyTags([$tag])->paginate(5);
+
+            return $this->renderView(
+                [
+                    $this->getViewPath('tags.'.str($tag->slug)->replace('/', '.')->toString()),
+                    $this->getViewPath('tags.show'),
+                    'siteman::themes.blank.tags.show',
+                ],
+                [
+                    'tag' => $tag,
+                    'posts' => $posts,
+                ],
             );
         }
+        $tags = Tag::withCount('pages')->orderBy('slug->en')->paginate();
 
         return $this->renderView(
             [
-                $this->getViewPath('pages.'.($page->slug !== '/' ? str($page->slug)->replace('/', '.')->toString() : 'home')),
-                $this->getViewPath('pages.show'),
-                'siteman::themes.blank.pages.show',
+                $this->getViewPath('tags.index'),
+                'siteman::themes.blank.tags.index',
             ],
-            ['page' => $page],
+            ['tags' => $tags],
         );
     }
 

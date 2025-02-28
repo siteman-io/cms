@@ -4,6 +4,7 @@ namespace Siteman\Cms\PageTypes;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Siteman\Cms\Models\Page as PageModel;
@@ -13,7 +14,7 @@ class BlogIndex implements PageTypeInterface
 {
     public function __construct(private readonly ThemeInterface $theme, private readonly Factory $view) {}
 
-    public function render(PageModel $page)
+    public function render(Request $request, PageModel $page)
     {
         return $this->renderView(
             [

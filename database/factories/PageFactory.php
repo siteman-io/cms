@@ -33,4 +33,11 @@ class PageFactory extends Factory
             'published_at' => $publishedAt ?? now()->subDays(rand(0, 365)),
         ]);
     }
+
+    public function withTags(array $tags): static
+    {
+        return $this->afterCreating(function (Page $page) use ($tags) {
+            $page->attachTags($tags);
+        });
+    }
 }

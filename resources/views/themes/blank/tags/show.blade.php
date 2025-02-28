@@ -11,7 +11,7 @@
     <ul>
         @foreach($posts as $post)
             <li>
-                <a href="{{$post->path()}}">{!! $post->title !!}</a>
+                <a href="{{$post->computed_slug}}">{!! $post->title !!}</a>
             </li>
         @endforeach
     </ul>

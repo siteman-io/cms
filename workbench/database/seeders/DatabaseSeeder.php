@@ -47,11 +47,16 @@ class DatabaseSeeder extends Seeder
             'linkable_id' => $blogIndexPage->id,
             'order' => 2,
         ]);
-        Page::factory()->count(10)->published()->withMarkdownBlock()->create(['parent_id' => $blogIndexPage->id, 'author_id' => $user->id]);
-        Page::factory()
+        Page::factory()->count(10)->published()->withMarkdownBlock()->withTags(['foo', 'bar', 'baz'])->create(['parent_id' => $blogIndexPage->id, 'author_id' => $user->id]);
+        $tagIndexPage = Page::factory()
             ->published()
-            ->withMarkdownBlock(true)
-            ->create(['title' => 'About Me', 'slug' => '/about-me', 'author_id' => $user->id]);
+            ->create(['title' => 'Tags', 'slug' => '/tags', 'author_id' => $user->id, 'type' => 'tag_index']);
+        $mainMenu->menuItems()->create([
+            'title' => 'Blog',
+            'linkable_type' => Page::class,
+            'linkable_id' => $tagIndexPage->id,
+            'order' => 3,
+        ]);
         $docs = Page::factory()
             ->published()
             ->withMarkdownBlock(true)

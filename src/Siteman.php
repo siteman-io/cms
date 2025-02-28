@@ -11,6 +11,7 @@ use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\PageTypes\BlogIndex;
 use Siteman\Cms\PageTypes\Page;
+use Siteman\Cms\PageTypes\TagIndex;
 use Siteman\Cms\Settings\BlogSettingsForm;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Settings\GeneralSettingsForm;
@@ -35,6 +36,7 @@ class Siteman
     protected array $pageTypes = [
         'page' => Page::class,
         'blog_index' => BlogIndex::class,
+        'tag_index' => TagIndex::class,
     ];
 
     protected array $formFieldHooks = [];

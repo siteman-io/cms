@@ -15,7 +15,7 @@
                 */
             @endphp
             <li>
-                <a href="{{$tag->url()}}">{{$tag->slug}} ({{$tag->posts_count}})</a>
+                <a href="{{$tag->url()}}">{{$tag->slug}} ({{$tag->pages_count}})</a>
             </li>
         @endforeach
     </ul>

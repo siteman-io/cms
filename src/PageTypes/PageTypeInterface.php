@@ -2,9 +2,10 @@
 
 namespace Siteman\Cms\PageTypes;
 
+use Illuminate\Http\Request;
 use Siteman\Cms\Models\Page;
 
 interface PageTypeInterface
 {
-    public function render(Page $page);
+    public function render(Request $request, Page $page);
 }

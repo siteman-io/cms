@@ -13,6 +13,11 @@ class Tag extends SpatieTag
         return $this->morphedByMany(Post::class, 'taggable')->published();
     }
 
+    public function pages(): MorphToMany
+    {
+        return $this->morphedByMany(Page::class, 'taggable');
+    }
+
     public function url(): string
     {
         return '/'.app(BlogSettings::class)->tag_index_route.'/'.$this->slug;

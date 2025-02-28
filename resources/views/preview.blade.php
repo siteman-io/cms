@@ -1,2 +1,2 @@
 @props(['post'])
-{!! app(\Siteman\Cms\View\Renderer::class)->renderPostType($post) !!}
+{!! app(Siteman::getPageTypes()[$post->type])->render(request(), $post) !!}
