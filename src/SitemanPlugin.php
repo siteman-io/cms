@@ -40,7 +40,7 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
-        $resources = [PageResource::class, PostResource::class, MenuResource::class, UserResource::class, RoleResource::class];
+        $resources = [PageResource::class, MenuResource::class, UserResource::class, RoleResource::class];
         $panel->resources($resources);
 
         $panel->pages([
