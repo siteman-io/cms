@@ -22,7 +22,7 @@ class PageFactory extends Factory
         return [
             'author_id' => config('siteman.models.user')::factory(),
             'title' => $title,
-            'slug' => Str::slug($title),
+            'slug' => '/'.Str::slug($title),
             'blocks' => [],
         ];
     }

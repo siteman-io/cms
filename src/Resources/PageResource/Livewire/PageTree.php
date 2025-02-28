@@ -34,6 +34,7 @@ class PageTree extends Component implements HasActions, HasForms
     {
         return Page::query()
             ->doesntHave('parent')
+            ->withCount('children')
             ->with('children', function ($query) {
                 $query->whereIn('parent_id', array_unique($this->activePageIds));
             })

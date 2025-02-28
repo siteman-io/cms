@@ -13,7 +13,8 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->references('id')->on($table->getTable())->nullOnDelete();
             $table->string('type')->default('page');
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug');
+            $table->string('computed_slug')->unique();
             $table->json('blocks')->nullable();
             $table->string('layout')->nullable();
             $table->timestamp('published_at')->nullable();

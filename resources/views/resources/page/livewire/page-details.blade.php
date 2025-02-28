@@ -7,8 +7,11 @@
         </div>
 
         <div class="space-y-6 p-4">
-            <div>
-                <h3 class="text-sm text-gray-500 dark:text-gray-400">{{ $page->slug }}</h3>
+            <div class="pb-4">
+                <h3 class="text-sm text-gray-500 dark:text-gray-400">
+                    <a href="{{ $page->computed_slug }}" target="_blank" class="text-primary-500 hover:underline">
+                        {{ $page->computed_slug }}
+                </h3>
             </div>
 
             <div class="grid grid-cols-2 gap-4">

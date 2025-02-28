@@ -14,15 +14,17 @@
         class="flex justify-between px-3 py-2 bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
     >
         <div class="flex items-center gap-2">
-            <x-filament::icon-button
-                icon="heroicon-o-chevron-right"
-                x-on:click.stop="open = !open; if (open) { $wire.loadChildren({{ $item->getKey() }}) }"
-                x-bind:title="open ? '{{ __('siteman::page.tree.items.collapse') }}' : '{{ __('siteman::page.tree.items.expand') }}'"
-                color="gray"
-                class="transition duration-200 ease-in-out"
-                x-bind:class="{ 'rotate-90': open }"
-                size="sm"
-            />
+            @if($item->children_count > 0)
+                <x-filament::icon-button
+                    icon="heroicon-o-chevron-right"
+                    x-on:click.stop="open = !open; if (open) { $wire.loadChildren({{ $item->getKey() }}) }"
+                    x-bind:title="open ? '{{ __('siteman::page.tree.items.collapse') }}' : '{{ __('siteman::page.tree.items.expand') }}'"
+                    color="gray"
+                    class="transition duration-200 ease-in-out"
+                    x-bind:class="{ 'rotate-90': open }"
+                    size="sm"
+                />
+            @endif
 
             <button
                 wire:click="selectPage({{ $item->getKey() }})"
@@ -41,13 +43,13 @@
                 {{ $item->type }}
             </x-filament::badge>
             @php
-//                $editAction = ($this->editAction)(['id' => $item->getKey()]);
-                $deleteAction = ($this->deleteAction)(['id' => $item->getKey()]);
+                //                $editAction = ($this->editAction)(['id' => $item->getKey()]);
+                                $deleteAction = ($this->deleteAction)(['id' => $item->getKey()]);
             @endphp
             <x-filament-actions::group :actions="[
 //        $editAction->isVisible() ? $editAction : null,
         $deleteAction->isVisible() ? $deleteAction : null,
-    ]" />
+    ]"/>
         </div>
     </div>
 
