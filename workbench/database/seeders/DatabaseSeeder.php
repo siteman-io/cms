@@ -44,7 +44,31 @@ class DatabaseSeeder extends Seeder
             'url' => '/blog',
             'order' => 2,
         ]);
-        Page::factory()->count(10)->has(Page::factory()->count(rand(1, 4)), 'children')->published()->create();
-        Post::factory()->count(10)->published()->create();
+        $aboutMe = Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'About Me', 'slug' => '/about-me', 'author_id' => $user->id]);
+        $docs = Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'Documentation', 'slug' => '/docs', 'author_id' => $user->id]);
+        Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'Getting started', 'slug' => '/getting-started', 'author_id' => $user->id, 'parent_id' => $docs->id]);
+        Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'Configuration', 'slug' => '/configuration', 'author_id' => $user->id, 'parent_id' => $docs->id]);
+        Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'foo', 'slug' => '/foo', 'author_id' => $user->id, 'parent_id' => $docs->id]);
+        Page::factory()
+            ->published()
+            ->withMarkdownBlock(true)
+            ->create(['title' => 'bar', 'slug' => '/bar', 'author_id' => $user->id, 'parent_id' => $docs->id]);
+        Page::factory()->count(10)->has(Page::factory()->count(5), 'children')->published()->create();
+        //        Post::factory()->count(10)->published()->create();
     }
 }

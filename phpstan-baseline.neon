@@ -97,16 +97,16 @@ parameters:
 			path: database/factories/PostFactory.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyTrashed\(\)\.$#'
-			identifier: method.notFound
+			message: '#^Class Siteman\\Cms\\Resources\\PageResource\\Livewire\\PageTreeItem not found\.$#'
+			identifier: class.notFound
 			count: 1
-			path: src/Resources/PageResource/Pages/ListPages.php
+			path: src/CmsServiceProvider.php
 
 		-
-			message: '#^Call to an undefined static method Illuminate\\Database\\Eloquent\\Model\:\:onlyTrashed\(\)\.$#'
-			identifier: staticMethod.notFound
+			message: '#^Access to an undefined property Siteman\\Cms\\Resources\\PageResource\\Livewire\\PageTree\:\:\$pages\.$#'
+			identifier: property.notFound
 			count: 1
-			path: src/Resources/PageResource/Pages/ListPages.php
+			path: src/Resources/PageResource/Livewire/PageTree.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyTrashed\(\)\.$#'

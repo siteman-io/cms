@@ -7,9 +7,7 @@
             class="space-y-2"
         >
             @foreach($this->pages as $page)
-                <livewire:page-tree-item
-                    :item="$page"
-                />
+                <x-siteman::page-tree-item :item="$page"/>
             @endforeach
         </ul>
     @else
