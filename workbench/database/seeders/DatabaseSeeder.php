@@ -7,7 +7,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Models\Post;
 use Workbench\App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -29,22 +28,27 @@ class DatabaseSeeder extends Seeder
         $mainMenu = Menu::create(['name' => 'Main Menu', 'is_visible' => true]);
         $mainMenu->locations()->create(['location' => 'header']);
 
-        $page = Page::factory()
+        $homePage = Page::factory()
             ->published()
             ->withMarkdownBlock(true)
             ->create(['title' => 'home', 'slug' => '/', 'author_id' => $user->id]);
         $mainMenu->menuItems()->create([
             'title' => 'Home',
             'linkable_type' => Page::class,
-            'linkable_id' => $page->id,
+            'linkable_id' => $homePage->id,
             'order' => 1,
         ]);
+        $blogIndexPage = Page::factory()
+            ->published()
+            ->create(['title' => 'Blog', 'slug' => '/blog', 'type' => 'blog_index', 'author_id' => $user->id]);
         $mainMenu->menuItems()->create([
             'title' => 'Blog',
-            'url' => '/blog',
+            'linkable_type' => Page::class,
+            'linkable_id' => $blogIndexPage->id,
             'order' => 2,
         ]);
-        $aboutMe = Page::factory()
+        Page::factory()->count(10)->published()->withMarkdownBlock()->create(['parent_id' => $blogIndexPage->id, 'author_id' => $user->id]);
+        Page::factory()
             ->published()
             ->withMarkdownBlock(true)
             ->create(['title' => 'About Me', 'slug' => '/about-me', 'author_id' => $user->id]);
@@ -68,7 +72,5 @@ class DatabaseSeeder extends Seeder
             ->published()
             ->withMarkdownBlock(true)
             ->create(['title' => 'bar', 'slug' => '/bar', 'author_id' => $user->id, 'parent_id' => $docs->id]);
-        Page::factory()->count(10)->has(Page::factory()->count(5), 'children')->published()->create();
-        //        Post::factory()->count(10)->published()->create();
     }
 }

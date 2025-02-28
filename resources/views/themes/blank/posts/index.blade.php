@@ -6,16 +6,16 @@
 @endphp
 
 @section('content')
-
+eqqe
     <ul>
         @foreach($posts as $post)
             @php
                 /**
-                * @var \Siteman\Cms\Models\Post $post
+                * @var \Siteman\Cms\Models\Page $post
                 */
             @endphp
             <li>
-                <a href="{{$post->path()}}">{!! $post->title !!}</a>
+                <a href="{{$post->computed_slug}}">{!! $post->title !!}</a>
             </li>
         @endforeach
     </ul>

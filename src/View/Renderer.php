@@ -16,6 +16,31 @@ class Renderer
 {
     public function __construct(private readonly ThemeInterface $theme, private readonly Factory $view) {}
 
+    public function renderPage(Page $page): View
+    {
+        return match ($page->type) {
+            'page' => $this->renderPostType($page),
+            'blog_index' => $this->renderPostType($page),
+            default => throw new \Exception('Unknown page type: '.$page->type),
+        };
+    }
+
+    public function renderPageType(Page $page): View
+    {
+        if ($page->layout) {
+            return $this->renderLayout($page->layout, ['page' => $page]);
+        }
+
+        return $this->render(
+            [
+                $this->getViewPath('pages.'.($page->slug !== '/' ? str($page->slug)->replace('/', '.')->toString() : 'home')),
+                $this->getViewPath('pages.show'),
+                'siteman::themes.blank.pages.show',
+            ],
+            ['page' => $page],
+        );
+    }
+
     public function renderPostType(BasePostType $post): View
     {
         if ($post instanceof Page) {

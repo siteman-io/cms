@@ -38,7 +38,6 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
 use Siteman\Cms\Resources\PageResource\Livewire\PageDetails;
 use Siteman\Cms\Resources\PageResource\Livewire\PageTree;
-use Siteman\Cms\Resources\PageResource\Livewire\PageTreeItem;
 use Siteman\Cms\Resources\PageResource\Pages\ViewPage;
 use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;

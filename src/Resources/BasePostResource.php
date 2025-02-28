@@ -61,6 +61,10 @@ abstract class BasePostResource extends Resource
                 Forms\Components\Section::make()
                     ->columnSpan(1)
                     ->schema(self::hook([
+                        Forms\Components\Select::make('type')->options([
+                            'page' => 'Page',
+                            'blog_index' => 'Blog Index',
+                        ])->required(),
                         TextInput::make('slug')
                             ->label('siteman::post.fields.slug.label')
                             ->translateLabel()

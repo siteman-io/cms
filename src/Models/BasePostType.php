@@ -25,6 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $author_id
  * @property string $title
  * @property string $slug
+ * @property string $computed_slug
  * @property string $content
  * @property Collection $blocks
  * @property ?string $layout

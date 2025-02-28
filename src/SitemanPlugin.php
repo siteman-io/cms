@@ -16,7 +16,6 @@ use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\MenuResource;
 use Siteman\Cms\Resources\PageResource;
-use Siteman\Cms\Resources\PostResource;
 use Siteman\Cms\Resources\RoleResource;
 use Siteman\Cms\Resources\UserResource;
 use Siteman\Cms\Search\SitemanSearchProvider;
