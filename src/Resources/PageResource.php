@@ -3,10 +3,7 @@
 namespace Siteman\Cms\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Tabs\Tab;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists;
@@ -20,9 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Concerns\HasFormHooks;
-use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\PageResource\Pages;
@@ -39,85 +34,90 @@ class PageResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Tabs::make()
-                    ->columnSpan('full')
-                    ->tabs(self::hook([self::getContentTab()], FormHook::POST_TABS)),
-            ]);
-    }
-
-    public static function getContentTab(): Tab
-    {
-        return Tab::make('Content')
             ->columns(4)
             ->schema([
                 Forms\Components\Section::make()
                     ->columnSpan(3)
-                    ->schema(self::hook([
-                        TextInput::make('title')
-                            ->label(__('siteman::page.fields.title.label'))
-                            ->helperText(__('siteman::page.fields.title.helper-text'))
-                            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
-                                if (!$get('is_slug_changed_manually') && filled($state)) {
-                                    $set('slug', Str::slug($state));
-                                }
-                            })
-                            ->live(debounce: 300)
-                            ->required(),
-                        BlockBuilder::make('blocks'),
-                    ], FormHook::POST_MAIN)),
+                    ->key('mainPageFields')
+                    ->schema(function (Forms\Get $get): array {
+                        $schema = [
+                            TextInput::make('title')
+                                ->label(__('siteman::page.fields.title.label'))
+                                ->helperText(__('siteman::page.fields.title.helper-text'))
+                                ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                                    if (!$get('is_slug_changed_manually') && filled($state)) {
+                                        $set('slug', Str::slug($state));
+                                    }
+                                })
+                                ->live(debounce: 300)
+                                ->required(),
+                        ];
+
+                        $type = $get('type');
+                        if ($type) {
+                            $typeClass = Siteman::getPageTypes()[$type];
+                            if (method_exists($typeClass, 'extendPageMainFields')) {
+                                $schema = $typeClass::extendPageMainFields($schema);
+                            }
+                        }
+
+                        return $schema;
+                    }),
                 Forms\Components\Section::make()
                     ->columnSpan(1)
-                    ->schema(self::hook([
-                        Forms\Components\Select::make('type')->options([
-                            'page' => 'Page',
-                            'blog_index' => 'Blog Index',
-                        ])->required(),
-                        TextInput::make('slug')
-                            ->label('siteman::page.fields.slug.label')
-                            ->translateLabel()
-                            ->helperText(__('siteman::page.fields.slug.helper-text'))
-                            ->afterStateUpdated(function (Forms\Set $set) {
-                                $set('is_slug_changed_manually', true);
-                            })
-                            ->required(),
-                        Hidden::make('is_slug_changed_manually')
-                            ->default(false)
-                            ->dehydrated(false),
-                        Forms\Components\DateTimePicker::make('published_at')
-                            ->label('siteman::page.fields.published_at.label')
-                            ->translateLabel()
-                            ->helperText(__('siteman::page.fields.published_at.helper-text'))
-                            ->seconds(false),
-                        Forms\Components\Select::make('layout')
-                            ->label(__('siteman::page.fields.layout.label'))
-                            ->helperText(__('siteman::page.fields.layout.helper-text'))
-                            ->options(array_keys(Siteman::getLayouts())),
-                        Group::make([
-                            Textarea::make('description')
-                                ->label('siteman::page.fields.description.label')
-                                ->translateLabel()
-                                ->helperText(__('siteman::page.fields.description.helper-text'))
-                                ->columnSpan(2),
-                            // here we can add further SEO fields
-                        ])
-                            ->afterStateHydrated(function (Group $component, ?Page $record): void {
-                                $component->getChildComponentContainer()->fill(
-                                    $record?->seo?->only('description') ?: []
-                                );
-                            })
-                            ->statePath('seo')
-                            ->dehydrated(false)
-                            ->saveRelationshipsUsing(function (Page $record, array $state): void {
-                                $state = collect($state)->only(['description'])->map(fn ($value) => $value ?: null)->all();
+                    ->key('sidebar')
+                    ->schema(function (Forms\Get $get): array {
+                        $schema = [
+                            Forms\Components\Select::make('type')
+                                ->options(collect(Siteman::getPageTypes())->mapWithKeys(fn ($type, $key) => [$key => str($key)->headline()])->toArray())
+                                ->afterStateUpdated(function (Forms\Components\Select $component, Page $record, $state) {
+                                    $all = $record->toArray();
+                                    $all['type'] = $state;
 
-                                if ($record->seo->exists) {
-                                    $record->seo->update($state);
-                                } else {
-                                    $record->seo()->create($state);
+                                    $component
+                                        ->getContainer()
+                                        ->getParentComponent()
+                                        ->getContainer()
+                                        ->getComponent('mainPageFields')
+                                        ?->getChildComponentContainer()
+                                        ->fill($all);
+
+                                    $component
+                                        ->getContainer()
+                                        ->getComponent('sidebar')
+                                        ?->getChildComponentContainer()
+                                        ->fill($all);
                                 }
-                            }),
-                    ], FormHook::POST_SIDEBAR)),
+                                )
+                                ->required()
+                                ->live(),
+                            TextInput::make('slug')
+                                ->label('siteman::page.fields.slug.label')
+                                ->translateLabel()
+                                ->helperText(__('siteman::page.fields.slug.helper-text'))
+                                ->afterStateUpdated(function (Forms\Set $set) {
+                                    $set('is_slug_changed_manually', true);
+                                })
+                                ->required(),
+                            Hidden::make('is_slug_changed_manually')
+                                ->default(false)
+                                ->dehydrated(false),
+                            Forms\Components\DateTimePicker::make('published_at')
+                                ->label('siteman::page.fields.published_at.label')
+                                ->translateLabel()
+                                ->helperText(__('siteman::page.fields.published_at.helper-text'))
+                                ->seconds(false),
+                        ];
+                        $type = $get('type');
+                        if ($type) {
+                            $typeClass = Siteman::getPageTypes()[$type];
+                            if (method_exists($typeClass, 'extendPageSidebarFields')) {
+                                $schema = $typeClass::extendPageSidebarFields($schema);
+                            }
+                        }
+
+                        return $schema;
+                    }),
             ]);
     }
 

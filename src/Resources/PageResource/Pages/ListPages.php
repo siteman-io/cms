@@ -24,7 +24,7 @@ class ListPages extends Page
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->model(PageResource::getModel()),
         ];
     }
 

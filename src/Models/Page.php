@@ -17,7 +17,6 @@ use RalphJSmit\Laravel\SEO\Models\SEO;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Siteman\Cms\Database\Factories\PageFactory;
-use Siteman\Cms\Facades\Siteman;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 use Spatie\MediaLibrary\HasMedia;
@@ -107,6 +106,7 @@ class Page extends Model implements Feedable, HasMedia
         return [
             'published_at' => 'datetime',
             'blocks' => 'collection',
+            'meta' => 'collection',
         ];
     }
 
@@ -119,7 +119,7 @@ class Page extends Model implements Feedable, HasMedia
     {
         return new SEOData(
             title: $this->title,
-            description: Siteman::getGeneralSettings()->description,
+            description: $this->meta['description'] ?? 'No description',
             author: property_exists($this->author, 'name') ? $this->author->name : null,
             published_time: $this->published_at,
             modified_time: $this->updated_at,

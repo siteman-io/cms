@@ -4,6 +4,7 @@ namespace Siteman\Cms;
 
 use DavidBadura\FakerMarkdownGenerator\FakerProvider;
 use Faker\Generator;
+use Filament\Forms\Components\Field;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
@@ -177,6 +178,11 @@ class CmsServiceProvider extends PackageServiceProvider
 
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
+        });
+
+        Field::macro('asPageMetaField', function () {
+            /** @var Field $this */
+            return $this->statePath('meta.'.$this->getName());
         });
     }
 

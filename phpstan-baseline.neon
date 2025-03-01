@@ -55,10 +55,64 @@ parameters:
 			path: database/factories/PageFactory.php
 
 		-
+			message: '#^PHPDoc tag @var with type Filament\\Forms\\Components\\Field is not subtype of native type \$this\(Siteman\\Cms\\CmsServiceProvider\)\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/CmsServiceProvider.php
+
+		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$computed_slug\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/Models/Page.php
+
+		-
+			message: '#^Offset ''description'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Models/Page.php
+
+		-
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\Textarea\:\:asPageMetaField\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/PageTypes/Page.php
+
+		-
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\Select\:\:asPageMetaField\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\TextInput\:\:asPageMetaField\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\Textarea\:\:asPageMetaField\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Offset ''feed_description'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Offset ''feed_language'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Offset ''feed_title'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/PageTypes/RssFeed.php
 
 		-
 			message: '#^Access to an undefined property Siteman\\Cms\\Resources\\PageResource\\Livewire\\PageTree\:\:\$pages\.$#'

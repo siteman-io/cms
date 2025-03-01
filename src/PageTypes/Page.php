@@ -2,11 +2,15 @@
 
 namespace Siteman\Cms\PageTypes;
 
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Siteman\Cms\Blocks\BlockBuilder;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page as PageModel;
 use Siteman\Cms\Theme\ThemeInterface;
 
@@ -31,6 +35,27 @@ class Page implements PageTypeInterface
             ],
             ['page' => $page],
         );
+    }
+
+    public static function extendPageMainFields(array $fields): array
+    {
+        return array_merge($fields, [
+            BlockBuilder::make('blocks'),
+        ]);
+    }
+
+    public static function extendPageSidebarFields(array $fields): array
+    {
+        return array_merge($fields, [
+            Select::make('layout')
+                ->label(__('siteman::page.fields.layout.label'))
+                ->helperText(__('siteman::page.fields.layout.helper-text'))
+                ->options(array_keys(Siteman::getLayouts())),
+            Textarea::make('description')
+                ->label(__('siteman::page.fields.description.label'))
+                ->helperText(__('siteman::page.fields.description.helper-text'))
+                ->asPageMetaField(),
+        ]);
     }
 
     protected function getViewPath(string $view): string
