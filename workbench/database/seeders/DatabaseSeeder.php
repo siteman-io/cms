@@ -51,6 +51,9 @@ class DatabaseSeeder extends Seeder
         $tagIndexPage = Page::factory()
             ->published()
             ->create(['title' => 'Tags', 'slug' => '/tags', 'author_id' => $user->id, 'type' => 'tag_index']);
+        Page::factory()
+            ->published()
+            ->create(['title' => 'RSS', 'slug' => '/rss', 'author_id' => $user->id, 'type' => 'rss_feed']);
         $mainMenu->menuItems()->create([
             'title' => 'Blog',
             'linkable_type' => Page::class,
