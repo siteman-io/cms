@@ -25,11 +25,9 @@ use Siteman\Cms\Commands\PublishCommand;
 use Siteman\Cms\Commands\UpdateCommand;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Models\Post;
 use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Policies\MenuPolicy;
 use Siteman\Cms\Policies\PagePolicy;
-use Siteman\Cms\Policies\PostPolicy;
 use Siteman\Cms\Policies\RolePolicy;
 use Siteman\Cms\Policies\UserPolicy;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
@@ -176,7 +174,6 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::policy(Menu::class, MenuPolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
-        Gate::policy(Post::class, PostPolicy::class);
 
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
