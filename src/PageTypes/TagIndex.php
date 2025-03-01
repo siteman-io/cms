@@ -31,9 +31,8 @@ class TagIndex implements PageTypeInterface
                     'siteman::themes.blank.tags.show',
                 ],
                 [
-                    'tagIndexPage' => $page,
                     'tag' => $tag,
-                    'posts' => $pages,
+                    'pages' => $pages,
                 ],
             );
         }
@@ -44,7 +43,10 @@ class TagIndex implements PageTypeInterface
                 $this->getViewPath('tags.index'),
                 'siteman::themes.blank.tags.index',
             ],
-            ['tags' => $tags],
+            [
+                'tagIndexPage' => $page,
+                'tags' => $tags,
+            ],
         );
     }
 

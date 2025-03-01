@@ -2,7 +2,7 @@
 
 use Siteman\Cms\Models\Page;
 
-it('can list tags with published posts count', function () {
+it('can list published pages on show tag page', function () {
     Page::factory()->published()->create(['type' => 'tag_index', 'slug' => '/tags']);
     $posts = Page::factory()->count(2)->published()->withTags(['foo', 'bar'])->create();
 
@@ -15,4 +15,13 @@ it('can list tags with published posts count', function () {
         ->assertOk()
         ->assertSee($posts[0]->title)
         ->assertSee($posts[1]->title);
+});
+
+it('can list tags with published pages count', function () {
+    Page::factory()->published()->create(['type' => 'tag_index', 'slug' => '/tags']);
+    Page::factory()->count(2)->published()->withTags(['foo', 'bar'])->create();
+
+    $this->get('/tags')
+        ->assertOk()
+        ->assertSee(['foo (2)', 'bar (2)']);
 });

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 use Siteman\Cms\Models\Page;
 
@@ -17,4 +17,18 @@ it('shows only published pages', function () {
 
     $this->get('/draft')->assertStatus(404);
     $this->get('/published')->assertStatus(200);
+});
+
+it('can render with a layout', function () {
+    Page::factory()
+        ->published()
+        ->create([
+            'slug' => '/published',
+            'layout' => 'base-layout',
+        ]);
+
+    $this->get('/published')
+        ->assertOk()
+        ->assertViewIs('siteman::themes.layout')
+        ->assertViewHas('layout', 'base-layout');
 });
