@@ -15,7 +15,6 @@ development experience.
 # Table of Contents
 
 2. [Installation](#installation)
-3. [Usage](#usage)
 4. [Features](#features)
     1. [Themes](#themes)
     2. [Layouts](#layouts)
@@ -160,6 +159,10 @@ Menus can be used in your Blade views via the `Siteman` facade.
     @endforeach
 </ul>
 ```
+
+### Menus
+
+TBD
 
 ### Blocks
 

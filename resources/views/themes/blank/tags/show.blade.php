@@ -2,19 +2,19 @@
 @php
     /**
     * @var \Siteman\Cms\Models\Tag $tag
-    * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $posts
+    * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, \Siteman\Cms\Models\Page> $pages
     */
 @endphp
 
 @section('content')
 
     <ul>
-        @foreach($posts as $post)
+        @foreach($pages as $page)
             <li>
-                <a href="{{$post->computed_slug}}">{!! $post->title !!}</a>
+                <a href="{{$page->computed_slug}}">{!! $page->title !!}</a>
             </li>
         @endforeach
     </ul>
-    {{$posts->links('pagination::simple-default')}}
+    {{$pages->links('pagination::simple-default')}}
 
 @endsection

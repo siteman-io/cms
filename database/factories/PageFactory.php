@@ -2,7 +2,9 @@
 
 namespace Siteman\Cms\Database\Factories;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Siteman\Cms\Models\Page;
@@ -20,7 +22,7 @@ class PageFactory extends Factory
         $title = fake()->unique()->sentence(rand(1, 3));
 
         return [
-            'author_id' => config('siteman.models.user')::factory(),
+            'author_id' => $this->getUserFactory(),
             'title' => $title,
             'slug' => '/'.Str::slug($title),
             'blocks' => [],
@@ -39,5 +41,15 @@ class PageFactory extends Factory
         return $this->afterCreating(function (Page $page) use ($tags) {
             $page->attachTags($tags);
         });
+    }
+
+    protected function getUserFactory(): Factory
+    {
+        $userModel = config('siteman.models.user');
+        if (!class_uses($userModel, HasFactory::class) || class_implements($userModel, Authenticatable::class)) {
+            throw new \Exception('User model must use the HasFactory trait and implement Authenticatable.');
+        }
+
+        return $userModel::factory();
     }
 }

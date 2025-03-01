@@ -1,6 +1,7 @@
 @extends('siteman::themes.blank.wrapper')
 @php
     /**
+    * @var \Siteman\Cms\Models\Page $tagIndexPage
     * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $tags
     */
 @endphp
@@ -15,7 +16,7 @@
                 */
             @endphp
             <li>
-                <a href="{{$tag->url()}}">{{$tag->slug}} ({{$tag->pages_count}})</a>
+                <a href="{{$tagIndexPage->computed_slug.'/'.$tag->slug}}">{{$tag->slug}} ({{$tag->pages_count}})</a>
             </li>
         @endforeach
     </ul>

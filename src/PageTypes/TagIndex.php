@@ -22,7 +22,7 @@ class TagIndex implements PageTypeInterface
         if ($tag !== '') {
             $tag = Tag::where('slug->en', ltrim($tag, '/'))->firstOrFail();
             Context::add('current_tag', $tag);
-            $posts = PageModel::published()->withAnyTags([$tag])->paginate(5);
+            $pages = PageModel::published()->withAnyTags([$tag])->paginate(5);
 
             return $this->renderView(
                 [
@@ -31,8 +31,9 @@ class TagIndex implements PageTypeInterface
                     'siteman::themes.blank.tags.show',
                 ],
                 [
+                    'tagIndexPage' => $page,
                     'tag' => $tag,
-                    'posts' => $posts,
+                    'posts' => $pages,
                 ],
             );
         }
