@@ -8,11 +8,6 @@ use Spatie\Tags\Tag as SpatieTag;
 
 class Tag extends SpatieTag
 {
-    public function posts(): MorphToMany
-    {
-        return $this->morphedByMany(Post::class, 'taggable')->published();
-    }
-
     public function pages(): MorphToMany
     {
         return $this->morphedByMany(Page::class, 'taggable');

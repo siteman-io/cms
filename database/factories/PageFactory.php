@@ -17,7 +17,7 @@ class PageFactory extends Factory
     /** @return array<string, mixed> */
     public function definition(): array
     {
-        $title = fake()->unique()->sentence(rand(2, 3));
+        $title = fake()->unique()->sentence(rand(1, 3));
 
         return [
             'author_id' => config('siteman.models.user')::factory(),

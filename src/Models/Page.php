@@ -9,8 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Carbon;
 use Overtrue\LaravelVersionable\Versionable;
 use Overtrue\LaravelVersionable\VersionStrategy;
+use RalphJSmit\Laravel\SEO\Models\SEO;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Siteman\Cms\Database\Factories\PageFactory;
@@ -21,6 +24,21 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 
+/**
+ * @property int $id
+ * @property int $author_id
+ * @property string $title
+ * @property string $slug
+ * @property string $computed_slug
+ * @property string $content
+ * @property \Illuminate\Support\Collection $blocks
+ * @property ?string $layout
+ * @property ?Carbon $published_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ * @property User $author
+ * @property SEO $seo
+ */
 class Page extends Model implements Feedable
 {
     use HasFactory;
@@ -127,7 +145,7 @@ class Page extends Model implements Feedable
             ->summary($this->excerpt ?? '')
             ->updated($this->updated_at)
             ->link($this->computed_slug)
-            ->authorName($this->author?->name ?? '');
+            ->authorName($this->author->name ?? '');
     }
 
     public function getFeedItems(): Collection

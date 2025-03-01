@@ -18,7 +18,7 @@ $example = 'This is a PHP example';
 9.	Bias for Efficiency: If you can reference a library that does what you need, do so. Don’t reinvent the wheel unless there’s a very good reason.
 
 **Last 5 blog posts as example**:
-@foreach(\Siteman\Cms\Models\Post::published()->whereNot('id', $post->id)->latest()->take(5)->get() as $oldPost)
+@foreach(\Siteman\Cms\Models\Page::published()->whereNot('id', $post->id)->latest()->take(5)->get() as $oldPost)
 ---------------------------------------
 #{{$oldPost->title}}
 

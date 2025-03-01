@@ -1,9 +1,9 @@
 <?php
 
-use Siteman\Cms\Models\Post;
+use Siteman\Cms\Models\Page;
 
 it('can list tags with published posts count', function () {
-    Post::factory()->count(2)->published()->withTags(['foo', 'bar'])->create();
+    Page::factory()->count(2)->published()->withTags(['foo', 'bar'])->create();
 
     $this->get('/tags')
         ->assertOk()
