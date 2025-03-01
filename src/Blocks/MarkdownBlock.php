@@ -14,7 +14,7 @@ use League\CommonMark\GithubFlavoredMarkdownConverter;
 use League\CommonMark\Node\Query;
 use League\CommonMark\Renderer\HtmlRenderer;
 use RyanChandler\CommonmarkBladeBlock\BladeExtension;
-use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Models\Page;
 use Siteman\Cms\Torchlight\TorchlightExtension;
 
 class MarkdownBlock extends BaseBlock
@@ -40,7 +40,7 @@ class MarkdownBlock extends BaseBlock
         ];
     }
 
-    public function render(array $data, BasePostType $post): View
+    public function render(array $data, Page $page): View
     {
         $extensions = [new BladeExtension, new AttributesExtension];
         if (config('torchlight.token') !== null) {

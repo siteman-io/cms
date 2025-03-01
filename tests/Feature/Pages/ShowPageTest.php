@@ -6,13 +6,13 @@ it('shows only published pages', function () {
     Page::factory()
         ->create([
             'published_at' => null,
-            'slug' => 'draft',
+            'slug' => '/draft',
         ]);
 
     Page::factory()
         ->published()
         ->create([
-            'slug' => 'published',
+            'slug' => '/published',
         ]);
 
     $this->get('/draft')->assertStatus(404);

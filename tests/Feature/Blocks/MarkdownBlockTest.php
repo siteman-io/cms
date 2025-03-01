@@ -7,7 +7,7 @@ it('does not show the table of contents by default', function () {
         ->published()
         ->withMarkdownBlock()
         ->create([
-            'slug' => 'markdown',
+            'slug' => '/markdown',
         ]);
 
     $this->get('/markdown')->assertStatus(200)->assertDontSeeHtml('<ul class="table-of-contents">');
@@ -18,7 +18,7 @@ it('can show the table of contents', function () {
         ->published()
         ->withMarkdownBlock(true)
         ->create([
-            'slug' => 'markdown',
+            'slug' => '/markdown',
         ]);
 
     $this->get('/markdown')->assertStatus(200)->assertSeeHtml('<ul class="table-of-contents">');

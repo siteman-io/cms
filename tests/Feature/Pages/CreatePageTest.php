@@ -28,6 +28,7 @@ it('can create pages', function () {
         ->fillForm([
             'title' => 'Test',
             'slug' => 'test',
+            'type' => 'page',
         ])
         ->call('create')
         ->assertHasNoFormErrors();

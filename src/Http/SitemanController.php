@@ -11,10 +11,10 @@ class SitemanController
 {
     public function __invoke(Request $request): mixed
     {
-        $page = Page::where('computed_slug', '/'.ltrim($request->path(), '/'))->first();
+        $page = Page::published()->where('computed_slug', '/'.ltrim($request->path(), '/'))->first();
         if (!$page) {
             $rootPath = '/'.str($request->path())->before('/');
-            $page = Page::where('computed_slug', $rootPath)->firstOrFail();
+            $page = Page::published()->where('computed_slug', $rootPath)->firstOrFail();
         }
 
         /** @var \Siteman\Cms\PageTypes\PageTypeInterface $pageType */

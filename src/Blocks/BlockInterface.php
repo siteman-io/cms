@@ -5,7 +5,7 @@ namespace Siteman\Cms\Blocks;
 use Filament\Forms\Components\Builder\Block;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
-use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Models\Page;
 
 interface BlockInterface
 {
@@ -13,5 +13,5 @@ interface BlockInterface
 
     public function getBlock(): Block;
 
-    public function render(array $data, BasePostType $post): string|View|Htmlable;
+    public function render(array $data, Page $page): string|View|Htmlable;
 }

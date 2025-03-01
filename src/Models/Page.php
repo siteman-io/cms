@@ -20,6 +20,7 @@ use Siteman\Cms\Database\Factories\PageFactory;
 use Siteman\Cms\Facades\Siteman;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
@@ -39,7 +40,7 @@ use Spatie\Tags\HasTags;
  * @property User $author
  * @property SEO $seo
  */
-class Page extends Model implements Feedable
+class Page extends Model implements Feedable, HasMedia
 {
     use HasFactory;
     use HasSEO;

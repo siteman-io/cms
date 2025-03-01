@@ -24,7 +24,6 @@ use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Concerns\HasFormHooks;
 use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Facades\Siteman;
-use Siteman\Cms\Models\BasePostType;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\PageResource\Pages;
 use Siteman\Cms\Resources\PageResource\Widgets\HomePageWidget;
@@ -149,7 +148,7 @@ class PageResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label(__('siteman::page.table.columns.title'))
                     ->searchable()
-                    ->formatStateUsing(fn (BasePostType $record) => $record->slug === '/' ? new HtmlString(Blade::render("<div class='flex'><span>$record->title &nbsp&nbsp-&nbsp&nbsp</span><x-filament::badge class='inline-block'>Homepage</x-filament::badge></div>")) : $record->title)
+                    ->formatStateUsing(fn (Page $record) => $record->slug === '/' ? new HtmlString(Blade::render("<div class='flex'><span>$record->title &nbsp&nbsp-&nbsp&nbsp</span><x-filament::badge class='inline-block'>Homepage</x-filament::badge></div>")) : $record->title)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('author.name')
                     ->label(__('siteman::page.table.columns.author'))

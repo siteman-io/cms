@@ -8,7 +8,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Contracts\View\View;
-use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Models\Page;
 
 class ImageBlock extends BaseBlock
 {
@@ -39,8 +39,8 @@ class ImageBlock extends BaseBlock
         ];
     }
 
-    public function render(array $data, BasePostType $post): View
+    public function render(array $data, Page $page): View
     {
-        return \view('siteman::blocks.image-block', ['image' => $post->getMedia($data['image_collection_id'])->first()]);
+        return \view('siteman::blocks.image-block', ['image' => $page->getMedia($data['image_collection_id'])->first()]);
     }
 }

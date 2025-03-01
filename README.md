@@ -193,7 +193,7 @@ namespace App\Blocks;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Contracts\View\View;
 use Siteman\Cms\Blocks\BaseBlock;
-use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Models\Page;
 
 class TitleBlock extends BaseBlock
 {
@@ -209,7 +209,7 @@ class TitleBlock extends BaseBlock
         ];
     }
 
-    public function render(array $data, BasePostType $post): View
+    public function render(array $data, Page $page): View
     {
         return view('blocks.title', ['data' => $data]);
     }
