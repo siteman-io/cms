@@ -33,7 +33,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/siteman-o/cms' }
+      { icon: 'github', link: 'https://github.com/siteman-io/cms' }
     ]
   }
 })
