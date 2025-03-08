@@ -14,7 +14,12 @@
         <div class="col-span-6">
 
             @if($this->selectedPageId)
-                <livewire:edit-page :record="$this->selectedPageId"/>
+            {{-- @can('edit', $this->page) --}}
+               <livewire:edit-page :record="$this->selectedPageId"/>
+            {{-- @else
+                <livewire:view-page :record="$this->page"/>
+            @endcan --}}
+
             @else
                 <div class="flex items-center justify-center h-full">
                     <div class="p-8 text-center max-w-md">
