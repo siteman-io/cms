@@ -15,6 +15,6 @@ trait HasPreviewModal
 
     protected function getPreviewModalDataRecordKey(): ?string
     {
-        return 'post';
+        return 'page';
     }
 }

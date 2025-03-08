@@ -173,7 +173,9 @@ class PageResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()->label(__('siteman::page.table.actions.edit')),
+                    Tables\Actions\EditAction::make()
+                        ->label(__('siteman::page.table.actions.edit'))
+                        ->url(fn (Page $record): string => static::getUrl('index', ['selectedPageId' => $record->id])),
                     Tables\Actions\DeleteAction::make()->label(__('siteman::page.table.actions.delete'))
                         ->color('gray')
                         ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::page.notifications.deleted.title'))),
@@ -200,7 +202,7 @@ class PageResource extends Resource
         return [
             'index' => Pages\ListPages::route('/'),
             'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            // Removed dedicated edit page route
         ];
     }
 

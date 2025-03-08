@@ -29,13 +29,11 @@
 
             <button
                 wire:click="selectPage({{ $item->getKey() }})"
-                class="flex items-center gap-2 text-left hover:text-primary-500 focus:outline-none focus:text-primary-500"
+                class="flex items-center gap-2 text-left hover:text-primary-100 focus:outline-none focus:text-primary-500"
             >
-
-                <div
+                <div 
                     class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">
-                    {{ $item->id }}
-                    {{ \Illuminate\Support\Str::of($item->slug)->limit(20) }}
+                    {{ \Illuminate\Support\Str::of($item->slug)->limit(15) }}
                 </div>
             </button>
         </div>
