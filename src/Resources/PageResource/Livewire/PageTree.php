@@ -14,6 +14,7 @@ use Filament\Forms\Get;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Siteman\Cms\Models\MenuItem;
@@ -35,8 +36,11 @@ class PageTree extends Component implements HasActions, HasForms
         return Page::query()
             ->doesntHave('parent')
             ->withCount('children')
+            ->orderBy('order')
             ->with('children', function ($query) {
-                $query->whereIn('parent_id', array_unique($this->activePageIds));
+                $query
+                ->whereIn('parent_id', array_unique($this->activePageIds))
+                ->orderBy('order');
             })
             ->get();
     }
@@ -112,6 +116,43 @@ class PageTree extends Component implements HasActions, HasForms
                     $page->delete();
                 }
             });
+    }
+
+    public function reorder(array $order, ?string $parentId = null): void
+    {
+        if (empty($order)) {
+            return;
+        }
+
+        // Process items in chunks of 200 to handle potentially large number of pages
+        collect($order)->chunk(200)->each(function ($chunk, $chunkIndex) use ($parentId) {
+            // Build a single CASE statement for the order column
+            $orderCases = collect($chunk)
+                ->map(fn ($id, $index): string => "WHEN id = {$id} THEN " . (($chunkIndex * 200) + $index + 1))
+                ->implode(' ');
+            
+            // Update all pages in this chunk with a single query
+            // Using a raw query to properly handle the 'order' reserved keyword
+            DB::statement(
+                "UPDATE pages SET 
+                    parent_id = ?, 
+                    \"order\" = CASE {$orderCases} ELSE \"order\" END 
+                WHERE id IN (" . implode(',', $chunk->toArray()) . ")",
+                [$parentId]
+            );
+        });
+    }
+
+    public function reorderAction(): Action
+    {
+        return Action::make('reorder')
+            ->label(__('filament-forms::components.builder.actions.reorder.label'))
+            ->icon('heroicon-m-arrows-up-down')
+            ->color('gray')
+            ->iconButton()
+            ->extraAttributes(['data-sortable-handle' => true, 'class' => 'cursor-move'])
+            ->livewireClickHandlerEnabled(false)
+            ->size(ActionSize::Small);
     }
 
     public function render()

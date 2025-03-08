@@ -14,6 +14,7 @@
         class="flex justify-between px-3 py-2 bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
     >
         <div class="flex items-center gap-2">
+            {{ $this->reorderAction }}
             @if($item->children_count > 0)
                 <x-filament::icon-button
                     icon="heroicon-o-chevron-right"
@@ -57,6 +58,7 @@
         x-collapse
         x-show="open"
         wire:key="{{ $item->getKey() }}.children"
+        x-data="menuBuilder({ parentId: {{ $item->getKey()  }} })"
         class="mt-2 space-y-2 ms-4"
     >
         @if($item->relationLoaded('children'))
