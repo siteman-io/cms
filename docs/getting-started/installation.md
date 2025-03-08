@@ -20,10 +20,6 @@ Normally the `siteman:install` command should take care of everything. If you wa
 by enabling the Siteman plugin in your Filament panel.
 
 ```php
-
-## Usage
-
-```php
 //...
 $panel->plugin(SitemanPlugin::make());
 //...
