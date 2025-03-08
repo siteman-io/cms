@@ -27,6 +27,7 @@ _ide_helper_models.php
 # Misc
 phpunit.xml
 phpstan.neon
-/docs
+/docs/.vitepress/dist
+/docs/.vitepress/cache
 /coverage
 CLAUDE.md
