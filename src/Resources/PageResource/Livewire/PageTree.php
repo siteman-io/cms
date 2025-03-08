@@ -39,8 +39,8 @@ class PageTree extends Component implements HasActions, HasForms
             ->orderBy('order')
             ->with('children', function ($query) {
                 $query
-                ->whereIn('parent_id', array_unique($this->activePageIds))
-                ->orderBy('order');
+                    ->whereIn('parent_id', array_unique($this->activePageIds))
+                    ->orderBy('order');
             })
             ->get();
     }
@@ -128,16 +128,16 @@ class PageTree extends Component implements HasActions, HasForms
         collect($order)->chunk(200)->each(function ($chunk, $chunkIndex) use ($parentId) {
             // Build a single CASE statement for the order column
             $orderCases = collect($chunk)
-                ->map(fn ($id, $index): string => "WHEN id = {$id} THEN " . (($chunkIndex * 200) + $index + 1))
+                ->map(fn ($id, $index): string => "WHEN id = {$id} THEN ".(($chunkIndex * 200) + $index + 1))
                 ->implode(' ');
-            
+
             // Update all pages in this chunk with a single query
             // Using a raw query to properly handle the 'order' reserved keyword
             DB::statement(
                 "UPDATE pages SET 
                     parent_id = ?, 
                     \"order\" = CASE {$orderCases} ELSE \"order\" END 
-                WHERE id IN (" . implode(',', $chunk->toArray()) . ")",
+                WHERE id IN (".implode(',', $chunk->toArray()).')',
                 [$parentId]
             );
         });

@@ -35,7 +35,7 @@ class EditPage extends EditRecord
     {
         return Action::make('cancel')
             ->label(__('filament-panels::resources/pages/edit-record.form.actions.cancel.label'))
-            ->alpineClickHandler('window.location.href = ' . Js::from(static::getResource()::getUrl('index')))
+            ->alpineClickHandler('window.location.href = '.Js::from(static::getResource()::getUrl('index')))
             ->color('gray');
     }
 }

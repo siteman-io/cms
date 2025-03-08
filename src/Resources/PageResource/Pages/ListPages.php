@@ -14,6 +14,7 @@ use Siteman\Cms\Resources\PageResource;
 class ListPages extends Page
 {
     use HasPreviewModal;
+
     protected static string $resource = PageResource::class;
 
     protected static string $view = 'siteman::resources.page.pages.list-pages';
@@ -66,13 +67,13 @@ class ListPages extends Page
                             \Filament\Forms\Components\Select::make('type')
                                 ->options(collect(\Siteman\Cms\Facades\Siteman::getPageTypes())->mapWithKeys(fn ($type, $key) => [$key => str($key)->headline()])->toArray())
                                 ->required(),
-                        ])
+                        ]),
                 ])
                 ->mutateFormDataUsing(function (array $data): array {
                     // Find the highest order value and increment by 1
                     $maxOrder = PageResource::getModel()::max('order') ?? 0;
                     $data['order'] = $maxOrder + 1;
-                    
+
                     return $data;
                 })
                 ->after(function ($record) {

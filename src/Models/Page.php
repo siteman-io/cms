@@ -53,7 +53,7 @@ class Page extends Model implements Feedable, HasMedia
     protected VersionStrategy $versionStrategy = VersionStrategy::SNAPSHOT;
 
     protected $guarded = [];
-    
+
     public static function boot(): void
     {
         parent::boot();
@@ -137,7 +137,7 @@ class Page extends Model implements Feedable, HasMedia
     public function children(): HasMany
     {
         return $this
-        ->hasMany(static::class, 'parent_id')
+            ->hasMany(static::class, 'parent_id')
             ->orderBy('order');
     }
 
