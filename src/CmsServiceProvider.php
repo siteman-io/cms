@@ -4,6 +4,7 @@ namespace Siteman\Cms;
 
 use DavidBadura\FakerMarkdownGenerator\FakerProvider;
 use Faker\Generator;
+use Filament\Forms\Components\Field;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
@@ -25,17 +26,19 @@ use Siteman\Cms\Commands\PublishCommand;
 use Siteman\Cms\Commands\UpdateCommand;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Models\Post;
 use Siteman\Cms\Models\Tag;
 use Siteman\Cms\Policies\MenuPolicy;
 use Siteman\Cms\Policies\PagePolicy;
-use Siteman\Cms\Policies\PostPolicy;
 use Siteman\Cms\Policies\RolePolicy;
 use Siteman\Cms\Policies\UserPolicy;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
+use Siteman\Cms\Resources\PageResource\Livewire\PageDetails;
+use Siteman\Cms\Resources\PageResource\Livewire\PageTree;
+use Siteman\Cms\Resources\PageResource\Pages\EditPage;
+use Siteman\Cms\Resources\PageResource\Pages\ViewPage;
 use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
 use Siteman\Cms\Theme\ThemeRegistry;
@@ -63,7 +66,6 @@ class CmsServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_menus_table',
                 'create_pages_table',
-                'create_posts_table',
                 '../settings/create_general_settings',
                 '../settings/create_blog_settings',
             ])
@@ -158,6 +160,10 @@ class CmsServiceProvider extends PackageServiceProvider
         Livewire::component('create-custom-link', CreateCustomLink::class);
         Livewire::component('create-custom-text', CreateCustomText::class);
         Livewire::component('create-page-link', CreatePageLink::class);
+        Livewire::component('page-tree', PageTree::class);
+        Livewire::component('page-details', PageDetails::class);
+        Livewire::component('view-page', ViewPage::class);
+        Livewire::component('edit-page', EditPage::class);
 
         Health::checks([
             EnvironmentCheck::new(),
@@ -170,10 +176,14 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::policy(Menu::class, MenuPolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
-        Gate::policy(Post::class, PostPolicy::class);
 
         Gate::before(function ($user) {
             return $user->hasRole('super_admin') ? true : null;
+        });
+
+        Field::macro('asPageMetaField', function () {
+            /** @var Field $this */
+            return $this->statePath('meta.'.$this->getName());
         });
     }
 

@@ -9,6 +9,10 @@ use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
 use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Models\Menu;
+use Siteman\Cms\PageTypes\BlogIndex;
+use Siteman\Cms\PageTypes\Page;
+use Siteman\Cms\PageTypes\RssFeed;
+use Siteman\Cms\PageTypes\TagIndex;
 use Siteman\Cms\Settings\BlogSettingsForm;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Settings\GeneralSettingsForm;
@@ -28,6 +32,13 @@ class Siteman
     protected array $defaultBlocks = [
         MarkdownBlock::class,
         ImageBlock::class,
+    ];
+
+    protected array $pageTypes = [
+        'page' => Page::class,
+        'blog_index' => BlogIndex::class,
+        'tag_index' => TagIndex::class,
+        'rss_feed' => RssFeed::class,
     ];
 
     protected array $formFieldHooks = [];
@@ -128,5 +139,10 @@ class Siteman
     public function getFormHooks(?FormHook $hook = null): array
     {
         return $hook ? $this->formFieldHooks[$hook->value] ?? [] : $this->formFieldHooks;
+    }
+
+    public function getPageTypes(): array
+    {
+        return $this->pageTypes;
     }
 }

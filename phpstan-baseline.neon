@@ -55,70 +55,70 @@ parameters:
 			path: database/factories/PageFactory.php
 
 		-
-			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBlockquote\(\)\.$#'
-			identifier: method.notFound
-			count: 2
-			path: database/factories/PostFactory.php
+			message: '#^PHPDoc tag @var with type Filament\\Forms\\Components\\Field is not subtype of native type \$this\(Siteman\\Cms\\CmsServiceProvider\)\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/CmsServiceProvider.php
 
 		-
-			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBulletedList\(\)\.$#'
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$computed_slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Page.php
+
+		-
+			message: '#^Offset ''description'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/Models/Page.php
+
+		-
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\Textarea\:\:asPageMetaField\(\)\.$#'
 			identifier: method.notFound
 			count: 1
-			path: database/factories/PostFactory.php
+			path: src/PageTypes/Page.php
 
 		-
-			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH1\(\)\.$#'
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\Select\:\:asPageMetaField\(\)\.$#'
 			identifier: method.notFound
 			count: 1
-			path: database/factories/PostFactory.php
+			path: src/PageTypes/RssFeed.php
 
 		-
-			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH2\(\)\.$#'
-			identifier: method.notFound
-			count: 3
-			path: database/factories/PostFactory.php
-
-		-
-			message: '#^Call to an undefined method Faker\\Generator\:\:markdownH3\(\)\.$#'
-			identifier: method.notFound
-			count: 6
-			path: database/factories/PostFactory.php
-
-		-
-			message: '#^Call to an undefined method Faker\\Generator\:\:markdownP\(\)\.$#'
-			identifier: method.notFound
-			count: 11
-			path: database/factories/PostFactory.php
-
-		-
-			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\PostFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Post, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Post\>\:\:definition\(\)$#'
-			identifier: method.childReturnType
-			count: 1
-			path: database/factories/PostFactory.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyTrashed\(\)\.$#'
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\TextInput\:\:asPageMetaField\(\)\.$#'
 			identifier: method.notFound
 			count: 1
-			path: src/Resources/PageResource/Pages/ListPages.php
+			path: src/PageTypes/RssFeed.php
 
 		-
-			message: '#^Call to an undefined static method Illuminate\\Database\\Eloquent\\Model\:\:onlyTrashed\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 1
-			path: src/Resources/PageResource/Pages/ListPages.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyTrashed\(\)\.$#'
+			message: '#^Call to an undefined method Filament\\Forms\\Components\\Textarea\:\:asPageMetaField\(\)\.$#'
 			identifier: method.notFound
 			count: 1
-			path: src/Resources/PostResource/Pages/ListPosts.php
+			path: src/PageTypes/RssFeed.php
 
 		-
-			message: '#^Call to an undefined static method Illuminate\\Database\\Eloquent\\Model\:\:onlyTrashed\(\)\.$#'
-			identifier: staticMethod.notFound
+			message: '#^Offset ''feed_description'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
 			count: 1
-			path: src/Resources/PostResource/Pages/ListPosts.php
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Offset ''feed_language'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Offset ''feed_title'' on string\|null on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: src/PageTypes/RssFeed.php
+
+		-
+			message: '#^Access to an undefined property Siteman\\Cms\\Resources\\PageResource\\Livewire\\PageTree\:\:\$pages\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Resources/PageResource/Livewire/PageTree.php
 
 		-
 			message: '#^Method Siteman\\Cms\\Torchlight\\BaseExtension\:\:getTheme\(\) should return string but return statement is missing\.$#'

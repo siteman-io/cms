@@ -42,6 +42,7 @@
         "torchlight/torchlight-laravel": "^0.6.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.15",
         "larastan/larastan": "^3.0.2",
         "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.1.1",
@@ -81,7 +82,7 @@
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
+        "test-coverage": "vendor/bin/pest --coverage-html coverage",
         "format": "vendor/bin/pint",
         "clear": [
             "rm -rf vendor/orchestra/testbench-core/laravel/database/migrations",

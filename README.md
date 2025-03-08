@@ -15,7 +15,6 @@ development experience.
 # Table of Contents
 
 2. [Installation](#installation)
-3. [Usage](#usage)
 4. [Features](#features)
     1. [Themes](#themes)
     2. [Layouts](#layouts)
@@ -161,6 +160,10 @@ Menus can be used in your Blade views via the `Siteman` facade.
 </ul>
 ```
 
+### Menus
+
+TBD
+
 ### Blocks
 
 Blocks are the building blocks of your content. They can be used to create complex layouts. Siteman ships with two
@@ -193,7 +196,7 @@ namespace App\Blocks;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Contracts\View\View;
 use Siteman\Cms\Blocks\BaseBlock;
-use Siteman\Cms\Models\BasePostType;
+use Siteman\Cms\Models\Page;
 
 class TitleBlock extends BaseBlock
 {
@@ -209,7 +212,7 @@ class TitleBlock extends BaseBlock
         ];
     }
 
-    public function render(array $data, BasePostType $post): View
+    public function render(array $data, Page $page): View
     {
         return view('blocks.title', ['data' => $data]);
     }

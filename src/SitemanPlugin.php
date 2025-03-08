@@ -8,6 +8,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Auth\EditProfile;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
@@ -15,7 +16,6 @@ use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\MenuResource;
 use Siteman\Cms\Resources\PageResource;
-use Siteman\Cms\Resources\PostResource;
 use Siteman\Cms\Resources\RoleResource;
 use Siteman\Cms\Resources\UserResource;
 use Siteman\Cms\Search\SitemanSearchProvider;
@@ -39,7 +39,7 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
-        $resources = [PageResource::class, PostResource::class, MenuResource::class, UserResource::class, RoleResource::class];
+        $resources = [PageResource::class, MenuResource::class, UserResource::class, RoleResource::class];
         $panel->resources($resources);
 
         $panel->pages([
@@ -70,7 +70,9 @@ class SitemanPlugin implements Plugin
             ]);
         });
 
-        $panel->sidebarFullyCollapsibleOnDesktop()->sidebarWidth('14rem');
+        $panel->sidebarFullyCollapsibleOnDesktop()
+            ->sidebarWidth('14rem')
+            ->maxContentWidth(MaxWidth::Full);
     }
 
     public function boot(Panel $panel): void

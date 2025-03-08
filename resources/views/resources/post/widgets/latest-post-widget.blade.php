@@ -1,6 +1,6 @@
 @php
-    use Siteman\Cms\Models\Post;
-    $post = Post::published()->latest()->first();
+    use Siteman\Cms\Models\Page;
+    $post = Page::published()->first();
 @endphp
 <x-filament-widgets::widget>
     <x-filament::section>
