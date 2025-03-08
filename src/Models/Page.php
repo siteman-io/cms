@@ -65,6 +65,7 @@ class Page extends Model implements Feedable, HasMedia
         });
 
         static::saving(function (self $page) {
+            $page->slug = '/'.ltrim($page->slug, '/');
             $prefix = $page->parent_id !== null ? $page->parent->computed_slug : '';
             $page->computed_slug = $prefix.$page->slug;
         });
