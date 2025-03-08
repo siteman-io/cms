@@ -37,6 +37,7 @@ use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
 use Siteman\Cms\Resources\PageResource\Livewire\PageDetails;
 use Siteman\Cms\Resources\PageResource\Livewire\PageTree;
+use Siteman\Cms\Resources\PageResource\Pages\EditPage;
 use Siteman\Cms\Resources\PageResource\Pages\ViewPage;
 use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
@@ -65,7 +66,6 @@ class CmsServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_menus_table',
                 'create_pages_table',
-                'create_posts_table',
                 '../settings/create_general_settings',
                 '../settings/create_blog_settings',
             ])
@@ -163,6 +163,7 @@ class CmsServiceProvider extends PackageServiceProvider
         Livewire::component('page-tree', PageTree::class);
         Livewire::component('page-details', PageDetails::class);
         Livewire::component('view-page', ViewPage::class);
+        Livewire::component('edit-page', EditPage::class);
 
         Health::checks([
             EnvironmentCheck::new(),

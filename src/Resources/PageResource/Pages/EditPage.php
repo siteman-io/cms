@@ -4,6 +4,7 @@ namespace Siteman\Cms\Resources\PageResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Livewire\Attributes\On;
 use Pboivin\FilamentPeek\Pages\Actions\PreviewAction;
 use Siteman\Cms\Resources\HasPreviewModal;
 use Siteman\Cms\Resources\PageResource;
@@ -20,5 +21,11 @@ class EditPage extends EditRecord
             Actions\DeleteAction::make(),
             PreviewAction::make(),
         ];
+    }
+
+    #[On('page-selected')]
+    public function loadPage(int $pageId): void
+    {
+        $this->mount($pageId);
     }
 }
