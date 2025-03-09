@@ -7,5 +7,9 @@ use Siteman\Cms\Models\Page;
 
 interface PageTypeInterface
 {
+    public static function extendPageMainFields(array $fields): array;
+
+    public static function extendPageSidebarFields(array $fields): array;
+
     public function render(Request $request, Page $page);
 }

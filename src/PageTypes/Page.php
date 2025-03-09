@@ -4,24 +4,22 @@ namespace Siteman\Cms\PageTypes;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Siteman\Cms\Blocks\BlockBuilder;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page as PageModel;
-use Siteman\Cms\Theme\ThemeInterface;
+use Siteman\Cms\PageTypes\Concerns\InteractsWithPageForm;
+use Siteman\Cms\PageTypes\Concerns\InteractsWithViews;
 
 class Page implements PageTypeInterface
 {
-    public function __construct(private readonly ThemeInterface $theme, private readonly Factory $view) {}
+    use InteractsWithPageForm;
+    use InteractsWithViews;
 
     public function render(Request $request, PageModel $page)
     {
         if ($page->layout) {
-            return $this->view->make(
+            return \view()->make(
                 'siteman::themes.layout',
                 ['page' => $page, 'layout' => $page->layout],
             );
@@ -56,26 +54,5 @@ class Page implements PageTypeInterface
                 ->helperText(__('siteman::page.fields.description.helper-text'))
                 ->asPageMetaField(),
         ]);
-    }
-
-    protected function getViewPath(string $view): string
-    {
-        $prefix = method_exists($this->theme, 'getViewPrefix')
-            ? $this->theme->getViewPrefix()
-            : Str::of(class_basename($this->theme))->before('Theme')->kebab()->prepend('themes.');
-
-        return $prefix.'.'.$view;
-    }
-
-    protected function renderView(string|array $views, array $data = []): View
-    {
-        $views = Arr::wrap($views);
-
-        foreach ($views as $view) {
-            if ($this->view->exists($view)) {
-                return $this->view->make($view, $data);
-            }
-        }
-        throw new \Exception('No view found for the keys: '.implode(', ', $views));
     }
 }
