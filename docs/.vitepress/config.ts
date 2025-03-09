@@ -4,7 +4,6 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
     title: "Siteman.io",
     description: "Your website manager",
-    base: "/cms/",
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
