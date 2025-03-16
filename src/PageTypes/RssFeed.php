@@ -7,24 +7,27 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Http\Request;
 use Siteman\Cms\Models\Page as PageModel;
+use Siteman\Cms\PageTypes\Concerns\InteractsWithPageForm;
 use Siteman\Cms\Settings\GeneralSettings;
 use Spatie\Feed\Feed;
 use Spatie\Feed\Helpers\ResolveFeedItems;
 
 class RssFeed implements PageTypeInterface
 {
+    use InteractsWithPageForm;
+
     public function render(Request $request, PageModel $page)
     {
         $items = ResolveFeedItems::resolve('main', [PageModel::class, 'getFeedItems']);
         $settings = app(GeneralSettings::class);
 
         return new Feed(
-            $page->meta['feed_title'] ?? $settings->site_name,
+            $page->getMeta('feed_title', $settings->site_name),
             $items,
             $request->url(),
             'feed::atom',
-            $page->meta['feed_description'] ?? $settings->description,
-            $page->meta['feed_language'] ?? 'en-US',
+            $page->getMeta('feed_description', $settings->description),
+            $page->getMeta('feed_language', 'en-US'),
             '',
             'atom',
             '',

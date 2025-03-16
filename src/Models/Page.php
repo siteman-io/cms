@@ -156,4 +156,9 @@ class Page extends Model implements Feedable, HasMedia
     {
         return self::published()->where('type', 'page')->get();
     }
+
+    public function getMeta(string $key, mixed $default = null): mixed
+    {
+        return $this->meta[$key] ?? $default;
+    }
 }
