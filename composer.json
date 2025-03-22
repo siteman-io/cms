@@ -24,10 +24,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/bambamboole/commonmark-blade-block"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/laravel-shift/torchlight-laravel.git"
         }
     ],
     "require": {
@@ -52,8 +48,9 @@
         "spatie/laravel-package-tools": "^1.16",
         "spatie/laravel-permission": "^6.10",
         "spatie/laravel-settings": "^3.4",
+        "staudenmeir/laravel-adjacency-list": "^1.24",
         "symfony/yaml": "^7.2",
-        "torchlight/torchlight-laravel": "dev-l12-compatibility"
+        "torchlight/torchlight-laravel": "^0.6.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
