@@ -20,6 +20,8 @@ workbench:
   sync:
     - from: ./resources/dist/css
       to: public/css/siteman
+    - from: ./resources/dist/js
+      to: public/js/siteman
   build:
     - asset-publish
     - create-sqlite-db
