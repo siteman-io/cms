@@ -11,13 +11,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 8.4, 8.3 ]
-        laravel: [ 11.* ]
+        php: [ 8.4 ]
+        laravel: [ 11.*, 12.* ]
         stability: [ prefer-stable ]
-        include:
-          - laravel: 11.*
-            testbench: 9.*
-            carbon: ^2.63
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -31,6 +27,8 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
           coverage: xdebug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup problem matchers
         run: |
@@ -39,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.os == 'windows-latest' && '^^^' || '' }}${{ matrix.carbon }}" --no-interaction --no-update
+          composer require "laravel/framework:12.*" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
           composer prepare
 
@@ -47,13 +45,13 @@ jobs:
         run: composer test -- --ci --coverage-clover coverage.xml --log-junit junit.xml
 
       - name: Upload coverage to Codecov
-        if: ${{ matrix.php == '8.4' }}
+        if: ${{ matrix.laravel == '11.*' }}
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload test results to Codecov
-        if: ${{ (matrix.php == '8.4') && (!cancelled()) }}
+        if: ${{ (matrix.laravel == '11.*') && (!cancelled()) }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
