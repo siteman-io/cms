@@ -9,6 +9,8 @@
     wire:key="{{ $item->getKey() }}"
     data-sortable-item="{{ $item->getKey() }}"
     x-data="{ open: {{ in_array($item->getKey(), $this->activePageIds) ? 'true' : 'false' }} }"
+    @dragenter.debounce.300ms="open = true"
+    @page-reordered.window="open = {{ in_array($item->getKey(), $this->activePageIds) ? 'true' : 'false' }}"
 >
     <div
         class="flex justify-between px-3 py-2 bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"

@@ -28,7 +28,10 @@ class PageTree extends Component implements HasActions, HasForms
 
     public array $activePageIds = [];
 
-    protected $listeners = ['page:deleted' => '$refresh'];
+    protected $listeners = [
+        'page:deleted' => '$refresh',
+        'page-reordered' => '$refresh',
+    ];
 
     #[Computed]
     public function pages(): Collection
@@ -53,7 +56,7 @@ class PageTree extends Component implements HasActions, HasForms
     public function loadChildren(int $pageId)
     {
         $this->activePageIds[] = $pageId;
-        $this->pages->find($pageId)?->load('children');
+        unset($this->pages);
     }
 
     public function selectPage(int $pageId)
@@ -141,6 +144,15 @@ class PageTree extends Component implements HasActions, HasForms
                 [$parentId]
             );
         });
+
+
+        $this->activePageIds = array_filter($this->activePageIds, fn ($id) => $id !== (int)$parentId);
+
+        // Remove the cached pages to force a refresh
+        unset($this->pages);
+
+        // Dispatch an event to update the UI
+        $this->dispatch('page-reordered');
     }
 
     public function reorderAction(): Action
