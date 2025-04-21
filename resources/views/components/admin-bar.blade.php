@@ -1,7 +1,6 @@
 @php
     $currentUser =auth()->user();
     $currentPage = \Illuminate\Support\Facades\Context::get('current_page');
-    $currentPost = \Illuminate\Support\Facades\Context::get('current_post');
     $panel = \Filament\Facades\Filament::getDefaultPanel();
 @endphp
 @if($currentUser instanceof \Filament\Models\Contracts\FilamentUser && $currentUser->canAccessPanel($panel))
@@ -43,16 +42,9 @@
 
         @if($currentPage && $currentUser->can('update_page', $currentPage))
             <a class="flex items-center space-x-2 text-white no-underline hover:underline"
-               href="{{$panel->getResourceUrl($currentPage, 'edit')}}">
+               href="{{$panel->getResourceUrl($currentPage, 'index', ['selectedPageId' => $currentPage->id])}}">
                 @svg('heroicon-o-paint-brush', 'h-4 w-4')
                 <span>{{ __('siteman::admin-bar.edit-page') }}</span>
-            </a>
-        @endif
-        @if($currentPost && $currentUser->can('update_post', $currentPost))
-            <a class="flex items-center space-x-2 text-white no-underline hover:underline"
-               href="{{$panel->getResourceUrl($currentPost, 'edit')}}">
-                @svg('heroicon-o-paint-brush', 'h-4 w-4')
-                <span>{{ __('siteman::admin-bar.edit-post') }}</span>
             </a>
         @endif
         <button id="admin-bar-hide-btn" class="ml-auto cursor-pointer border-0 bg-transparent text-white">
