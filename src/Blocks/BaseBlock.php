@@ -14,4 +14,9 @@ abstract class BaseBlock implements BlockInterface
     }
 
     abstract protected function fields(): array;
+
+    protected function getView(array $data, string $default): string
+    {
+        return $data['view'] ?? $default;
+    }
 }

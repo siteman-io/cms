@@ -80,7 +80,7 @@ class MarkdownBlock extends BaseBlock
             $renderer = new HtmlRenderer($environment);
             $html = $renderer->renderDocument($document);
 
-            return \view('siteman::blocks.markdown-block', ['content' => $html, 'showToc' => $showToc]);
+            return \view($this->getView($data, 'siteman::blocks.markdown-block'), ['content' => $html, 'showToc' => $showToc]);
         }
         $toc = (new Query)
             ->where(Query::type(TableOfContents::class))
@@ -92,6 +92,6 @@ class MarkdownBlock extends BaseBlock
         $html = $renderer->renderDocument($document);
         $toc = $renderer->renderNodes([$toc]);
 
-        return \view('siteman::blocks.markdown-block', ['content' => $html, 'showToc' => $showToc, 'toc' => $toc]);
+        return \view($this->getView($data, 'siteman::blocks.markdown-block'), ['content' => $html, 'showToc' => $showToc, 'toc' => $toc]);
     }
 }

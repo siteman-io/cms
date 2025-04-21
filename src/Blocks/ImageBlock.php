@@ -41,6 +41,6 @@ class ImageBlock extends BaseBlock
 
     public function render(array $data, Page $page): View
     {
-        return \view('siteman::blocks.image-block', ['image' => $page->getMedia($data['image_collection_id'])->first()]);
+        return \view($this->getView($data, 'siteman::blocks.image-block'), ['image' => $page->getMedia($data['image_collection_id'])->first()]);
     }
 }
