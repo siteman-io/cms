@@ -1,2 +1,2 @@
 @props(['page'])
-{!! app(Siteman::getPageTypes()[$page->type])->render(request(), $page) !!}
+{!! app(\Siteman\Cms\Facades\Siteman::getPageTypes()[$page->type])->render(request(), $page) !!}
