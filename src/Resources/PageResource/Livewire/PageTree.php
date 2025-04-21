@@ -134,9 +134,9 @@ class PageTree extends Component implements HasActions, HasForms
             // Update all pages in this chunk with a single query
             // Using a raw query to properly handle the 'order' reserved keyword
             DB::statement(
-                "UPDATE pages SET 
-                    parent_id = ?, 
-                    \"order\" = CASE {$orderCases} ELSE \"order\" END 
+                "UPDATE pages SET
+                    parent_id = ?,
+                    \"order\" = CASE {$orderCases} ELSE \"order\" END
                 WHERE id IN (".implode(',', $chunk->toArray()).')',
                 [$parentId]
             );

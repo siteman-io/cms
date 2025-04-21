@@ -31,7 +31,7 @@
                 wire:click="selectPage({{ $item->getKey() }})"
                 class="flex items-center gap-2 text-left hover:text-primary-100 focus:outline-none focus:text-primary-500"
             >
-                <div 
+                <div
                     class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">
                     {{ \Illuminate\Support\Str::of($item->slug)->limit(15) }}
                 </div>
@@ -61,7 +61,7 @@
     >
         @if($item->relationLoaded('children'))
             @foreach($item->children as $child)
-                <x:siteman::page-tree-item :item="$child"/>
+                <x-siteman::page-tree-item :item="$child"/>
             @endforeach
         @endif
     </ul>
