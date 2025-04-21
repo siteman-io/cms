@@ -5,9 +5,9 @@ namespace Siteman\Cms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Process;
-use Illuminate\Support\Process\PhpExecutableFinder;
 use Laravel\Prompts\Prompt;
 
+use Symfony\Component\Process\PhpExecutableFinder;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
