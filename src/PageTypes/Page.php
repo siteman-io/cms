@@ -48,7 +48,7 @@ class Page implements PageTypeInterface
             Select::make('layout')
                 ->label(__('siteman::page.fields.layout.label'))
                 ->helperText(__('siteman::page.fields.layout.helper-text'))
-                ->options(array_keys(Siteman::getLayouts())),
+                ->options(array_combine(array_keys(Siteman::getLayouts()), array_keys(Siteman::getLayouts()))),
             Textarea::make('description')
                 ->label(__('siteman::page.fields.description.label'))
                 ->helperText(__('siteman::page.fields.description.helper-text'))
