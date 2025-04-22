@@ -6,7 +6,6 @@
 @endphp
 
 @section('content')
-eqqe
     <ul>
         @foreach($posts as $post)
             @php
