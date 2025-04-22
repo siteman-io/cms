@@ -145,8 +145,7 @@ class PageTree extends Component implements HasActions, HasForms
             );
         });
 
-
-        $this->activePageIds = array_filter($this->activePageIds, fn ($id) => $id !== (int)$parentId);
+        $this->activePageIds = array_filter($this->activePageIds, fn ($id) => $id !== (int) $parentId);
 
         // Remove the cached pages to force a refresh
         unset($this->pages);
