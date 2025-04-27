@@ -103,12 +103,6 @@ parameters:
 			path: src/PageTypes/RssFeed.php
 
 		-
-			message: '#^Access to an undefined property Siteman\\Cms\\Resources\\PageResource\\Livewire\\PageTree\:\:\$pages\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Resources/PageResource/Livewire/PageTree.php
-
-		-
 			message: '#^Method Siteman\\Cms\\Torchlight\\BaseExtension\:\:getTheme\(\) should return string but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1
