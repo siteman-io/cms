@@ -42,7 +42,7 @@ jobs:
           composer prepare
 
       - name: Execute tests
-        run: composer test -- --ci --coverage-clover coverage.xml --log-junit junit.xml
+        run: composer test:ci -- --ci --coverage-clover coverage.xml --log-junit junit.xml
 
       - name: Upload coverage to Codecov
         if: ${{ matrix.laravel == '11.*' }}
