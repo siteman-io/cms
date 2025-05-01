@@ -12,7 +12,7 @@ class ThemeGenerator
     public function generate(string $themeClass, string $themeNamespace): void
     {
         $relativeViewPath = 'themes/'.str($themeClass)->lower()->replace('theme', '')->kebab();
-        $folderToCopy = dirname(__DIR__, 2).'/resources/views/themes/blank';
+        $folderToCopy = dirname(__DIR__, 3).'/resources/views/themes/blank';
 
         $this->copyStubToApp('Theme', base_path(str($themeNamespace)->replace('\\', '/').'/'.$themeClass.'.php'), [
             'class' => $themeClass,
