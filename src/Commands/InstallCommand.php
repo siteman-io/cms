@@ -4,9 +4,7 @@ namespace Siteman\Cms\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Process;
 use Laravel\Prompts\Prompt;
-use Symfony\Component\Process\PhpExecutableFinder;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;
@@ -86,9 +84,18 @@ class InstallCommand extends Command
             'password' => bcrypt($password),
         ]);
 
-        Process::run([(new PhpExecutableFinder)->find(), 'artisan', 'shield:super-admin', '--user '.$user->id]);
+        if ($exitCode = $this->call('shield:super-admin', ['--user' => $user->id])) {
+            $this->error("Failed creating and assigning super admin role for user {$user->id}");
+
+            return $exitCode;
+        }
         $this->info('Super admin role created and assigned to user');
-        Process::run([(new PhpExecutableFinder)->find(), 'artisan', 'filament:assets']);
+
+        if ($exitCode = $this->call('filament:assets')) {
+            $this->error('Failed setting up filament assets');
+
+            return $exitCode;
+        }
 
         $this->comment('All done');
 
