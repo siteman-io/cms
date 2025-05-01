@@ -92,7 +92,12 @@
             "@build"
         ],
         "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest --parallel",
+        "test": [
+            "vendor/bin/pint --test",
+            "vendor/bin/phpstan",
+            "vendor/bin/pest --parallel"
+        ],
+        "test:ci": "vendor/bin/pest --parallel",
         "test-coverage": "vendor/bin/pest --coverage-html coverage",
         "format": "vendor/bin/pint",
         "clear": [
