@@ -38,7 +38,7 @@ class InstallCommand extends Command
             // interactive is static and is set to false in the last command call
             Prompt::interactive();
         } else {
-            $this->info('Filament is already installed. You may enable the SitemanPlugin manually.');
+            $this->components->info('Filament is already installed. You may enable the SitemanPlugin manually.');
         }
 
         $userModel = config('siteman.models.user');
@@ -63,13 +63,13 @@ class InstallCommand extends Command
 
                 $filesystem->put($filePath, $content);
             } else {
-                $this->info('No changes made to the User model. You need to add the trait on your own.');
+                $this->components->info('No changes made to the User model. You need to add the trait on your own.');
             }
         }
 
         if ($userModel::count() > 0
             && !confirm('There are already users in the database. Do you want to continue?')) {
-            $this->info('No user created. All done.');
+            $this->components->info('No user created. All done.');
 
             return self::SUCCESS;
         }
@@ -84,20 +84,20 @@ class InstallCommand extends Command
             'password' => bcrypt($password),
         ]);
 
-        if ($exitCode = $this->call('shield:super-admin', ['--user' => $user->id])) {
-            $this->error("Failed creating and assigning super admin role for user {$user->id}");
-
-            return $exitCode;
-        }
-        $this->info('Super admin role created and assigned to user');
-
         if ($exitCode = $this->call('filament:assets')) {
-            $this->error('Failed setting up filament assets');
+            $this->components->error('Failed setting up filament assets');
 
             return $exitCode;
         }
 
-        $this->comment('All done');
+        try {
+            $this->call('shield:super-admin', ['--user' => $user->id]);
+        } catch (\Throwable) {
+            $this->components->error("Failed creating and assigning super admin role for user {$user->id}");
+            $this->components->info("Try to create on your own via 'php artisan  shield:super-admin --user {$user->id}'");
+        }
+
+        $this->components->info('All done!');
 
         return self::SUCCESS;
     }
