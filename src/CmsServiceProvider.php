@@ -67,7 +67,6 @@ class CmsServiceProvider extends PackageServiceProvider
                 'create_menus_table',
                 'create_pages_table',
                 '../settings/create_general_settings',
-                '../settings/create_blog_settings',
             ])
             ->hasTranslations()
             ->hasCommands([

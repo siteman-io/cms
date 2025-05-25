@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Siteman\Cms\Settings\BlogSettings;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Theme\BlankTheme;
 use Workbench\App\Models\User;
@@ -40,13 +39,6 @@ class TestCase extends Orchestra
             'site_name' => 'Siteman',
             'description' => 'Siteman Test Environment',
             'theme' => BlankTheme::class,
-        ], false);
-        BlogSettings::fake([
-            'enabled' => true,
-            'blog_index_route' => 'blog',
-            'tag_index_route' => 'tags',
-            'rss_enabled' => true,
-            'rss_endpoint' => 'rss',
         ], false);
     }
 }

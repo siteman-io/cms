@@ -13,7 +13,6 @@ use Siteman\Cms\PageTypes\BlogIndex;
 use Siteman\Cms\PageTypes\Page;
 use Siteman\Cms\PageTypes\RssFeed;
 use Siteman\Cms\PageTypes\TagIndex;
-use Siteman\Cms\Settings\BlogSettingsForm;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Settings\GeneralSettingsForm;
 use Siteman\Cms\Theme\ThemeInterface;
@@ -26,7 +25,6 @@ class Siteman
 
     protected array $settingsForms = [
         GeneralSettingsForm::class,
-        BlogSettingsForm::class,
     ];
 
     protected array $defaultBlocks = [
