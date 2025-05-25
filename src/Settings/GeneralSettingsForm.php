@@ -5,6 +5,7 @@ namespace Siteman\Cms\Settings;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Support\Str;
 use Siteman\Cms\Theme\ThemeRegistry;
 
 class GeneralSettingsForm implements SettingsFormInterface
@@ -21,6 +22,16 @@ class GeneralSettingsForm implements SettingsFormInterface
 
     public function schema(): array
     {
+        $themes = app(ThemeRegistry::class)->getThemes();
+        $themeOptions = collect($themes)
+            ->mapWithKeys(function ($theme) {
+                $value = method_exists($theme, 'getName')
+                    ? $theme::getName()
+                    : Str::afterLast($theme, '\\');
+
+                return [$theme => $value];
+            });
+
         return [
             TextInput::make('site_name')
                 ->label(__('siteman::settings.general.fields.site_name.label'))
@@ -33,7 +44,7 @@ class GeneralSettingsForm implements SettingsFormInterface
             Select::make('theme')
                 ->label(__('siteman::settings.general.fields.theme.label'))
                 ->helperText(__('siteman::settings.general.fields.theme.helper-text'))
-                ->options(fn () => collect(app(ThemeRegistry::class)->getThemes())->mapWithKeys(fn ($theme) => [$theme => $theme::getName()]))
+                ->options($themeOptions)
                 ->required(),
         ];
     }
