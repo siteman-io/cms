@@ -8,6 +8,11 @@ use Siteman\Cms\Theme\BaseLayout;
 
 class {{ class }} implements ThemeInterface
 {
+    public static function getName(): string
+    {
+        return '{{ class }}';
+    }
+
     public function configure(Siteman $siteman): void
     {
         $siteman
