@@ -19,7 +19,7 @@ class BlogIndex implements PageTypeInterface
                 $this->getViewPath('posts.index'),
                 'siteman::themes.blank.posts.index',
             ],
-            ['posts' => $page->children()->paginate(10)],
+            ['posts' => $page->children()->published()->paginate(10)],
         );
     }
 }
