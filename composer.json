@@ -18,7 +18,6 @@
     ],
     "require": {
         "php": "^8.3",
-        "bezhansalleh/filament-shield": "^3.3",
         "blade-ui-kit/blade-icons": "^1.8.0",
         "davidbadura/faker-markdown-generator": "^1.1",
         "echolabsdev/prism": "^0.68",

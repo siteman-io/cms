@@ -2,7 +2,6 @@
 
 namespace Siteman\Cms\Pages;
 
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -15,8 +14,6 @@ use Spatie\LaravelSettings\Settings;
 
 class SettingsPage extends Page
 {
-    use HasPageShield;
-
     protected static string $view = 'siteman::pages.settings';
 
     public ?array $data = [];

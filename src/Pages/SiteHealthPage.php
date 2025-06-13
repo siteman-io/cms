@@ -2,7 +2,6 @@
 
 namespace Siteman\Cms\Pages;
 
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -16,8 +15,6 @@ use Spatie\Health\ResultStores\ResultStore;
 
 class SiteHealthPage extends Page
 {
-    use HasPageShield;
-
     protected static string $view = 'siteman::pages.site-health';
 
     protected $listeners = ['refresh-component' => '$refresh'];

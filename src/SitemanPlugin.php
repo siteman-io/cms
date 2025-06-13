@@ -2,7 +2,6 @@
 
 namespace Siteman\Cms;
 
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Auth\EditProfile;
@@ -16,7 +15,6 @@ use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\MenuResource;
 use Siteman\Cms\Resources\PageResource;
-use Siteman\Cms\Resources\RoleResource;
 use Siteman\Cms\Resources\UserResource;
 use Siteman\Cms\Search\SitemanSearchProvider;
 use Siteman\Cms\Theme\ThemeInterface;
@@ -39,7 +37,7 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
-        $resources = [PageResource::class, MenuResource::class, UserResource::class, RoleResource::class];
+        $resources = [PageResource::class, MenuResource::class, UserResource::class];
         $panel->resources($resources);
 
         $panel->pages([
@@ -48,7 +46,6 @@ class SitemanPlugin implements Plugin
         ]);
 
         $panel->profile(EditProfile::class, false);
-        $panel->plugin(FilamentShieldPlugin::make()->checkboxListColumns(3));
         $panel->plugin(FilamentPeekPlugin::make());
         $panel->renderHook(
             PanelsRenderHook::TOPBAR_START,

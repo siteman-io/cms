@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Prompts\Prompt;
 
+use Spatie\Permission\Models\Role;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;
 use function Laravel\Prompts\text;
@@ -90,12 +92,11 @@ class InstallCommand extends Command
             return $exitCode;
         }
 
-        try {
-            $this->call('shield:super-admin', ['--user' => $user->id]);
-        } catch (\Throwable) {
-            $this->components->error("Failed creating and assigning super admin role for user {$user->id}");
-            $this->components->info("Try to create on your own via 'php artisan  shield:super-admin --user {$user->id}'");
-        }
+        $role = Role::create([
+            'name' => 'admin',
+            'guard_name' => 'web',
+        ]);
+        $user->assignRole($role);
 
         $this->components->info('All done!');
 

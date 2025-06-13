@@ -11,6 +11,7 @@ use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -143,6 +144,8 @@ class CmsServiceProvider extends PackageServiceProvider
 
             return $generator;
         });
+
+        Gate::before(static fn(User $user) => $user->hasRole('admin') ? true : null);
     }
 
     public function packageBooted(): void
