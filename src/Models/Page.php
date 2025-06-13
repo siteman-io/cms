@@ -134,6 +134,9 @@ class Page extends Model implements Feedable, HasMedia
         return $this->belongsTo(static::class);
     }
 
+    /**
+     * @return HasMany<static, $this>
+     */
     public function children(): HasMany
     {
         return $this
