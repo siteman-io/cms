@@ -2,7 +2,7 @@
 
 namespace Siteman\Cms\Blocks;
 
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Builder;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;

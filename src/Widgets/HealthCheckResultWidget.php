@@ -11,7 +11,7 @@ class HealthCheckResultWidget extends Widget
 
     public array $result = [];
 
-    protected static string $view = 'siteman::widgets.health-check-result-widget';
+    protected string $view = 'siteman::widgets.health-check-result-widget';
 
     public function getIcon(): string
     {

@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Livewire;
 
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -42,10 +42,10 @@ class CreateCustomText extends Component implements HasForms
         $this->dispatch('menu:created');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('title')
                     ->label(__('siteman::menu.form.title'))
                     ->required(),

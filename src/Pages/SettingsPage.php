@@ -2,7 +2,7 @@
 
 namespace Siteman\Cms\Pages;
 
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
@@ -14,7 +14,7 @@ use Spatie\LaravelSettings\Settings;
 
 class SettingsPage extends Page
 {
-    protected static string $view = 'siteman::pages.settings';
+    protected string $view = 'siteman::pages.settings';
 
     public ?array $data = [];
 
@@ -76,7 +76,7 @@ class SettingsPage extends Page
             ->mapWithKeys(
                 fn (SettingsFormInterface $form, string $group) => [
                     $this->getFormName($group) => $this->makeForm()
-                        ->schema($form->schema())
+                        ->components($form->schema())
                         ->statePath('data.'.$group),
                 ])
             ->toArray();
@@ -117,7 +117,7 @@ class SettingsPage extends Page
         return $group.'SettingsForm';
     }
 
-    protected function getGroupForm(string $group): ?Form
+    protected function getGroupForm(string $group): ?Schema
     {
         $formName = $this->getFormName($group);
 

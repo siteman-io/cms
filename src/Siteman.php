@@ -2,6 +2,8 @@
 
 namespace Siteman\Cms;
 
+use RuntimeException;
+use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Siteman\Cms\Blocks\BlockRegistry;
@@ -52,7 +54,7 @@ class Siteman
     {
         $theme = app($this->settings->theme);
         if (!$theme instanceof ThemeInterface) {
-            throw new \RuntimeException('Theme must implement ThemeInterface');
+            throw new RuntimeException('Theme must implement ThemeInterface');
         }
         $this->theme = $theme;
         foreach ($this->defaultBlocks as $block) {
@@ -110,7 +112,7 @@ class Siteman
     public function registerLayout(string $className): self
     {
         if (!array_key_exists($className::getId(), Blade::getClassComponentAliases())) {
-            throw new \RuntimeException('Layout must be registered as Blade component');
+            throw new RuntimeException('Layout must be registered as Blade component');
         }
         $this->layouts[$className::getId()] = $className;
 
@@ -129,7 +131,7 @@ class Siteman
         return $this->layouts;
     }
 
-    public function registerFormHook(FormHook $hook, \Closure $callback): void
+    public function registerFormHook(FormHook $hook, Closure $callback): void
     {
         $this->formFieldHooks[$hook->value] = array_merge($this->formFieldHooks[$hook->value] ?? [], [$callback]);
     }

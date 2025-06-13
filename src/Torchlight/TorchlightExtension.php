@@ -2,6 +2,7 @@
 
 namespace Siteman\Cms\Torchlight;
 
+use Stringable;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
@@ -28,7 +29,7 @@ class TorchlightExtension extends BaseExtension implements ExtensionInterface, N
      * This method just proxies to our base class, but the
      * signature has to match Commonmark V2.
      *
-     * @return mixed|string|\Stringable|null
+     * @return mixed|string|Stringable|null
      */
     public function render(Node $node, ChildNodeRendererInterface $childRenderer)
     {

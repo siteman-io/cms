@@ -2,15 +2,14 @@
 
 namespace Siteman\Cms;
 
+use Filament\Auth\Pages\EditProfile;
+use Filament\Support\Enums\Width;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages\Auth\EditProfile;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\MaxWidth;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
-use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\MenuResource;
@@ -46,7 +45,6 @@ class SitemanPlugin implements Plugin
         ]);
 
         $panel->profile(EditProfile::class, false);
-        $panel->plugin(FilamentPeekPlugin::make());
         $panel->renderHook(
             PanelsRenderHook::TOPBAR_START,
             fn () => Blade::render(sprintf('<x-filament::link href="/">%s</x-filament::link>', __('siteman::dashboard.go-to-site'))),
@@ -69,7 +67,7 @@ class SitemanPlugin implements Plugin
 
         $panel->sidebarFullyCollapsibleOnDesktop()
             ->sidebarWidth('14rem')
-            ->maxContentWidth(MaxWidth::Full);
+            ->maxContentWidth(Width::Full);
     }
 
     public function boot(Panel $panel): void

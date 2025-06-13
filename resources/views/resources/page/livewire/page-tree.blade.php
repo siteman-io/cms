@@ -10,11 +10,6 @@
                 <x-siteman::page-tree-item :item="$page"/>
             @endforeach
         </ul>
-    @else
-        <x-filament-tables::empty-state
-            icon="heroicon-o-document"
-            :heading="__('siteman::page.tree.empty')"
-        />
     @endif
 
     <x-filament-actions::modals />

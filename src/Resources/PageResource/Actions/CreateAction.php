@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms\Resources\PageResource\Actions;
 
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Set;
 use Illuminate\Support\Str;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Resources\PageResource;
@@ -16,7 +16,7 @@ class CreateAction extends \Filament\Actions\CreateAction
     {
         parent::setUp();
         $this->model(PageResource::getModel())
-            ->form([
+            ->schema([
                 Group::make()
                     ->schema([
                         TextInput::make('title')
@@ -43,7 +43,7 @@ class CreateAction extends \Filament\Actions\CreateAction
 
                     ]),
             ])
-            ->mutateFormDataUsing(function (array $data): array {
+            ->mutateDataUsing(function (array $data): array {
                 // Find the highest order value and increment by 1
                 $maxOrder = PageResource::getModel()::max('order') ?? 0;
                 $data['order'] = $maxOrder + 1;

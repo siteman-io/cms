@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Pages;
 
+use Filament\Actions\CreateAction;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Actions;
-use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 use Siteman\Cms\Resources\MenuResource;
@@ -22,7 +23,7 @@ class ListMenus extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->authorize('create_menu')
                 ->label(__('siteman::menu.resource.actions.create.label'))
                 ->modalHeading(__('siteman::menu.resource.actions.create.heading'))

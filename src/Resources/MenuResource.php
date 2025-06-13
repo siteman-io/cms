@@ -3,8 +3,20 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Siteman\Cms\Resources\MenuResource\Pages\ListMenus;
+use Siteman\Cms\Resources\MenuResource\Pages\EditMenu;
 use Filament\Forms\Components;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -45,19 +57,19 @@ class MenuResource extends Resource
         return __('siteman::menu.resource.navigation-label');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(1)
-            ->schema([
-                Components\Grid::make(4)
+            ->components([
+                Grid::make(4)
                     ->schema([
-                        Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label(__('siteman::menu.resource.fields.name.label'))
                             ->required()
                             ->columnSpan(3),
 
-                        Components\ToggleButtons::make('is_visible')
+                        ToggleButtons::make('is_visible')
                             ->grouped()
                             ->options([
                                 true => __('siteman::menu.resource.fields.is_visible.visible'),
@@ -81,11 +93,11 @@ class MenuResource extends Resource
         return $table
             ->modifyQueryUsing(fn ($query) => $query->withCount('menuItems'))
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable()
                     ->label(__('siteman::menu.resource.fields.name.label')),
-                Tables\Columns\TextColumn::make('locations.location')
+                TextColumn::make('locations.location')
                     ->label(__('siteman::menu.resource.fields.locations.label'))
                     ->default(__('siteman::menu.resource.fields.locations.empty'))
                     ->color(fn (string $state) => array_key_exists($state, $locations) ? 'primary' : 'gray')
@@ -93,30 +105,30 @@ class MenuResource extends Resource
                     ->limitList(2)
                     ->sortable()
                     ->badge(),
-                Tables\Columns\TextColumn::make('menu_items_count')
+                TextColumn::make('menu_items_count')
                     ->label(__('siteman::menu.resource.fields.items.label'))
                     ->icon('heroicon-o-link')
                     ->numeric()
                     ->default(0)
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_visible')
+                IconColumn::make('is_visible')
                     ->label(__('siteman::menu.resource.fields.is_visible.label'))
                     ->sortable()
                     ->alignCenter()
                     ->boolean(),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('filament-shield::filament-shield.column.updated_at'))
                     ->alignRight()
                     ->dateTimeTooltip()
                     ->since(),
             ])
-            ->actions(Tables\Actions\ActionGroup::make([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->color('gray'),
+            ->recordActions(ActionGroup::make([
+                EditAction::make(),
+                DeleteAction::make()->color('gray'),
             ]))
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -124,8 +136,8 @@ class MenuResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => MenuResource\Pages\ListMenus::route('/'),
-            'edit' => MenuResource\Pages\EditMenu::route('/{record}/edit'),
+            'index' => ListMenus::route('/'),
+            'edit' => EditMenu::route('/{record}/edit'),
         ];
     }
 }

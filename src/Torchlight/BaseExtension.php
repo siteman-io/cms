@@ -2,6 +2,7 @@
 
 namespace Siteman\Cms\Torchlight;
 
+use Closure;
 use Illuminate\Support\Str;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Util\Xml;
@@ -61,7 +62,7 @@ abstract class BaseExtension
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
     public function defaultBlockRenderer()
     {

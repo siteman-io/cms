@@ -2,7 +2,7 @@
 
 namespace Siteman\Cms\Search;
 
-use Filament\GlobalSearch\DefaultGlobalSearchProvider;
+use Filament\GlobalSearch\Providers\DefaultGlobalSearchProvider;
 use Filament\GlobalSearch\GlobalSearchResult;
 use Filament\GlobalSearch\GlobalSearchResults;
 use Siteman\Cms\Facades\Siteman;

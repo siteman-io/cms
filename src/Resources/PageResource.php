@@ -2,12 +2,30 @@
 
 namespace Siteman\Cms\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use Siteman\Cms\Resources\PageResource\Pages\ListPages;
+use Siteman\Cms\Resources\PageResource\Pages\CreatePage;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -31,20 +49,20 @@ class PageResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->columns(4)
-            ->schema([
-                Forms\Components\Section::make()
+            ->components([
+                Section::make()
                     ->columnSpan(3)
                     ->key('mainPageFields')
-                    ->schema(function (Forms\Get $get): array {
+                    ->schema(function (Get $get): array {
                         $schema = [
                             TextInput::make('title')
                                 ->label(__('siteman::page.fields.title.label'))
                                 ->helperText(__('siteman::page.fields.title.helper-text'))
-                                ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                                ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
                                     if (!$get('is_slug_changed_manually') && filled($state)) {
                                         $set('slug', Str::slug($state));
                                     }
@@ -63,14 +81,14 @@ class PageResource extends Resource
 
                         return $schema;
                     }),
-                Forms\Components\Section::make()
+                Section::make()
                     ->columnSpan(1)
                     ->key('sidebar')
-                    ->schema(function (Forms\Get $get): array {
+                    ->schema(function (Get $get): array {
                         $schema = [
-                            Forms\Components\Select::make('type')
+                            Select::make('type')
                                 ->options(collect(Siteman::getPageTypes())->mapWithKeys(fn ($type, $key) => [$key => str($key)->headline()])->toArray())
-                                ->afterStateUpdated(function (Forms\Components\Select $component, Page $record, $state) {
+                                ->afterStateUpdated(function (Select $component, Page $record, $state) {
                                     $all = $record->toArray();
                                     $all['type'] = $state;
 
@@ -79,13 +97,13 @@ class PageResource extends Resource
                                         ->getParentComponent()
                                         ->getContainer()
                                         ->getComponent('mainPageFields')
-                                        ?->getChildComponentContainer()
+                                        ?->getChildSchema()
                                         ->fill($all);
 
                                     $component
                                         ->getContainer()
                                         ->getComponent('sidebar')
-                                        ?->getChildComponentContainer()
+                                        ?->getChildSchema()
                                         ->fill($all);
                                 }
                                 )
@@ -95,14 +113,14 @@ class PageResource extends Resource
                                 ->label('siteman::page.fields.slug.label')
                                 ->translateLabel()
                                 ->helperText(__('siteman::page.fields.slug.helper-text'))
-                                ->afterStateUpdated(function (Forms\Set $set) {
+                                ->afterStateUpdated(function (Set $set) {
                                     $set('is_slug_changed_manually', true);
                                 })
                                 ->required(),
                             Hidden::make('is_slug_changed_manually')
                                 ->default(false)
                                 ->dehydrated(false),
-                            Forms\Components\DateTimePicker::make('published_at')
+                            DateTimePicker::make('published_at')
                                 ->label('siteman::page.fields.published_at.label')
                                 ->translateLabel()
                                 ->helperText(__('siteman::page.fields.published_at.helper-text'))
@@ -129,13 +147,13 @@ class PageResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
-                Infolists\Components\TextEntry::make('title'),
-                Infolists\Components\TextEntry::make('computed_slug'),
-                Infolists\Components\TextEntry::make('published_at')->dateTime()->since()
+        return $schema
+            ->components([
+                TextEntry::make('title'),
+                TextEntry::make('computed_slug'),
+                TextEntry::make('published_at')->dateTime()->since()
                     ->columnSpanFull(),
             ]);
     }
@@ -145,17 +163,17 @@ class PageResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with('author')->latest('created_at'))
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->label(__('siteman::page.table.columns.title'))
                     ->searchable()
                     ->formatStateUsing(fn (Page $record) => $record->slug === '/' ? new HtmlString(Blade::render("<div class='flex'><span>$record->title &nbsp&nbsp-&nbsp&nbsp</span><x-filament::badge class='inline-block'>Homepage</x-filament::badge></div>")) : $record->title)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('author.name')
+                TextColumn::make('author.name')
                     ->label(__('siteman::page.table.columns.author'))
                     ->searchable()
                     ->alignRight()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('published_at')
+                TextColumn::make('published_at')
                     ->label(__('siteman::page.table.columns.published_at'))
                     ->since()
                     ->dateTimeTooltip()
@@ -164,30 +182,30 @@ class PageResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('author')
+                SelectFilter::make('author')
                     ->label(__('siteman::page.table.filters.author.label'))
                     ->multiple()
                     ->relationship('author', 'name')
                     ->preload()
                     ->searchable(),
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()
+            ->recordActions([
+                ActionGroup::make([
+                    EditAction::make()
                         ->label(__('siteman::page.table.actions.edit'))
                         ->url(fn (Page $record): string => static::getUrl('index', ['selectedPageId' => $record->id])),
-                    Tables\Actions\DeleteAction::make()->label(__('siteman::page.table.actions.delete'))
+                    DeleteAction::make()->label(__('siteman::page.table.actions.delete'))
                         ->color('gray')
                         ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::page.notifications.deleted.title'))),
-                    Tables\Actions\ForceDeleteAction::make()->color('gray'),
-                    Tables\Actions\RestoreAction::make(),
+                    ForceDeleteAction::make()->color('gray'),
+                    RestoreAction::make(),
                 ]),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()->label(__('siteman::page.table.actions.delete')),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()->label(__('siteman::page.table.actions.delete')),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -200,8 +218,8 @@ class PageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
-            'create' => Pages\CreatePage::route('/create'),
+            'index' => ListPages::route('/'),
+            'create' => CreatePage::route('/create'),
             // Removed dedicated edit page route
         ];
     }

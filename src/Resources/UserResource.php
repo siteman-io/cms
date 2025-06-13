@@ -2,9 +2,18 @@
 
 namespace Siteman\Cms\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Siteman\Cms\Resources\UserResource\Pages\ListUsers;
+use Siteman\Cms\Resources\UserResource\Pages\CreateUser;
+use Siteman\Cms\Resources\UserResource\Pages\EditUser;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,10 +28,10 @@ class UserResource extends Resource
         return config('siteman.models.user');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('name')
                     ->label('siteman::user.fields.name.label')
                     ->translateLabel()
@@ -51,23 +60,23 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('siteman::user.table.columns.name'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label(__('siteman::user.table.columns.email'))
                     ->copyable()
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('roles.name')
+                TextColumn::make('roles.name')
                     ->label(__('siteman::user.table.columns.roles'))
                     ->badge()
                     ->colors([
                         'primary',
                         'success' => 'super_admin',
                     ]),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('siteman::user.table.columns.created_at'))
                     ->since()
                     ->dateTimeTooltip()
@@ -75,21 +84,21 @@ class UserResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('roles')
+                SelectFilter::make('roles')
                     ->label(__('siteman::user.table.filters.role.label'))
                     ->multiple()
                     ->relationship('roles', 'name')
                     ->preload()
                     ->searchable(),
             ])
-            ->actions(
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()->label(__('siteman::user.table.actions.edit')),
+            ->recordActions(
+                ActionGroup::make([
+                    EditAction::make()->label(__('siteman::user.table.actions.edit')),
                 ]),
             )
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()->label(__('siteman::user.table.bulk-actions.delete')),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()->label(__('siteman::user.table.bulk-actions.delete')),
                 ]),
             ]);
     }
@@ -97,9 +106,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 

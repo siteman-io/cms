@@ -15,7 +15,7 @@ use Spatie\Health\ResultStores\ResultStore;
 
 class SiteHealthPage extends Page
 {
-    protected static string $view = 'siteman::pages.site-health';
+    protected string $view = 'siteman::pages.site-health';
 
     protected $listeners = ['refresh-component' => '$refresh'];
 

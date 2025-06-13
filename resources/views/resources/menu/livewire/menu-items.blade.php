@@ -12,11 +12,6 @@
                 />
             @endforeach
         </ul>
-    @else
-        <x-filament-tables::empty-state
-            icon="heroicon-o-document"
-            :heading="__('siteman::menu.items.empty.heading')"
-        />
     @endif
 
     <x-filament-actions::modals />

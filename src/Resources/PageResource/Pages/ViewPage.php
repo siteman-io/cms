@@ -2,6 +2,8 @@
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Livewire\Attributes\On;
@@ -14,8 +16,8 @@ class ViewPage extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make(),
+            EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 

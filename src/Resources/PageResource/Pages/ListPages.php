@@ -2,11 +2,12 @@
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
+use Siteman\Cms\Resources\PageResource\Actions\CreateAction;
+use Siteman\Cms\Resources\PageResource\Widgets\HomePageWidget;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\View as FacadesView;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
-use Pboivin\FilamentPeek\Support\View;
 use Siteman\Cms\Resources\HasPreviewModal;
 use Siteman\Cms\Resources\PageResource;
 
@@ -16,7 +17,7 @@ class ListPages extends Page
 
     protected static string $resource = PageResource::class;
 
-    protected static string $view = 'siteman::resources.page.pages.list-pages';
+    protected string $view = 'siteman::resources.page.pages.list-pages';
 
     #[Url]
     public ?int $selectedPageId = null;
@@ -41,17 +42,17 @@ class ListPages extends Page
 
     protected function getHeaderActions(): array
     {
-        FacadesView::share(View::PREVIEW_ACTION_SETUP_HOOK, true);
+//        FacadesView::share(View::PREVIEW_ACTION_SETUP_HOOK, true);
 
         return [
-            PageResource\Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 
     protected function getHeaderWidgets(): array
     {
         return [
-            PageResource\Widgets\HomePageWidget::class,
+            HomePageWidget::class,
         ];
     }
 }

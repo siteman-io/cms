@@ -2,6 +2,9 @@
 
 namespace Siteman\Cms\Resources\PageResource\Livewire;
 
+use Filament\Support\Enums\Size;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Support\Enums\Width;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -10,9 +13,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Get;
-use Filament\Support\Enums\ActionSize;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -69,7 +69,7 @@ class PageTree extends Component implements HasActions, HasForms
         return Action::make('edit')
             ->label(__('filament-actions::edit.single.label'))
             ->iconButton()
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->modalHeading(fn (array $arguments): string => __('filament-actions::edit.single.modal.heading', ['label' => $arguments['title']]))
             ->icon('heroicon-m-pencil-square')
             ->fillForm(fn (array $arguments): array => MenuItem::query()
@@ -77,7 +77,7 @@ class PageTree extends Component implements HasActions, HasForms
                 ->with('linkable')
                 ->first()
                 ->toArray())
-            ->form([
+            ->schema([
                 TextInput::make('title')
                     ->label(__('siteman::menu.form.title'))
                     ->required(),
@@ -103,7 +103,7 @@ class PageTree extends Component implements HasActions, HasForms
                     ->where('id', $arguments['id'])
                     ->update($data),
             )
-            ->modalWidth(MaxWidth::Medium)
+            ->modalWidth(Width::Medium)
             ->slideOver();
     }
 
@@ -163,7 +163,7 @@ class PageTree extends Component implements HasActions, HasForms
             ->iconButton()
             ->extraAttributes(['data-sortable-handle' => true, 'class' => 'cursor-move'])
             ->livewireClickHandlerEnabled(false)
-            ->size(ActionSize::Small);
+            ->size(Size::Small);
     }
 
     public function render()

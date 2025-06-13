@@ -2,6 +2,8 @@
 
 namespace Siteman\Cms\PageTypes;
 
+use ResourceBundle;
+use Locale;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -46,8 +48,8 @@ class RssFeed implements PageTypeInterface
                 ->asPageMetaField(),
             Select::make('feed_language')
                 ->options(
-                    collect(\ResourceBundle::getLocales(''))
-                        ->mapWithKeys(fn ($locale) => [$locale => \Locale::getDisplayName($locale, 'en_US')])
+                    collect(ResourceBundle::getLocales(''))
+                        ->mapWithKeys(fn ($locale) => [$locale => Locale::getDisplayName($locale, 'en_US')])
                         ->sort()
                         ->all()
                 )->asPageMetaField(),

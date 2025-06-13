@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\DeleteAction;
 use Filament\Actions;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Siteman\Cms\Resources\MenuResource;
@@ -15,25 +16,25 @@ class EditMenu extends EditRecord
 {
     use HasLocationAction;
 
-    protected static string $view = 'siteman::resources.menu.pages.edit-record';
+    protected string $view = 'siteman::resources.menu.pages.edit-record';
 
     public static function getResource(): string
     {
         return MenuResource::class;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Section::make()->schema($form->getComponents()),
+        return $schema
+            ->components([
+                Section::make()->schema($schema->getComponents()),
             ]);
     }
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
             $this->getLocationAction(),
         ];
     }
