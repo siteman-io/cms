@@ -2,14 +2,14 @@
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
-use Siteman\Cms\Resources\PageResource\Actions\CreateAction;
-use Siteman\Cms\Resources\PageResource\Widgets\HomePageWidget;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\View as FacadesView;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Siteman\Cms\Resources\HasPreviewModal;
 use Siteman\Cms\Resources\PageResource;
+use Siteman\Cms\Resources\PageResource\Actions\CreateAction;
+use Siteman\Cms\Resources\PageResource\Widgets\HomePageWidget;
 
 class ListPages extends Page
 {
@@ -42,7 +42,7 @@ class ListPages extends Page
 
     protected function getHeaderActions(): array
     {
-//        FacadesView::share(View::PREVIEW_ACTION_SETUP_HOOK, true);
+        //        FacadesView::share(View::PREVIEW_ACTION_SETUP_HOOK, true);
 
         return [
             CreateAction::make(),

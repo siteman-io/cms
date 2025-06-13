@@ -145,7 +145,7 @@ class CmsServiceProvider extends PackageServiceProvider
             return $generator;
         });
 
-        Gate::before(static fn(User $user) => $user->hasRole('admin') ? true : null);
+        Gate::before(static fn (User $user) => $user->hasRole('admin') ? true : null);
     }
 
     public function packageBooted(): void

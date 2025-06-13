@@ -2,22 +2,20 @@
 
 namespace Siteman\Cms\Resources;
 
-use Filament\Schemas\Schema;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Siteman\Cms\Resources\UserResource\Pages\ListUsers;
-use Siteman\Cms\Resources\UserResource\Pages\CreateUser;
-use Siteman\Cms\Resources\UserResource\Pages\EditUser;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Siteman\Cms\Resources\UserResource\Pages;
+use Siteman\Cms\Resources\UserResource\Pages\CreateUser;
+use Siteman\Cms\Resources\UserResource\Pages\EditUser;
+use Siteman\Cms\Resources\UserResource\Pages\ListUsers;
 
 class UserResource extends Resource
 {

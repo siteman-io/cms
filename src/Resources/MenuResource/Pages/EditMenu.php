@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource\Pages;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use Filament\Actions\DeleteAction;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Siteman\Cms\Resources\MenuResource;
 use Siteman\Cms\Resources\MenuResource\HasLocationAction;

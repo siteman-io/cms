@@ -5,7 +5,6 @@ namespace Siteman\Cms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Prompts\Prompt;
-
 use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\confirm;

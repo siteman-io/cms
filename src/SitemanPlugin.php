@@ -3,11 +3,11 @@
 namespace Siteman\Cms;
 
 use Filament\Auth\Pages\EditProfile;
-use Filament\Support\Enums\Width;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Width;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Siteman\Cms\Pages\SettingsPage;

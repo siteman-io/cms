@@ -2,9 +2,8 @@
 
 namespace Siteman\Cms\Resources\PageResource\Pages;
 
-use Filament\Actions\DeleteAction;
-use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Js;
 use Livewire\Attributes\On;

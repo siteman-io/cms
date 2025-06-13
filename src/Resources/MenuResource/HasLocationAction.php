@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Siteman\Cms\Resources\MenuResource;
 
-use Filament\Support\Enums\Width;
-use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\View;
 use Filament\Actions\Action;
 use Filament\Forms\Components;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\View;
+use Filament\Support\Enums\Width;
 use Illuminate\Support\Collection;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
@@ -80,11 +80,11 @@ trait HasLocationAction
                             ->options($this->getMenus()->pluck('name', 'id')->all()),
                     ]),
             )->all() ?: [
-//                View::make('filament-tables::components.empty-state.index')
-//                    ->viewData([
-//                        'heading' => __('siteman::menu.resource.actions.locations.empty.heading'),
-//                        'icon' => 'heroicon-o-x-mark',
-//                    ]),
+                //                View::make('filament-tables::components.empty-state.index')
+                //                    ->viewData([
+                //                        'heading' => __('siteman::menu.resource.actions.locations.empty.heading'),
+                //                        'icon' => 'heroicon-o-x-mark',
+                //                    ]),
             ]);
     }
 

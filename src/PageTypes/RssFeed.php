@@ -2,12 +2,12 @@
 
 namespace Siteman\Cms\PageTypes;
 
-use ResourceBundle;
-use Locale;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Http\Request;
+use Locale;
+use ResourceBundle;
 use Siteman\Cms\Models\Page as PageModel;
 use Siteman\Cms\PageTypes\Concerns\InteractsWithPageForm;
 use Siteman\Cms\Settings\GeneralSettings;

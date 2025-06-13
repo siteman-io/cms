@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms;
 
-use RuntimeException;
 use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use RuntimeException;
 use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;

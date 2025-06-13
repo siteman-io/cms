@@ -2,10 +2,10 @@
 
 namespace Siteman\Cms\Http;
 
-use Siteman\Cms\Facades\Siteman\Cms\PageTypes\PageTypeInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Facades\Siteman\Cms\PageTypes\PageTypeInterface;
 use Siteman\Cms\Models\Page;
 
 class SitemanController
