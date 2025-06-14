@@ -7,8 +7,8 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
-use Siteman\Cms\Resources\Menus\MenuResource;
 use Siteman\Cms\Resources\Menus\HasLocationAction;
+use Siteman\Cms\Resources\Menus\MenuResource;
 
 class ListMenus extends ListRecords
 {

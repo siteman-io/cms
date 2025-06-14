@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\View as FacadesView;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Siteman\Cms\Resources\HasPreviewModal;
-use Siteman\Cms\Resources\Pages\PageResource;
 use Siteman\Cms\Resources\Pages\Actions\CreateAction;
+use Siteman\Cms\Resources\Pages\PageResource;
 use Siteman\Cms\Resources\Pages\Widgets\HomePageWidget;
 
 class ListPages extends Page

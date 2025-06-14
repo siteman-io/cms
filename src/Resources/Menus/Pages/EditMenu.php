@@ -8,8 +8,8 @@ use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
-use Siteman\Cms\Resources\Menus\MenuResource;
 use Siteman\Cms\Resources\Menus\HasLocationAction;
+use Siteman\Cms\Resources\Menus\MenuResource;
 
 class EditMenu extends EditRecord
 {
