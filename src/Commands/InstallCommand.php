@@ -5,6 +5,7 @@ namespace Siteman\Cms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Prompts\Prompt;
+use Siteman\Cms\Facades\Siteman;
 use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\confirm;
@@ -91,11 +92,7 @@ class InstallCommand extends Command
             return $exitCode;
         }
 
-        $role = Role::create([
-            'name' => 'admin',
-            'guard_name' => 'web',
-        ]);
-        $user->assignRole($role);
+        $user->assignRole(Siteman::createSuperAdminRole());
 
         $this->components->info('All done!');
 

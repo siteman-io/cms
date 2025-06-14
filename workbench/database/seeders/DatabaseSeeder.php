@@ -4,6 +4,7 @@ namespace Workbench\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
 use Spatie\Permission\Models\Role;
@@ -22,11 +23,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        $role = Role::create([
-            'name' => 'admin',
-            'guard_name' => 'web',
-        ]);
-        $user->assignRole($role);
+        $user->assignRole(Siteman::createSuperAdminRole());
 
         $mainMenu = Menu::create(['name' => 'Main Menu', 'is_visible' => true]);
         $mainMenu->locations()->create(['location' => 'header']);

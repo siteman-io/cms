@@ -18,6 +18,8 @@ use Siteman\Cms\PageTypes\TagIndex;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Settings\GeneralSettingsForm;
 use Siteman\Cms\Theme\ThemeInterface;
+use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class Siteman
 {
@@ -144,5 +146,13 @@ class Siteman
     public function getPageTypes(): array
     {
         return $this->pageTypes;
+    }
+
+    public static function createSuperAdminRole(): Role
+    {
+        return app(PermissionRegistrar::class)->getRoleClass()::create([
+            'name' => 'super-admin',
+            'guard_name' => 'web',
+        ]);
     }
 }
