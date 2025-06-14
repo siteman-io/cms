@@ -144,8 +144,6 @@ class CmsServiceProvider extends PackageServiceProvider
 
             return $generator;
         });
-
-        Gate::before(static fn (User $user) => $user->hasRole('admin') ? true : null);
     }
 
     public function packageBooted(): void
@@ -179,8 +177,12 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
 
-        Gate::before(function ($user) {
-            return $user->hasRole('super_admin') ? true : null;
+        Gate::before(function (User $user) {
+            if (method_exists($user, 'hasRole')) {
+                return $user->hasRole('super-admin') ? true : null;
+            }
+
+            return null;
         });
 
         Field::macro('asPageMetaField', function () {
