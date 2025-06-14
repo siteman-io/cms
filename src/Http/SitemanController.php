@@ -5,8 +5,8 @@ namespace Siteman\Cms\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Facades\Siteman;
-use Siteman\Cms\Facades\Siteman\Cms\PageTypes\PageTypeInterface;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\PageTypes\PageTypeInterface;
 
 class SitemanController
 {
