@@ -198,8 +198,8 @@ class CmsServiceProvider extends PackageServiceProvider
     {
         return [
             AlpineComponent::make('menu', __DIR__.'/../resources/dist/js/menu.js'),
-            Css::make('index', __DIR__.'/../resources/dist/css/index.css'),
-            Css::make('admin-bar', __DIR__.'/../resources/dist/css/admin-bar.css'),
+            Css::make('index', __DIR__.'/../resources/dist/css/index.css')->loadedOnRequest(),
+            Css::make('admin-bar', __DIR__.'/../resources/dist/css/admin-bar.css')->loadedOnRequest(),
         ];
     }
 }
