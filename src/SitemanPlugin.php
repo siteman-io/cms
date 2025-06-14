@@ -12,10 +12,10 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
-use Siteman\Cms\Resources\MenuResource;
-use Siteman\Cms\Resources\PageResource;
+use Siteman\Cms\Resources\Menus\MenuResource;
+use Siteman\Cms\Resources\Pages\PageResource;
 use Siteman\Cms\Resources\Roles\RoleResource;
-use Siteman\Cms\Resources\UserResource;
+use Siteman\Cms\Resources\Users\UserResource;
 use Siteman\Cms\Search\SitemanSearchProvider;
 use Siteman\Cms\Theme\ThemeInterface;
 

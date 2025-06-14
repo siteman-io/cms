@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Resources\PageResource\Pages\EditPage;
+use Siteman\Cms\Resources\Pages\Pages\EditPage;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
