@@ -14,6 +14,7 @@ use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\MenuResource;
 use Siteman\Cms\Resources\PageResource;
+use Siteman\Cms\Resources\Roles\RoleResource;
 use Siteman\Cms\Resources\UserResource;
 use Siteman\Cms\Search\SitemanSearchProvider;
 use Siteman\Cms\Theme\ThemeInterface;
@@ -36,7 +37,7 @@ class SitemanPlugin implements Plugin
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),
         ]);
-        $resources = [PageResource::class, MenuResource::class, UserResource::class];
+        $resources = [PageResource::class, MenuResource::class, UserResource::class, RoleResource::class];
         $panel->resources($resources);
 
         $panel->pages([

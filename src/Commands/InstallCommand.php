@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Prompts\Prompt;
 use Siteman\Cms\Facades\Siteman;
-use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;

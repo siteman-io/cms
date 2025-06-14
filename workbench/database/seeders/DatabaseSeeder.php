@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Hash;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
-use Spatie\Permission\Models\Role;
 use Workbench\App\Models\User;
 
 class DatabaseSeeder extends Seeder
