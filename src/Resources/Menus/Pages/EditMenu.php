@@ -3,7 +3,6 @@
 namespace Siteman\Cms\Resources\Menus\Pages;
 
 use Filament\Actions\DeleteAction;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Livewire;
@@ -43,20 +42,20 @@ class EditMenu extends EditRecord
 
             Grid::make()
                 ->columns(3)
-            ->schema([
-                Section::make()
-                    ->columns(1)
-                    ->schema([
-                        Livewire::make(CreatePageLink::class),
-                        Livewire::make(CreateCustomLink::class),
-                        Livewire::make(CreateCustomText::class),
-                    ]),
-                Section::make()
-                    ->columnSpan(2)
-                    ->schema([
-                        Livewire::make(MenuItems::class, ['menu' => $this->getRecord()]),
-                    ]),
-            ]),
+                ->schema([
+                    Section::make()
+                        ->columns(1)
+                        ->schema([
+                            Livewire::make(CreatePageLink::class),
+                            Livewire::make(CreateCustomLink::class),
+                            Livewire::make(CreateCustomText::class),
+                        ]),
+                    Section::make()
+                        ->columnSpan(2)
+                        ->schema([
+                            Livewire::make(MenuItems::class, ['menu' => $this->getRecord()]),
+                        ]),
+                ]),
         ]);
     }
 }
