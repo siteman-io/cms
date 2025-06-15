@@ -1,8 +1,8 @@
 <div>
     @if($this->menuItems->isNotEmpty())
         <ul
-            ax-load
-            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('menu', 'siteman') }}"
+            x-load
+            x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('menu', 'siteman') }}"
             x-data="menuBuilder({ parentId: 0 })"
             class="space-y-2"
         >
