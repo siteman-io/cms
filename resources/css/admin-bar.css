@@ -1,7 +1,6 @@
-@config "./../../tailwind.admin-bar.config.js";
+@import 'tailwindcss/utilities' layer(utilities);
 
-@tailwind components;
-@tailwind utilities;
+@source '../views/components/admin-bar.blade.php';
 
 body {
     padding-top: 34px;

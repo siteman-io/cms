@@ -199,8 +199,8 @@ class CmsServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            AlpineComponent::make('menu', __DIR__.'/../resources/dist/js/menu.js'),
-            Css::make('index', __DIR__.'/../resources/dist/css/index.css')->loadedOnRequest(),
+            AlpineComponent::make('menu', __DIR__.'/../resources/dist/js/components/menu.js'),
+            Css::make('components', __DIR__.'/../resources/dist/css/components.css')->loadedOnRequest(),
             Css::make('admin-bar', __DIR__.'/../resources/dist/css/admin-bar.css')->loadedOnRequest(),
         ];
     }

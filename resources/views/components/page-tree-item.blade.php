@@ -31,7 +31,7 @@
 
             <button
                 wire:click="selectPage({{ $item->getKey() }})"
-                class="flex items-center gap-2 text-left hover:text-primary-100 focus:outline-none focus:text-primary-500"
+                class="flex items-center gap-2 text-left hover:text-primary-100 focus:outline-hidden focus:text-primary-500"
             >
                 <div
                     class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">

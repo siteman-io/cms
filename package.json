@@ -1,32 +1,29 @@
 {
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/css/index.css --postcss --watch",
-    "dev:styles:admin-bar": "npx tailwindcss -i resources/css/admin-bar.css -o resources/dist/css/admin-bar.css --postcss --watch",
-    "dev:scripts": "node bin/build.js --dev",
-    "build:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/css/index.css --postcss --minify && npm run purge",
-    "build:styles:admin-bar": "npx tailwindcss -i resources/css/admin-bar.css -o resources/dist/css/admin-bar.css --postcss --minify && npm run purge",
-    "build:scripts": "node bin/build.js",
-    "purge": "filament-purge -i resources/dist/css/index.css -o resources/dist/css/index.css -v 3.x",
-    "dev": "npm-run-all --parallel dev:*",
-    "build": "npm-run-all build:*",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
-  },
-  "devDependencies": {
-    "@awcodes/filament-plugin-purge": "^1.1.1",
-    "@tailwindcss/forms": "^0.5.9",
-    "@tailwindcss/typography": "^0.5.16",
-    "autoprefixer": "^10.4.20",
-    "esbuild": "^0.25.0",
-    "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.49",
-    "postcss-import": "^15.1.0",
-    "prettier": "^3.4.2",
-    "prettier-plugin-tailwindcss": "^0.6.10",
-    "tailwindcss": "^3.4.17",
-    "vitepress": "^1.6.3"
-  }
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev:styles": "npx tailwindcss -i resources/css/components.css -o resources/dist/css/components.css --postcss --watch",
+        "dev:styles:admin-bar": "npx tailwindcss -i resources/css/admin-bar.css -o resources/dist/css/admin-bar.css --postcss --watch",
+        "dev:scripts": "node bin/build.js --dev",
+        "build:styles": "npx tailwindcss -i resources/css/components.css -o resources/dist/css/components.css --postcss --minify",
+        "build:styles:admin-bar": "npx tailwindcss -i resources/css/admin-bar.css -o resources/dist/css/admin-bar.css --postcss --minify",
+        "build:scripts": "node bin/build.js",
+        "dev": "npm-run-all --parallel dev:*",
+        "build": "npm-run-all build:*",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.1.10",
+        "@tailwindcss/forms": "^0.5.9",
+        "@tailwindcss/typography": "^0.5.16",
+        "@tailwindcss/vite": "^4.1.10",
+        "esbuild": "^0.25.0",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^3.4.2",
+        "prettier-plugin-tailwindcss": "^0.6.12",
+        "tailwindcss": "^4.1.10",
+        "vitepress": "^1.6.3"
+    }
 }
