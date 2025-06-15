@@ -3,8 +3,10 @@
 namespace Siteman\Cms;
 
 use Closure;
+use Filament\Facades\Filament;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Str;
 use RuntimeException;
 use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Blocks\ImageBlock;
@@ -148,11 +150,51 @@ class Siteman
         return $this->pageTypes;
     }
 
-    public static function createSuperAdminRole(): Role
+    public function createSuperAdminRole(): Role
     {
         return app(PermissionRegistrar::class)->getRoleClass()::create([
             'name' => 'super-admin',
             'guard_name' => 'web',
         ]);
+    }
+
+    public function isSuperAdmin(Role $role): bool
+    {
+        return $role->name === 'super-admin';
+    }
+
+    public function getResourceInfoForPermissions(): Collection
+    {
+        return collect(Filament::getResources())
+            ->map(fn ($resource) => [
+                'identifier' => $this->getDefaultPermissionIdentifier($resource),
+                'model' => $resource::getModel(),
+                'model_name' => Str::of($resource::getModel())->afterLast('\\')->lower()->toString(),
+                'resource' => $resource,
+            ]);
+    }
+
+    public function getPermissionsFor(string $model): array
+    {
+        return method_exists($model, 'getPermissions')
+            ? $model::getPermissions()
+            : [
+                'view_any',
+                'view',
+                'create',
+                'update',
+                'delete',
+            ];
+    }
+
+    protected function getDefaultPermissionIdentifier(string $resource): string
+    {
+        return Str::of($resource)
+            ->afterLast('Resources\\')
+            ->beforeLast('Resource')
+            ->replace('\\', '')
+            ->snake()
+            ->replace('_', '::')
+            ->toString();
     }
 }
