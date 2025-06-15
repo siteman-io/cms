@@ -5,6 +5,7 @@ namespace Siteman\Cms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Prompts\Prompt;
+use Siteman\Cms\Facades\Siteman;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;
@@ -90,12 +91,7 @@ class InstallCommand extends Command
             return $exitCode;
         }
 
-        try {
-            $this->call('shield:super-admin', ['--user' => $user->id]);
-        } catch (\Throwable) {
-            $this->components->error("Failed creating and assigning super admin role for user {$user->id}");
-            $this->components->info("Try to create on your own via 'php artisan  shield:super-admin --user {$user->id}'");
-        }
+        $user->assignRole(Siteman::createSuperAdminRole());
 
         $this->components->info('All done!');
 

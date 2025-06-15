@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Siteman\Cms\Models\Menu;
-use Siteman\Cms\Resources\MenuResource\Pages\EditMenu;
+use Siteman\Cms\Resources\Menus\Pages\EditMenu;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;

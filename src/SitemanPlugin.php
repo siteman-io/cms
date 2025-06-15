@@ -2,22 +2,20 @@
 
 namespace Siteman\Cms;
 
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Auth\Pages\EditProfile;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages\Auth\EditProfile;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Width;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
-use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
-use Siteman\Cms\Resources\MenuResource;
-use Siteman\Cms\Resources\PageResource;
-use Siteman\Cms\Resources\RoleResource;
-use Siteman\Cms\Resources\UserResource;
+use Siteman\Cms\Resources\Menus\MenuResource;
+use Siteman\Cms\Resources\Pages\PageResource;
+use Siteman\Cms\Resources\Roles\RoleResource;
+use Siteman\Cms\Resources\Users\UserResource;
 use Siteman\Cms\Search\SitemanSearchProvider;
 use Siteman\Cms\Theme\ThemeInterface;
 
@@ -48,8 +46,6 @@ class SitemanPlugin implements Plugin
         ]);
 
         $panel->profile(EditProfile::class, false);
-        $panel->plugin(FilamentShieldPlugin::make()->checkboxListColumns(3));
-        $panel->plugin(FilamentPeekPlugin::make());
         $panel->renderHook(
             PanelsRenderHook::TOPBAR_START,
             fn () => Blade::render(sprintf('<x-filament::link href="/">%s</x-filament::link>', __('siteman::dashboard.go-to-site'))),
@@ -72,7 +68,7 @@ class SitemanPlugin implements Plugin
 
         $panel->sidebarFullyCollapsibleOnDesktop()
             ->sidebarWidth('14rem')
-            ->maxContentWidth(MaxWidth::Full);
+            ->maxContentWidth(Width::Full);
     }
 
     public function boot(Panel $panel): void

@@ -2,6 +2,7 @@
 
 namespace Siteman\Cms\PageTypes\Concerns;
 
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -29,7 +30,7 @@ trait InteractsWithViews
                 return \view()->make($view, $data);
             }
         }
-        throw new \Exception('No view found for the keys: '.implode(', ', $views));
+        throw new Exception('No view found for the keys: '.implode(', ', $views));
     }
 
     protected function getTheme(): ThemeInterface

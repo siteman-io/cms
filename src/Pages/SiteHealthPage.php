@@ -2,7 +2,6 @@
 
 namespace Siteman\Cms\Pages;
 
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -10,15 +9,16 @@ use Filament\Pages\Page;
 use Filament\Widgets\WidgetConfiguration;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Artisan;
+use Siteman\Cms\Pages\Concerns\IsProtectedPage;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\ResultStores\ResultStore;
 
 class SiteHealthPage extends Page
 {
-    use HasPageShield;
+    use IsProtectedPage;
 
-    protected static string $view = 'siteman::pages.site-health';
+    protected string $view = 'siteman::pages.site-health';
 
     protected $listeners = ['refresh-component' => '$refresh'];
 

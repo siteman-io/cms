@@ -2,22 +2,24 @@
 
 namespace Siteman\Cms\Pages;
 
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
-use Filament\Forms\Form;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Pages\Concerns\IsProtectedPage;
 use Siteman\Cms\Settings\SettingsFormInterface;
 use Spatie\LaravelSettings\Settings;
 
 class SettingsPage extends Page
 {
-    use HasPageShield;
+    use InteractsWithForms;
+    use IsProtectedPage;
 
-    protected static string $view = 'siteman::pages.settings';
+    protected string $view = 'siteman::pages.settings';
 
     public ?array $data = [];
 
@@ -78,8 +80,8 @@ class SettingsPage extends Page
         return $this->getSettingForms()
             ->mapWithKeys(
                 fn (SettingsFormInterface $form, string $group) => [
-                    $this->getFormName($group) => $this->makeForm()
-                        ->schema($form->schema())
+                    $this->getFormName($group) => $this->makeSchema()
+                        ->components($form->schema())
                         ->statePath('data.'.$group),
                 ])
             ->toArray();
@@ -120,7 +122,7 @@ class SettingsPage extends Page
         return $group.'SettingsForm';
     }
 
-    protected function getGroupForm(string $group): ?Form
+    protected function getGroupForm(string $group): ?Schema
     {
         $formName = $this->getFormName($group);
 
