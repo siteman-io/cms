@@ -9,12 +9,15 @@ use Filament\Pages\Page;
 use Filament\Widgets\WidgetConfiguration;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Artisan;
+use Siteman\Cms\Pages\Concerns\IsProtectedPage;
 use Siteman\Cms\Widgets\HealthCheckResultWidget;
 use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\ResultStores\ResultStore;
 
 class SiteHealthPage extends Page
 {
+    use IsProtectedPage;
+
     protected string $view = 'siteman::pages.site-health';
 
     protected $listeners = ['refresh-component' => '$refresh'];

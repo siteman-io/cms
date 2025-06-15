@@ -10,12 +10,15 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Pages\Concerns\IsProtectedPage;
 use Siteman\Cms\Settings\SettingsFormInterface;
 use Spatie\LaravelSettings\Settings;
 
 class SettingsPage extends Page
 {
     use InteractsWithForms;
+    use IsProtectedPage;
+
     protected string $view = 'siteman::pages.settings';
 
     public ?array $data = [];
