@@ -24,14 +24,14 @@
         @endphp
 
         <template x-if="activeTab === '{{$group}}'">
-            <x-filament-panels::form wire:submit="save('{{$group}}')">
+            <form wire:submit="save('{{$group}}')">
                 {{ $this->$formProp }}
                 <div>
                     <x-filament::button type="submit" size="sm">
                         {{ __('siteman::settings.form.submit') }}
                     </x-filament::button>
                 </div>
-            </x-filament-panels::form>
+            </form>
         </template>
     @endforeach
 </x-filament-panels::page>
