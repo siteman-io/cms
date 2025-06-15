@@ -24,9 +24,9 @@ class ListUsers extends ListRecords
         return [
             'all' => Tab::make(),
             'admin' => Tab::make()->modifyQueryUsing(fn (Builder $query) => $query->whereHas('roles', function (Builder $query) {
-                $query->where('name', 'super_admin');
+                $query->where('name', 'super-admin');
             }))->badge(fn () => UserResource::getModel()::whereHas('roles', function (Builder $query) {
-                $query->where('name', 'super_admin');
+                $query->where('name', 'super-admin');
             })->count()),
         ];
     }

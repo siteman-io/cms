@@ -48,4 +48,9 @@ class RoleResource extends Resource
             'edit' => EditRole::route('/{record}/edit'),
         ];
     }
+
+    public static function canGloballySearch(): bool
+    {
+        return count(static::getGloballySearchableAttributes()) && static::canViewAny();
+    }
 }

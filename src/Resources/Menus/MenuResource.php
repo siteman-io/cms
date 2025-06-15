@@ -115,7 +115,7 @@ class MenuResource extends Resource
                     ->alignCenter()
                     ->boolean(),
                 TextColumn::make('updated_at')
-                    ->label(__('filament-shield::filament-shield.column.updated_at'))
+                    ->label(__('siteman::menu.table.column.updated_at'))
                     ->alignRight()
                     ->dateTimeTooltip()
                     ->since(),
