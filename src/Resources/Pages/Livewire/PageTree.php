@@ -5,11 +5,11 @@ namespace Siteman\Cms\Resources\Pages\Livewire;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\Size;
 use Filament\Support\Enums\Width;
@@ -36,26 +36,11 @@ class PageTree extends Component implements HasActions, HasForms
     #[Computed]
     public function pages(): Collection
     {
-        return Page::query()
-            ->doesntHave('parent')
-            ->withCount('children')
-            ->orderBy('order')
-            ->with('children', function ($query) {
-                $query
-                    ->whereIn('parent_id', array_unique($this->activePageIds))
-                    ->orderBy('order');
-            })
-            ->get();
+        return Page::tree(1)->get()->loadTreeRelationships()->toTree();
     }
 
     public function onPageDeleted()
     {
-        unset($this->pages);
-    }
-
-    public function loadChildren(int $pageId)
-    {
-        $this->activePageIds[] = $pageId;
         unset($this->pages);
     }
 
@@ -85,14 +70,14 @@ class PageTree extends Component implements HasActions, HasForms
                     ->hidden(fn (?string $state, Get $get): bool => blank($state) || filled($get('linkable_type')))
                     ->label(__('siteman::menu.form.url'))
                     ->required(),
-                Placeholder::make('linkable_type')
+                TextEntry::make('linkable_type')
                     ->label(__('siteman::menu.form.linkable_type'))
                     ->hidden(fn (?string $state): bool => blank($state))
-                    ->content(fn (string $state) => $state),
-                Placeholder::make('linkable_id')
+                    ->state(fn (string $state) => $state),
+                TextEntry::make('linkable_id')
                     ->label(__('siteman::menu.form.linkable_id'))
                     ->hidden(fn (?string $state): bool => blank($state))
-                    ->content(fn (string $state) => $state),
+                    ->state(fn (string $state) => $state),
                 Select::make('target')
                     ->label(__('siteman::menu.open_in.label'))
                     ->options(LinkTarget::class)

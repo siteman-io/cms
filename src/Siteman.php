@@ -152,10 +152,25 @@ class Siteman
 
     public function createSuperAdminRole(): Role
     {
-        return app(PermissionRegistrar::class)->getRoleClass()::create([
-            'name' => 'super-admin',
+        return $this->createRole('super-admin');
+    }
+
+    public function createRole(string $name): Role
+    {
+        return $this->getRoleModel()::create([
+            'name' => $name,
             'guard_name' => 'web',
         ]);
+    }
+
+    public function getPermissionModel(): string
+    {
+        return app(PermissionRegistrar::class)->getPermissionClass();
+    }
+
+    public function getRoleModel(): string
+    {
+        return app(PermissionRegistrar::class)->getRoleClass();
     }
 
     public function isSuperAdmin(Role $role): bool

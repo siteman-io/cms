@@ -35,7 +35,6 @@ use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Pages\CreatePage;
 use Siteman\Cms\Resources\Pages\Pages\ListPages;
-use Siteman\Cms\Resources\Pages\Widgets\HomePageWidget;
 
 class PageResource extends Resource
 {
@@ -222,9 +221,7 @@ class PageResource extends Resource
 
     public static function getWidgets(): array
     {
-        return [
-            HomePageWidget::class,
-        ];
+        return [];
     }
 
     public static function getNavigationIcon(): string

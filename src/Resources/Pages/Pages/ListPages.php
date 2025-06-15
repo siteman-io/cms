@@ -3,13 +3,11 @@
 namespace Siteman\Cms\Resources\Pages\Pages;
 
 use Filament\Resources\Pages\Page;
-use Illuminate\Support\Facades\View as FacadesView;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Siteman\Cms\Resources\HasPreviewModal;
 use Siteman\Cms\Resources\Pages\Actions\CreateAction;
 use Siteman\Cms\Resources\Pages\PageResource;
-use Siteman\Cms\Resources\Pages\Widgets\HomePageWidget;
 
 class ListPages extends Page
 {
@@ -51,8 +49,6 @@ class ListPages extends Page
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            HomePageWidget::class,
-        ];
+        return [];
     }
 }

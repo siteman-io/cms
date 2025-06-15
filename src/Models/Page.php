@@ -23,6 +23,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * @property int $id
@@ -42,6 +43,7 @@ use Spatie\Tags\HasTags;
 class Page extends Model implements Feedable, HasMedia
 {
     use HasFactory;
+    use HasRecursiveRelationships;
     use HasSEO;
     use HasTags;
     use InteractsWithMedia;
@@ -128,21 +130,21 @@ class Page extends Model implements Feedable, HasMedia
     }
 
     protected static string $factory = PageFactory::class;
-
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(static::class);
-    }
-
-    /**
-     * @return HasMany<static, $this>
-     */
-    public function children(): HasMany
-    {
-        return $this
-            ->hasMany(static::class, 'parent_id')
-            ->orderBy('order');
-    }
+    //
+    //    public function parent(): BelongsTo
+    //    {
+    //        return $this->belongsTo(static::class);
+    //    }
+    //
+    //    /**
+    //     * @return HasMany<static, $this>
+    //     */
+    //    public function children(): HasMany
+    //    {
+    //        return $this
+    //            ->hasMany(static::class, 'parent_id')
+    //            ->orderBy('order');
+    //    }
 
     public function toFeedItem(): FeedItem
     {

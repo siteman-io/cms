@@ -17,10 +17,10 @@
     >
         <div class="flex items-center gap-2">
             {{ $this->reorderAction }}
-            @if($item->children_count > 0)
+            @if($item->children->isNotEmpty())
                 <x-filament::icon-button
                     icon="heroicon-o-chevron-right"
-                    x-on:click.stop="open = !open; if (open) { $wire.loadChildren({{ $item->getKey() }}) }"
+                    x-on:click.stop="open = !open"
                     x-bind:title="open ? '{{ __('siteman::page.tree.items.collapse') }}' : '{{ __('siteman::page.tree.items.expand') }}'"
                     color="gray"
                     class="transition duration-200 ease-in-out"
@@ -61,10 +61,8 @@
         x-data="menuBuilder({ parentId: {{ $item->getKey()  }} })"
         class="mt-2 space-y-2 ms-4"
     >
-        @if($item->relationLoaded('children'))
             @foreach($item->children as $child)
                 <x-siteman::page-tree-item :item="$child"/>
             @endforeach
-        @endif
     </ul>
 </li>

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use BezhanSalleh\FilamentShield\Resources\RoleResource\Pages\CreateRole;
+use Siteman\Cms\Resources\Roles\Pages\CreateRole;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
