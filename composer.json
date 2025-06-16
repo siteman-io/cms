@@ -21,7 +21,7 @@
         "bezhansalleh/filament-shield": "^3.3",
         "blade-ui-kit/blade-icons": "^1.8.0",
         "davidbadura/faker-markdown-generator": "^1.1",
-        "echolabsdev/prism": "^0.68",
+        "echolabsdev/prism": "^0.71",
         "filament/filament": "^3.3",
         "filament/spatie-laravel-media-library-plugin": "^3.3",
         "filament/spatie-laravel-tags-plugin": "^3.3",
