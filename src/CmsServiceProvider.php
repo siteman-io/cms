@@ -19,6 +19,7 @@ use Livewire\Livewire;
 use RalphJSmit\Laravel\SEO\SEOManager;
 use RalphJSmit\Laravel\SEO\TagManager;
 use Siteman\Cms\Blocks\BlockRegistry;
+use Siteman\Cms\Commands\CreateAdminCommand;
 use Siteman\Cms\Commands\InstallCommand;
 use Siteman\Cms\Commands\MakeBlockCommand;
 use Siteman\Cms\Commands\MakeSettingsCommand;
@@ -77,6 +78,7 @@ class CmsServiceProvider extends PackageServiceProvider
                 MakeThemeCommand::class,
                 MakeBlockCommand::class,
                 MakeSettingsCommand::class,
+                CreateAdminCommand::class,
             ]);
 
     }

@@ -202,6 +202,11 @@ class Siteman
             ];
     }
 
+    public function getLoginUrl(): string
+    {
+        return route('filament.admin.auth.login');
+    }
+
     protected function getDefaultPermissionIdentifier(string $resource): string
     {
         return Str::of($resource)
