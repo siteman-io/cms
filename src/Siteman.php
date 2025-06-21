@@ -2,8 +2,12 @@
 
 namespace Siteman\Cms;
 
+use Closure;
+use Filament\Facades\Filament;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Str;
+use RuntimeException;
 use Siteman\Cms\Blocks\BlockRegistry;
 use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
@@ -16,6 +20,8 @@ use Siteman\Cms\PageTypes\TagIndex;
 use Siteman\Cms\Settings\GeneralSettings;
 use Siteman\Cms\Settings\GeneralSettingsForm;
 use Siteman\Cms\Theme\ThemeInterface;
+use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class Siteman
 {
@@ -52,7 +58,7 @@ class Siteman
     {
         $theme = app($this->settings->theme);
         if (!$theme instanceof ThemeInterface) {
-            throw new \RuntimeException('Theme must implement ThemeInterface');
+            throw new RuntimeException('Theme must implement ThemeInterface');
         }
         $this->theme = $theme;
         foreach ($this->defaultBlocks as $block) {
@@ -110,7 +116,7 @@ class Siteman
     public function registerLayout(string $className): self
     {
         if (!array_key_exists($className::getId(), Blade::getClassComponentAliases())) {
-            throw new \RuntimeException('Layout must be registered as Blade component');
+            throw new RuntimeException('Layout must be registered as Blade component');
         }
         $this->layouts[$className::getId()] = $className;
 
@@ -129,7 +135,7 @@ class Siteman
         return $this->layouts;
     }
 
-    public function registerFormHook(FormHook $hook, \Closure $callback): void
+    public function registerFormHook(FormHook $hook, Closure $callback): void
     {
         $this->formFieldHooks[$hook->value] = array_merge($this->formFieldHooks[$hook->value] ?? [], [$callback]);
     }
@@ -142,5 +148,73 @@ class Siteman
     public function getPageTypes(): array
     {
         return $this->pageTypes;
+    }
+
+    public function createSuperAdminRole(): Role
+    {
+        return $this->createRole('super-admin');
+    }
+
+    public function createRole(string $name): Role
+    {
+        return $this->getRoleModel()::create([
+            'name' => $name,
+            'guard_name' => 'web',
+        ]);
+    }
+
+    public function getPermissionModel(): string
+    {
+        return app(PermissionRegistrar::class)->getPermissionClass();
+    }
+
+    public function getRoleModel(): string
+    {
+        return app(PermissionRegistrar::class)->getRoleClass();
+    }
+
+    public function isSuperAdmin(Role $role): bool
+    {
+        return $role->name === 'super-admin';
+    }
+
+    public function getResourceInfoForPermissions(): Collection
+    {
+        return collect(Filament::getResources())
+            ->map(fn ($resource) => [
+                'identifier' => $this->getDefaultPermissionIdentifier($resource),
+                'model' => $resource::getModel(),
+                'model_name' => Str::of($resource::getModel())->afterLast('\\')->lower()->toString(),
+                'resource' => $resource,
+            ]);
+    }
+
+    public function getPermissionsFor(string $model): array
+    {
+        return method_exists($model, 'getPermissions')
+            ? $model::getPermissions()
+            : [
+                'view_any',
+                'view',
+                'create',
+                'update',
+                'delete',
+            ];
+    }
+
+    public function getLoginUrl(): string
+    {
+        return route('filament.admin.auth.login');
+    }
+
+    protected function getDefaultPermissionIdentifier(string $resource): string
+    {
+        return Str::of($resource)
+            ->afterLast('Resources\\')
+            ->beforeLast('Resource')
+            ->replace('\\', '')
+            ->snake()
+            ->replace('_', '::')
+            ->toString();
     }
 }

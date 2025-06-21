@@ -1,8 +1,9 @@
-<div>
+<div wire:key="page-tree-test">
     @if($this->pages->isNotEmpty())
         <ul
-            ax-load
-            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('menu', 'siteman') }}"
+            x-load
+            x-load-css="[@js(\Filament\Support\Facades\FilamentAsset::getStyleHref('components', 'siteman'))]"
+            x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('menu', 'siteman') }}"
             x-data="menuBuilder({ parentId: 0 })"
             class="space-y-2"
         >
@@ -11,10 +12,7 @@
             @endforeach
         </ul>
     @else
-        <x-filament-tables::empty-state
-            icon="heroicon-o-document"
-            :heading="__('siteman::page.tree.empty')"
-        />
+        <p class="text-center">No pages found</p>
     @endif
 
     <x-filament-actions::modals />

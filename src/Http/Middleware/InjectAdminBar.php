@@ -2,13 +2,14 @@
 
 namespace Siteman\Cms\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Blade;
 
 class InjectAdminBar
 {
-    public function handle(Request $request, \Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         /** @var Response $response */
         $response = $next($request);

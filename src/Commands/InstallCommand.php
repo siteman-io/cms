@@ -4,7 +4,9 @@ namespace Siteman\Cms\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Process;
 use Laravel\Prompts\Prompt;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\password;
@@ -74,27 +76,18 @@ class InstallCommand extends Command
             return self::SUCCESS;
         }
 
-        $username = text('Enter the admin user name', default: 'admin');
+        $name = text('Enter the admin user name', default: 'admin');
         $email = text('Enter the admin email', default: 'admin@admin.com');
         $password = password('Enter the admin password');
 
-        $user = config('siteman.models.user')::factory()->create([
-            'name' => $username,
-            'email' => $email,
-            'password' => bcrypt($password),
-        ]);
+        Process::run([(new PhpExecutableFinder)->find(), 'artisan', 'siteman:create-admin', $name, $email, $password], function ($type, $line) {
+            $this->output->write($line);
+        });
 
         if ($exitCode = $this->call('filament:assets')) {
             $this->components->error('Failed setting up filament assets');
 
             return $exitCode;
-        }
-
-        try {
-            $this->call('shield:super-admin', ['--user' => $user->id]);
-        } catch (\Throwable) {
-            $this->components->error("Failed creating and assigning super admin role for user {$user->id}");
-            $this->components->info("Try to create on your own via 'php artisan  shield:super-admin --user {$user->id}'");
         }
 
         $this->components->info('All done!');

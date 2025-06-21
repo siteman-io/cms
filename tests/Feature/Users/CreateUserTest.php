@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Siteman\Cms\Resources\UserResource\Pages\CreateUser;
+use Siteman\Cms\Resources\Users\Pages\CreateUser;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;

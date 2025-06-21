@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Siteman\Cms\Resources\UserResource\Pages\ListUsers;
+use Siteman\Cms\Resources\Users\Pages\ListUsers;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;

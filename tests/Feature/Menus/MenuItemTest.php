@@ -2,11 +2,11 @@
 
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Resources\MenuResource\LinkTarget;
-use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
-use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
-use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
-use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
+use Siteman\Cms\Resources\Menus\LinkTarget;
+use Siteman\Cms\Resources\Menus\Livewire\CreateCustomLink;
+use Siteman\Cms\Resources\Menus\Livewire\CreateCustomText;
+use Siteman\Cms\Resources\Menus\Livewire\CreatePageLink;
+use Siteman\Cms\Resources\Menus\Livewire\MenuItems;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;

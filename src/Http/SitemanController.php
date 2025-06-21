@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\PageTypes\PageTypeInterface;
 
 class SitemanController
 {
@@ -17,7 +18,7 @@ class SitemanController
             $page = Page::published()->where('computed_slug', $rootPath)->firstOrFail();
         }
 
-        /** @var \Siteman\Cms\PageTypes\PageTypeInterface $pageType */
+        /** @var PageTypeInterface $pageType */
         $pageType = app(Siteman::getPageTypes()[$page->type]);
 
         Context::add('current_page', $page);

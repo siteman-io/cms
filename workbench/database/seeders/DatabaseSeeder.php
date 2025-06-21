@@ -2,9 +2,9 @@
 
 namespace Workbench\Database\Seeders;
 
-use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
 use Workbench\App\Models\User;
@@ -22,8 +22,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        $role = FilamentShield::createRole();
-        $user->assignRole($role);
+        $user->assignRole(Siteman::createSuperAdminRole());
 
         $mainMenu = Menu::create(['name' => 'Main Menu', 'is_visible' => true]);
         $mainMenu->locations()->create(['location' => 'header']);

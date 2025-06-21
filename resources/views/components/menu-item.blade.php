@@ -3,7 +3,6 @@
 
 @php
     /** @var MenuItem $item */
-
     $hasChildren = $item->children->isNotEmpty();
 @endphp
 
@@ -26,7 +25,6 @@
                     color="gray"
                     class="transition duration-200 ease-in-out"
                     x-bind:class="{ 'rotate-90': open }"
-                    size="sm"
                 />
             @endif
 
@@ -42,12 +40,14 @@
             <x-filament::badge :color="$item->type === 'internal' ? 'primary' : 'gray'" class="hidden sm:block">
                 {{ $item->type }}
             </x-filament::badge>
+
             @php
                 $editAction = ($this->editAction)(['id' => $item->getKey(), 'title' => $item->title]);
                 $deleteAction = ($this->deleteAction)(['id' => $item->getKey(), 'title' => $item->title]);
             @endphp
-            @if($editAction->isVisible()){{ $editAction }}@endif
-            @if($deleteAction->isVisible()){{ $deleteAction }}@endif
+
+            @if($editAction->isVisible()) {{ $editAction }} @endif
+            @if($deleteAction->isVisible()) {{ $deleteAction }} @endif
         </div>
     </div>
 
