@@ -14,6 +14,5 @@
             @endforeach
         </ul>
     @endif
-
     <x-filament-actions::modals />
 </div>

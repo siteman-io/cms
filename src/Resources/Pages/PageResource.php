@@ -2,39 +2,26 @@
 
 namespace Siteman\Cms\Resources\Pages;
 
-use Filament\Actions\ActionGroup;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Siteman\Cms\Concerns\HasFormHooks;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Pages\CreatePage;
 use Siteman\Cms\Resources\Pages\Pages\ListPages;
+use Siteman\Cms\Resources\Pages\Tables\PagesTable;
 
 class PageResource extends Resource
 {
@@ -44,9 +31,9 @@ class PageResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Schema $form): Schema
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(4)
             ->components([
                 Section::make()
@@ -83,7 +70,10 @@ class PageResource extends Resource
                         $schema = [
                             Select::make('type')
                                 ->options(collect(Siteman::getPageTypes())->mapWithKeys(fn ($type, $key) => [$key => str($key)->headline()])->toArray())
-                                ->afterStateUpdated(function (Select $component, Page $record, $state) {
+                                ->afterStateUpdated(function (Select $component, ?Page $record, $state) {
+                                    if (!$record) {
+                                        return;
+                                    }
                                     $all = $record->toArray();
                                     $all['type'] = $state;
 
@@ -155,54 +145,7 @@ class PageResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('author')->latest('created_at'))
-            ->columns([
-                TextColumn::make('title')
-                    ->label(__('siteman::page.table.columns.title'))
-                    ->searchable()
-                    ->formatStateUsing(fn (Page $record) => $record->slug === '/' ? new HtmlString(Blade::render("<div class='flex'><span>$record->title &nbsp&nbsp-&nbsp&nbsp</span><x-filament::badge class='inline-block'>Homepage</x-filament::badge></div>")) : $record->title)
-                    ->sortable(),
-                TextColumn::make('author.name')
-                    ->label(__('siteman::page.table.columns.author'))
-                    ->searchable()
-                    ->alignRight()
-                    ->sortable(),
-                TextColumn::make('published_at')
-                    ->label(__('siteman::page.table.columns.published_at'))
-                    ->since()
-                    ->dateTimeTooltip()
-                    ->alignRight()
-                    ->width('10rem')
-                    ->sortable(),
-            ])
-            ->filters([
-                SelectFilter::make('author')
-                    ->label(__('siteman::page.table.filters.author.label'))
-                    ->multiple()
-                    ->relationship('author', 'name')
-                    ->preload()
-                    ->searchable(),
-            ])
-            ->recordActions([
-                ActionGroup::make([
-                    EditAction::make()
-                        ->label(__('siteman::page.table.actions.edit'))
-                        ->url(fn (Page $record): string => static::getUrl('index', ['selectedPageId' => $record->id])),
-                    DeleteAction::make()->label(__('siteman::page.table.actions.delete'))
-                        ->color('gray')
-                        ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::page.notifications.deleted.title'))),
-                    ForceDeleteAction::make()->color('gray'),
-                    RestoreAction::make(),
-                ]),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make()->label(__('siteman::page.table.actions.delete')),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
-                ]),
-            ]);
+        return PagesTable::configure($table);
     }
 
     public static function getNavigationGroup(): ?string

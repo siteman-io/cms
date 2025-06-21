@@ -13,9 +13,9 @@
     @page-reordered.window="open = {{ in_array($item->getKey(), $this->activePageIds) ? 'true' : 'false' }}"
 >
     <div
-        class="flex justify-between px-3 py-2 bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
+        class="flex px-3 py-2 bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
     >
-        <div class="flex items-center gap-2">
+        <div class="flex grow items-center gap-2">
             {{ $this->reorderAction }}
             @if($item->children->isNotEmpty())
                 <x-filament::icon-button
@@ -31,7 +31,7 @@
 
             <button
                 wire:click="selectPage({{ $item->getKey() }})"
-                class="flex items-center gap-2 text-left hover:text-primary-100 focus:outline-hidden focus:text-primary-500"
+                class="flex grow gap-2 text-left hover:text-primary-100 focus:outline-hidden focus:text-primary-500"
             >
                 <div
                     class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">

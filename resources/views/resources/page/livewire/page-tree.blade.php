@@ -1,4 +1,4 @@
-<div>
+<div wire:key="page-tree-test">
     @if($this->pages->isNotEmpty())
         <ul
             x-load
@@ -11,6 +11,8 @@
                 <x-siteman::page-tree-item :item="$page"/>
             @endforeach
         </ul>
+    @else
+        <p class="text-center">No pages found</p>
     @endif
 
     <x-filament-actions::modals />
