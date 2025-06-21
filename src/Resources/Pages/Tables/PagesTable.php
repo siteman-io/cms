@@ -57,8 +57,7 @@ class PagesTable
             ->recordActions([
                 ActionGroup::make([
                     EditAction::make()
-                        ->label(__('siteman::page.table.actions.edit'))
-                        ->url(fn (Page $record): string => PageResource::getUrl('index', ['selectedPageId' => $record->id])),
+                        ->label(__('siteman::page.table.actions.edit')),
                     DeleteAction::make()->label(__('siteman::page.table.actions.delete'))
                         ->color('gray')
                         ->successNotification(fn (Notification $notification) => $notification->title(__('siteman::page.notifications.deleted.title'))),
