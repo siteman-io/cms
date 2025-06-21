@@ -2,7 +2,6 @@
 
 namespace Siteman\Cms\Pages;
 
-use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -10,6 +9,7 @@ use Filament\Schemas\Components\Text;
 use Filament\Schemas\Schema;
 use Filament\Widgets\WidgetConfiguration;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\HtmlString;
 use Siteman\Cms\Pages\Concerns\IsProtectedPage;
@@ -50,9 +50,13 @@ class SiteHealthPage extends Page
     public function content(Schema $schema): Schema
     {
         $lastRanAt = app(ResultStore::class)->latestResults()?->finishedAt;
+        if ($lastRanAt) {
+            $lastRanAt = (new Carbon($lastRanAt));
+        }
+
         return $schema->components([
-            Text::make(new HtmlString(__('siteman::site-health.notifications.check_results', ['lastRanAt' => $lastRanAt->diffForHumans()])))
-                ->color($lastRanAt->diffInMinutes() > 5 ? 'danger' : 'info')
+            Text::make(new HtmlString(__('siteman::site-health.notifications.check_results', ['lastRanAt' => $lastRanAt?->diffForHumans()])))
+                ->color((!$lastRanAt || $lastRanAt->diffInMinutes() > 5) ? 'danger' : 'info'),
         ])->extraAttributes(['style' => 'text-align: center;']);
     }
 
