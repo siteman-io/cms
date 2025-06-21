@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Resources\Pages\PageResource;
 
 class PagesTable
 {
