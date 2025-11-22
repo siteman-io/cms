@@ -2,4 +2,4 @@
 
 use Siteman\Cms\Tests\TestCase;
 
-uses(TestCase::class)->in('Feature');
+uses(TestCase::class)->in('Feature', 'Browser');

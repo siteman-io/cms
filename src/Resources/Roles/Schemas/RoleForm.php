@@ -73,7 +73,7 @@ class RoleForm
             ->label('')
             ->options($permissions)
             ->bulkToggleable()
-            ->disabled(fn (Role $record) => Siteman::isSuperAdmin($record))
+            ->disabled(fn (?Role $record) => $record && Siteman::isSuperAdmin($record))
             ->columnSpan('full')
             ->columns([
                 'sm' => 2,

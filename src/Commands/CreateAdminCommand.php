@@ -26,8 +26,6 @@ class CreateAdminCommand extends Command
             'password' => bcrypt($password),
         ]);
 
-        dump($user);
-
         $user->assignRole(Siteman::createSuperAdminRole());
 
         $this->components->info('User successfully created. You can now log in at '.Siteman::getLoginUrl());

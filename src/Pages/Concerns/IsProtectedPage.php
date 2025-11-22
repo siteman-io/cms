@@ -4,6 +4,7 @@ namespace Siteman\Cms\Pages\Concerns;
 
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Str;
 
 trait IsProtectedPage
 {
@@ -33,7 +34,7 @@ trait IsProtectedPage
 
     public static function getPermissionName(): string
     {
-        return 'view_page::'.\Str::snake(class_basename(static::class));
+        return 'page_'.class_basename(static::class);
     }
 
     public static function shouldRegisterNavigation(array $parameters = []): bool
