@@ -31,3 +31,5 @@ phpstan.neon
 /docs/.vitepress/cache
 /coverage
 CLAUDE.md
+.mcp.json
+.junie
