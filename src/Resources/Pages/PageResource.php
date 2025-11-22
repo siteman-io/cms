@@ -107,6 +107,13 @@ class PageResource extends Resource
                             Hidden::make('is_slug_changed_manually')
                                 ->default(false)
                                 ->dehydrated(false),
+                            Select::make('parent_id')
+                                ->label(__('siteman::page.fields.parent_id.label'))
+                                ->helperText(__('siteman::page.fields.parent_id.helper-text'))
+                                ->searchable()
+                                ->preload()
+                                ->relationship('parent', 'title')
+                                ->nullable(),
                             DateTimePicker::make('published_at')
                                 ->label('siteman::page.fields.published_at.label')
                                 ->translateLabel()

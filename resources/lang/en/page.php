@@ -41,6 +41,10 @@ return [
             'label' => 'Published at',
             'helper-text' => 'The date when the post will be published.',
         ],
+        'parent_id' => [
+            'label' => 'Parent Page',
+            'helper-text' => 'Select a parent page to create a hierarchy. Leave empty for a root page.',
+        ],
         'layout' => [
             'label' => 'Layout',
             'helper-text' => 'Choose the lout for the post',
