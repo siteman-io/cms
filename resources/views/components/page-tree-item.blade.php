@@ -31,6 +31,7 @@
 
             <button
                 wire:click="selectPage({{ $item->getKey() }})"
+                data-page-id="{{ $item->getKey() }}"
                 class="flex grow gap-2 text-left hover:text-primary-100 focus:outline-hidden focus:text-primary-500"
             >
                 <div

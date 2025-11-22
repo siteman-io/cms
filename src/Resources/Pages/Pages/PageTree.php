@@ -12,6 +12,29 @@ class PageTree extends ListRecords
 {
     protected static string $resource = PageResource::class;
 
+    public ?int $selectedPageId = null;
+
+    protected $listeners = [
+        'page-selected' => 'onPageSelected',
+    ];
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        // Get selectedPageId from query parameter and cast to int
+        $selectedPageId = request()->query('selectedPageId');
+        $this->selectedPageId = $selectedPageId ? (int) $selectedPageId : null;
+    }
+
+    public function onPageSelected(int $pageId): void
+    {
+        $this->selectedPageId = $pageId;
+
+        // Update URL to keep it bookmarkable
+        $this->dispatch('update-url', ['selectedPageId' => $pageId]);
+    }
+
     public function getView(): string
     {
         return 'siteman::resources.page.pages.page-tree';
