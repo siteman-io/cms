@@ -1,0 +1,13 @@
+{
+    "agents": [
+        "claude_code"
+    ],
+    "editors": [
+        "claude_code",
+        "phpstorm"
+    ],
+    "guidelines": [
+        "filament/filament"
+    ],
+    "herd_mcp": false
+}

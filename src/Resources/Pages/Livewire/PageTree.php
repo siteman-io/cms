@@ -43,13 +43,68 @@ class PageTree extends Component implements HasActions, HasForms
         return Action::make('delete')
             ->label(__('filament-actions::delete.single.label'))
             ->visible(fn (): bool => auth()->check() && auth()->user()->can('delete_page'))
-            ->action(function (array $arguments): void {
+            ->requiresConfirmation()
+            ->modalDescription(function (array $arguments): ?string {
+                if (!isset($arguments['id'])) {
+                    return null;
+                }
+
                 $page = Page::query()->where('id', $arguments['id'])->first();
 
-                if ($page) {
-                    $this->dispatch('page:deleted', $page->id);
+                if (!$page) {
+                    return null;
+                }
+
+                if ($page->children()->count() > 0) {
+                    return __('siteman::page.tree.delete.has_children_description');
+                }
+
+                return __('siteman::page.tree.delete.confirm_description');
+            })
+            ->schema(function (array $arguments): array {
+                if (!isset($arguments['id'])) {
+                    return [];
+                }
+
+                $page = Page::query()->where('id', $arguments['id'])->first();
+
+                if (!$page || $page->children()->count() === 0) {
+                    return [];
+                }
+
+                return [
+                    \Filament\Forms\Components\Radio::make('delete_strategy')
+                        ->label(__('siteman::page.tree.delete.strategy_label'))
+                        ->options([
+                            'cascade' => __('siteman::page.tree.delete.cascade_option'),
+                            'reassign' => __('siteman::page.tree.delete.reassign_option'),
+                        ])
+                        ->default('cascade')
+                        ->required(),
+                ];
+            })
+            ->action(function (array $arguments, array $data): void {
+                $page = Page::query()->where('id', $arguments['id'])->first();
+
+                if (!$page) {
+                    return;
+                }
+
+                $hasChildren = $page->children()->count() > 0;
+
+                if ($hasChildren) {
+                    $strategy = $data['delete_strategy'] ?? 'cascade';
+
+                    if ($strategy === 'cascade') {
+                        $page->cascadeDelete();
+                    } elseif ($strategy === 'reassign') {
+                        $page->deleteAndReassignChildren();
+                    }
+                } else {
                     $page->delete();
                 }
+
+                $this->dispatch('page:deleted', $page->id);
             });
     }
 

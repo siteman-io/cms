@@ -20,6 +20,13 @@ return [
             'collapse' => 'Collapse',
             'expand' => 'Expand',
         ],
+        'delete' => [
+            'confirm_description' => 'Are you sure you want to delete this page?',
+            'has_children_description' => 'This page has child pages. Please choose how to handle them:',
+            'strategy_label' => 'What should happen to the child pages?',
+            'cascade_option' => 'Delete all child pages',
+            'reassign_option' => 'Move child pages to parent level',
+        ],
     ],
     'fields' => [
         'title' => [
