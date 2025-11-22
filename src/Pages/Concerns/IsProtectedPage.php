@@ -4,7 +4,6 @@ namespace Siteman\Cms\Pages\Concerns;
 
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Str;
 
 trait IsProtectedPage
 {

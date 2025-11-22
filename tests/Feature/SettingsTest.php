@@ -28,7 +28,7 @@ it('can update settings', function () {
 
     $page->fillForm(['site_name' => 'test'], 'generalSettingsForm')
         ->call('save', 'general')
-        ->assertHasNoFormErrors(form:'generalSettingsForm');
+        ->assertHasNoFormErrors(form: 'generalSettingsForm');
 
     expect(app(\Siteman\Cms\Settings\GeneralSettings::class)->site_name)->toBe('test');
 });

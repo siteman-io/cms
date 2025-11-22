@@ -28,6 +28,18 @@ class PageFactory extends Factory
         ];
     }
 
+    public function withChildren(int|array|PageFactory $children = 2): static
+    {
+        if (is_int($children)) {
+            $children = Page::factory($children);
+        }
+        if (is_array($children)) {
+            $children = Page::factory()->sequence($children);
+        }
+
+        return $this->has($children, 'children');
+    }
+
     public function published(?Carbon $publishedAt = null): static
     {
         return $this->state(fn (array $attributes) => [
