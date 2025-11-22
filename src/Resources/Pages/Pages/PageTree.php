@@ -12,6 +12,11 @@ class PageTree extends ListRecords
 {
     protected static string $resource = PageResource::class;
 
+    public function getView(): string
+    {
+        return 'siteman::resources.page.pages.page-tree';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

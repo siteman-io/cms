@@ -67,6 +67,14 @@ class Page extends Model implements Feedable, HasMedia
         });
 
         static::saving(function (self $page) {
+            // Validate maximum nesting depth before saving
+            if ($page->parent_id !== null) {
+                $depth = $page->calculateDepth($page->parent_id);
+                if ($depth >= 3) {
+                    throw new \InvalidArgumentException('Maximum nesting depth of 3 levels exceeded.');
+                }
+            }
+
             // Validate circular reference before saving
             if ($page->parent_id !== null && $page->exists) {
                 if ($page->wouldCreateCircularReference($page->parent_id)) {
@@ -75,9 +83,39 @@ class Page extends Model implements Feedable, HasMedia
             }
 
             $page->slug = '/'.ltrim($page->slug, '/');
-            $prefix = $page->parent_id !== null ? $page->parent->computed_slug : '';
+
+            // Reload parent if parent_id changed to get fresh computed_slug
+            if ($page->parent_id !== null) {
+                $parent = $page->isDirty('parent_id')
+                    ? static::find($page->parent_id)
+                    : $page->parent;
+                $prefix = $parent ? $parent->computed_slug : '';
+            } else {
+                $prefix = '';
+            }
+
             $page->computed_slug = $prefix.$page->slug;
         });
+    }
+
+    /**
+     * Calculate the depth of the tree if this page were to have the given parent.
+     */
+    protected function calculateDepth(?int $parentId): int
+    {
+        if ($parentId === null) {
+            return 0; // Root level
+        }
+
+        $depth = 1; // Starting from level 1 (has a parent)
+        $currentParent = static::find($parentId);
+
+        while ($currentParent && $currentParent->parent_id !== null) {
+            $depth++;
+            $currentParent = $currentParent->parent;
+        }
+
+        return $depth;
     }
 
     /**

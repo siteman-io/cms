@@ -15,6 +15,7 @@ return [
     'tree' => [
         'title' => 'Page Tree',
         'empty' => 'No pages found.',
+        'empty_selection' => 'Please select a page from the tree to edit its content.',
         'items' => [
             'collapse' => 'Collapse',
             'expand' => 'Expand',

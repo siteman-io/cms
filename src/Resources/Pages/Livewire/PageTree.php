@@ -29,7 +29,8 @@ class PageTree extends Component implements HasActions, HasForms
     #[Computed]
     public function pages(): Collection
     {
-        return Page::tree(1)->get()->loadTreeRelationships()->toTree();
+        // Load complete tree (no depth limit) with all relationships
+        return Page::tree()->get()->toTree();
     }
 
     public function selectPage(int $pageId): void
