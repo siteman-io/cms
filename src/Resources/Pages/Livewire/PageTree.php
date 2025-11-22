@@ -42,6 +42,7 @@ class PageTree extends Component implements HasActions, HasForms
     {
         return Action::make('delete')
             ->label(__('filament-actions::delete.single.label'))
+            ->visible(fn (): bool => auth()->check() && auth()->user()->can('delete_page'))
             ->action(function (array $arguments): void {
                 $page = Page::query()->where('id', $arguments['id'])->first();
 
@@ -60,13 +61,16 @@ class PageTree extends Component implements HasActions, HasForms
 
         // Process items in chunks of 200 to handle potentially large number of pages
         collect($order)->chunk(200)->each(function ($chunk, $chunkIndex) use ($parentId) {
+            // Reset keys to 0-based indexing for correct order calculation
+            $chunk = $chunk->values();
+
             // Build parameterized CASE statement for the order column
-            $orderCases = collect($chunk)
+            $orderCases = $chunk
                 ->map(fn ($id, $index): string => 'WHEN id = ? THEN ?')
                 ->implode(' ');
 
             // Collect all bind values: order case pairs, parent_id, and IDs for WHERE IN
-            $caseBindings = collect($chunk)
+            $caseBindings = $chunk
                 ->flatMap(fn ($id, $index) => [$id, ($chunkIndex * 200) + $index + 1])
                 ->toArray();
 

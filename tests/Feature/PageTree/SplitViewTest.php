@@ -10,7 +10,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 it('loads split view page without errors', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
 
     get(PageResource::getUrl('tree'))
         ->assertOk()
@@ -18,7 +18,7 @@ it('loads split view page without errors', function () {
 });
 
 it('shows empty state when no page is selected', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
 
     get(PageResource::getUrl('tree'))
         ->assertOk()
@@ -26,7 +26,7 @@ it('shows empty state when no page is selected', function () {
 });
 
 it('tracks selected page ID from URL parameter', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
 
     $page = Page::factory()->create([
         'title' => 'Test Page',
@@ -41,7 +41,7 @@ it('tracks selected page ID from URL parameter', function () {
 });
 
 it('loads edit form when page is selected', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
 
     $page = Page::factory()->create([
         'title' => 'Test Page',
@@ -56,7 +56,7 @@ it('loads edit form when page is selected', function () {
 });
 
 it('updates edit panel when selecting different pages', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
 
     $page1 = Page::factory()->create([
         'title' => 'First Page',
@@ -84,7 +84,7 @@ it('updates edit panel when selecting different pages', function () {
 });
 
 it('listens to page-selected event and updates selectedPageId', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
 
     $page = Page::factory()->create([
         'title' => 'Test Page',

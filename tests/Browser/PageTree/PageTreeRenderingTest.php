@@ -7,7 +7,7 @@ use Workbench\App\Models\User;
 use function Pest\Laravel\actingAs;
 
 beforeEach(function () {
-    actingAs(User::factory()->withPermissions(['view_any_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
 });
 
 it('renders tree structure with nested pages', function () {
