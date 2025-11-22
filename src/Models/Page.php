@@ -159,6 +159,64 @@ class Page extends Model implements Feedable, HasMedia
     }
 
     /**
+     * Override delete to prevent deleting pages with children.
+     */
+    public function delete(): ?bool
+    {
+        // Check if page has children (only if not in a cascade or reassign operation)
+        if (!$this->skipChildrenCheck && $this->children()->count() > 0) {
+            throw new \RuntimeException('Cannot delete page with children. Please reassign or cascade delete children first.');
+        }
+
+        return parent::delete();
+    }
+
+    /**
+     * Flag to skip children check when deleting.
+     */
+    protected bool $skipChildrenCheck = false;
+
+    /**
+     * Delete this page and all its descendants (cascade delete).
+     */
+    public function cascadeDelete(): void
+    {
+        // Get all descendants
+        $descendants = $this->descendants()->get();
+
+        // Delete all descendants first (bottom-up)
+        foreach ($descendants->reverse() as $descendant) {
+            $descendant->skipChildrenCheck = true;
+            $descendant->delete();
+        }
+
+        // Delete this page
+        $this->skipChildrenCheck = true;
+        $this->delete();
+    }
+
+    /**
+     * Delete this page and reassign children to the grandparent (or root if no grandparent).
+     */
+    public function deleteAndReassignChildren(): void
+    {
+        $newParentId = $this->parent_id; // Grandparent ID (or null for root)
+
+        // Get children before updating
+        $children = $this->children()->get();
+
+        // Update all direct children to have the grandparent as parent
+        foreach ($children as $child) {
+            $child->parent_id = $newParentId;
+            $child->save(); // This will trigger the saving event and recalculate computed_slug
+        }
+
+        // Now delete this page (no children left, so delete() will work)
+        $this->skipChildrenCheck = true;
+        $this->delete();
+    }
+
+    /**
      * Scope a query to only include published posts.
      */
     public function scopePublished(Builder $query): Builder
