@@ -23,6 +23,12 @@ return new class extends Migration
             $table->unsignedInteger('order')->default(0);
             $table->timestamps();
             $table->softDeletes();
+
+            // Indexes for tree queries and ordering
+            $table->index('parent_id');
+            $table->index('order');
+            $table->index(['parent_id', 'order']); // Composite index for efficient sibling ordering
+            $table->index('type'); // For filtering by page type
         });
     }
 
