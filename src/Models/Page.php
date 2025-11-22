@@ -67,10 +67,57 @@ class Page extends Model implements Feedable, HasMedia
         });
 
         static::saving(function (self $page) {
+            // Validate circular reference before saving
+            if ($page->parent_id !== null && $page->exists) {
+                if ($page->wouldCreateCircularReference($page->parent_id)) {
+                    throw new \InvalidArgumentException('Cannot set parent: this would create a circular reference.');
+                }
+            }
+
             $page->slug = '/'.ltrim($page->slug, '/');
             $prefix = $page->parent_id !== null ? $page->parent->computed_slug : '';
             $page->computed_slug = $prefix.$page->slug;
         });
+    }
+
+    /**
+     * Check if setting the given parent would create a circular reference.
+     */
+    protected function wouldCreateCircularReference(?int $parentId): bool
+    {
+        if ($parentId === null) {
+            return false;
+        }
+
+        // Cannot be parent of itself
+        if ($parentId === $this->id) {
+            return true;
+        }
+
+        // Check if the proposed parent is a descendant of this page
+        $parent = static::find($parentId);
+        if (!$parent) {
+            return false;
+        }
+
+        // Walk up the tree to check if we encounter this page
+        $currentParent = $parent;
+        $visited = [];
+        while ($currentParent && $currentParent->parent_id !== null) {
+            // Prevent infinite loop
+            if (in_array($currentParent->parent_id, $visited)) {
+                break;
+            }
+            $visited[] = $currentParent->parent_id;
+
+            if ($currentParent->parent_id === $this->id) {
+                return true; // Found circular reference
+            }
+
+            $currentParent = $currentParent->parent;
+        }
+
+        return false;
     }
 
     /**

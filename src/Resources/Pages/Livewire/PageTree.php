@@ -59,19 +59,25 @@ class PageTree extends Component implements HasActions, HasForms
 
         // Process items in chunks of 200 to handle potentially large number of pages
         collect($order)->chunk(200)->each(function ($chunk, $chunkIndex) use ($parentId) {
-            // Build a single CASE statement for the order column
+            // Build parameterized CASE statement for the order column
             $orderCases = collect($chunk)
-                ->map(fn ($id, $index): string => "WHEN id = {$id} THEN ".(($chunkIndex * 200) + $index + 1))
+                ->map(fn ($id, $index): string => 'WHEN id = ? THEN ?')
                 ->implode(' ');
 
-            // Update all pages in this chunk with a single query
-            // Using a raw query to properly handle the 'order' reserved keyword
+            // Collect all bind values: order case pairs, parent_id, and IDs for WHERE IN
+            $caseBindings = collect($chunk)
+                ->flatMap(fn ($id, $index) => [$id, ($chunkIndex * 200) + $index + 1])
+                ->toArray();
+
+            $placeholders = implode(',', array_fill(0, count($chunk), '?'));
+
+            // Update all pages in this chunk with a single query using proper parameter binding
             DB::statement(
                 "UPDATE pages SET
                     parent_id = ?,
                     \"order\" = CASE {$orderCases} ELSE \"order\" END
-                WHERE id IN (".implode(',', $chunk->toArray()).')',
-                [$parentId]
+                WHERE id IN ({$placeholders})",
+                array_merge([$parentId], $caseBindings, $chunk->toArray())
             );
         });
 
