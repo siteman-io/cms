@@ -49,7 +49,7 @@
 
                 <div class="fi-section-content-ctn">
                     <div class="fi-section-content p-6 overflow-y-auto max-h-[calc(100vh-16rem)]">
-                        <livewire:page-tree/>
+                        <livewire:page-tree :selected-page-id="$this->selectedPageId"/>
                     </div>
                 </div>
             </section>

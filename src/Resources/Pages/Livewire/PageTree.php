@@ -23,6 +23,7 @@ use Siteman\Cms\Models\Page;
  *
  * @property Collection $pages Collection of root pages with descendants loaded as tree
  * @property array $activePageIds Array of page IDs that should be expanded in the tree
+ * @property int|null $selectedPageId ID of the currently selected page for highlighting
  */
 class PageTree extends Component implements HasActions, HasForms
 {
@@ -31,11 +32,24 @@ class PageTree extends Component implements HasActions, HasForms
 
     public array $activePageIds = [];
 
+    public ?int $selectedPageId = null;
+
     protected $listeners = [
         'page:deleted' => '$refresh',
         'page-reordered' => '$refresh',
         'page:updated' => '$refresh',
+        'page-selected' => 'onPageSelected',
     ];
+
+    /**
+     * Handle page selection event to update highlight.
+     *
+     * @param  int  $pageId  The ID of the selected page
+     */
+    public function onPageSelected(int $pageId): void
+    {
+        $this->selectedPageId = $pageId;
+    }
 
     /**
      * Get all pages as a hierarchical tree structure.
@@ -159,6 +173,12 @@ class PageTree extends Component implements HasActions, HasForms
             return;
         }
 
+        // Handle cases where 'null' string is passed instead of actual null
+        // This can happen when JavaScript sends null values
+        if ($parentId === 'null' || $parentId === '0' || $parentId === 0) {
+            $parentId = null;
+        }
+
         try {
             DB::transaction(function () use ($order, $parentId) {
                 // Process items in chunks of 200 to handle potentially large number of pages
@@ -173,10 +193,15 @@ class PageTree extends Component implements HasActions, HasForms
 
                     // Collect all bind values: order case pairs, parent_id, and IDs for WHERE IN
                     $caseBindings = $chunk
-                        ->flatMap(fn ($id, $index) => [$id, ($chunkIndex * 200) + $index + 1])
+                        ->flatMap(fn ($id, $index) => [(int)$id, ($chunkIndex * 200) + $index + 1])
                         ->toArray();
 
                     $placeholders = implode(',', array_fill(0, count($chunk), '?'));
+
+                    // Cast chunk IDs to integers for WHERE IN clause
+                    $chunkIds = $chunk->map(fn ($id) => (int) $id)->toArray();
+
+                    $bindings = array_merge([$parentId], $caseBindings, $chunkIds);
 
                     // Update all pages in this chunk with a single query using proper parameter binding
                     DB::statement(
@@ -184,7 +209,7 @@ class PageTree extends Component implements HasActions, HasForms
                             parent_id = ?,
                             \"order\" = CASE {$orderCases} ELSE \"order\" END
                         WHERE id IN ({$placeholders})",
-                        array_merge([$parentId], $caseBindings, $chunk->toArray())
+                        $bindings
                     );
                 });
             });
@@ -197,6 +222,9 @@ class PageTree extends Component implements HasActions, HasForms
             // Dispatch an event to update the UI
             $this->dispatch('page-reordered');
 
+            // Force Livewire to re-render the component
+            $this->dispatch('$refresh');
+
         } catch (\Exception $e) {
             // Show error notification
             Notification::make()
@@ -204,12 +232,6 @@ class PageTree extends Component implements HasActions, HasForms
                 ->body(__('An error occurred while reordering. Please try again.'))
                 ->danger()
                 ->send();
-
-            // Log error for debugging
-            logger()->error('PageTree reorder error', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
 
             // Refresh to show correct state
             unset($this->pages);

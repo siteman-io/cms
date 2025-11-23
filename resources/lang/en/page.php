@@ -11,8 +11,11 @@ return [
         'title' => 'Page Tree',
         'description' => 'Navigate and manage your page hierarchy',
         'empty' => 'No pages found.',
+        'empty_tree_title' => 'No pages yet',
+        'empty_tree_description' => 'Create your first page to get started',
         'empty_selection' => 'Please select a page from the tree to edit its content.',
         'empty_selection_title' => 'No page selected',
+        'reordering' => 'Reordering pages...',
         'items' => [
             'collapse' => 'Collapse',
             'expand' => 'Expand',
@@ -30,6 +33,10 @@ return [
             'title' => 'Moved to trash',
         ],
         'not_found' => 'Page not found',
+    ],
+    'status' => [
+        'published' => 'Published',
+        'draft' => 'Draft',
     ],
     'fields' => [
         'title' => [

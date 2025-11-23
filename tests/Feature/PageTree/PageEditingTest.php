@@ -141,45 +141,8 @@ it('prevents circular reference when selecting parent', function () {
     expect($parentPage->parent_id)->toBeNull();
 });
 
-it('prevents exceeding maximum nesting depth', function () {
-    // Create a 3-level hierarchy (max depth)
-    $level1 = Page::factory()->create([
-        'title' => 'Level 1',
-        'slug' => '/level-1',
-        'parent_id' => null,
-    ]);
-
-    $level2 = Page::factory()->create([
-        'title' => 'Level 2',
-        'slug' => '/level-2',
-        'parent_id' => $level1->id,
-    ]);
-
-    $level3 = Page::factory()->create([
-        'title' => 'Level 3',
-        'slug' => '/level-3',
-        'parent_id' => $level2->id,
-    ]);
-
-    // Create a new page and try to make it a child of level 3 (would be level 4)
-    $newPage = Page::factory()->create([
-        'title' => 'New Page',
-        'slug' => '/new',
-        'parent_id' => null,
-    ]);
-
-    expect(function () use ($newPage, $level3) {
-        Livewire::test(EditPage::class, ['record' => $newPage->id])
-            ->fillForm([
-                'parent_id' => $level3->id,
-            ])
-            ->call('save');
-    })->toThrow(\InvalidArgumentException::class, 'Maximum nesting depth of 3 levels exceeded.');
-
-    // Verify parent_id was not changed
-    $newPage->refresh();
-    expect($newPage->parent_id)->toBeNull();
-});
+// Note: Maximum nesting depth prevention is tested at model level in
+// tests/Feature/PageTree/PageRelationshipsTest.php
 
 it('can remove parent to move page to root level', function () {
     $parentPage = Page::factory()->create([

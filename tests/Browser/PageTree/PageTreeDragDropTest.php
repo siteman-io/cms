@@ -12,8 +12,8 @@ beforeEach(function () {
 
 // Note: Actual drag-and-drop simulation with SortableJS in browser automation is complex
 // and not reliably supported by Pest's browser plugin. The reorder functionality itself
-// is thoroughly tested in Feature tests (PageTreeComponentTest). These browser tests
-// verify the tree UI reflects hierarchy changes correctly.
+// is thoroughly tested in Feature tests (PageTreeComponentTest.php). These browser tests
+// verify the tree UI reflects hierarchy changes correctly after reordering operations.
 
 it('displays pages in hierarchical order', function () {
     $parent = Page::factory()->create(['slug' => '/parent']);

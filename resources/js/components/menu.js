@@ -10,11 +10,19 @@ export default ({ parentId }) => ({
             animation: 300,
             ghostClass: 'fi-sortable-ghost',
             dataIdAttr: 'data-sortable-item',
-            onSort: () => {
-                this.$wire.reorder(
-                    this.sortable.toArray(),
-                    this.parentId === 0 ? null : this.parentId,
-                )
+            onSort: (evt) => {
+                const order = this.sortable.toArray();
+                const actualParentId = this.parentId === 0 ? null : this.parentId;
+
+                // Debug logging
+                console.log('Reorder triggered:', {
+                    parentId: this.parentId,
+                    actualParentId: actualParentId,
+                    order: order,
+                    orderLength: order.length
+                });
+
+                this.$wire.reorder(order, actualParentId);
             },
         })
     },

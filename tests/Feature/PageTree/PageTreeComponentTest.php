@@ -293,6 +293,71 @@ it('reorder method handles large batches (200+ pages)', function () {
     expect(Page::where('parent_id', $parent->id)->count())->toBe(250);
 });
 
+it('reorder method handles string null from JavaScript for root level pages', function () {
+    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+
+    // Create 2 root pages
+    $page1 = Page::factory()->create([
+        'title' => 'Page 1',
+        'slug' => '/page-1',
+        'parent_id' => null,
+        'order' => 1,
+    ]);
+
+    $page2 = Page::factory()->create([
+        'title' => 'Page 2',
+        'slug' => '/page-2',
+        'parent_id' => null,
+        'order' => 2,
+    ]);
+
+    $component = livewire(PageTree::class);
+
+    // Test with string 'null' (which might come from JavaScript)
+    $component->call('reorder', [$page2->id, $page1->id], 'null');
+
+    // Refresh models
+    $page1->refresh();
+    $page2->refresh();
+
+    // Verify order was updated
+    expect($page2->order)->toBe(1);
+    expect($page1->order)->toBe(2);
+
+    // Verify parent_id is still null (not set to a string 'null')
+    expect($page1->parent_id)->toBeNull();
+    expect($page2->parent_id)->toBeNull();
+});
+
+it('loads pages with depth attribute in tree structure', function () {
+    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+
+    $level1 = Page::factory()->create(['title' => 'Level 1']);
+    $level2 = Page::factory()->create([
+        'title' => 'Level 2',
+        'parent_id' => $level1->id,
+    ]);
+    $level3 = Page::factory()->create([
+        'title' => 'Level 3',
+        'parent_id' => $level2->id,
+    ]);
+
+    $component = livewire(PageTree::class);
+
+    // Get pages as tree to verify depth attribute
+    $pages = $component->get('pages');
+    $tree = Page::tree()->get()->toTree();
+
+    // Root page should have depth 0
+    expect($tree->first()->depth)->toBe(0);
+
+    // Child should have depth 1
+    expect($tree->first()->children->first()->depth)->toBe(1);
+
+    // Grandchild should have depth 2
+    expect($tree->first()->children->first()->children->first()->depth)->toBe(2);
+});
+
 it('delete action removes page and dispatches event', function () {
     $page = Page::factory()->create([
         'title' => 'Test Page',
