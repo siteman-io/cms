@@ -86,6 +86,33 @@
                         </section>
                     @endif
 
+                    {{-- Read-Only Banner --}}
+                    @if($this->isFormReadOnly())
+                        <section class="fi-section">
+                            <div class="fi-section-content">
+                                <div class="rounded-lg bg-warning-50 dark:bg-warning-400/10 p-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-warning-600 dark:text-warning-400" fill="none"
+                                                 stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 class="text-sm font-medium text-warning-800 dark:text-warning-200">
+                                                {{ __('Read-Only Mode') }}
+                                            </h3>
+                                            <p class="mt-1 text-sm text-warning-700 dark:text-warning-300">
+                                                {{ __('You do not have permission to edit this page. All fields are disabled.') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    @endif
+
                     {{-- Edit Form --}}
                     <form wire:submit="save" class="space-y-6">
                         {{ $this->form }}

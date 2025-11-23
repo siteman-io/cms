@@ -61,5 +61,5 @@ it('supports URL state with selected page ID parameter', function () {
     $page = Page::factory()->create(['slug' => '/test']);
 
     visit(PageResource::getUrl('tree', ['selectedPageId' => $page->id]))
-        ->assertSee($page->slug); // Slug is visible in tree, verifying page loaded with URL param
+        ->assertSee($page->slug);
 });

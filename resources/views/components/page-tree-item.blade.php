@@ -80,11 +80,14 @@
             @php
                 //                $editAction = ($this->editAction)(['id' => $item->getKey()]);
                                 $deleteAction = ($this->deleteAction)(['id' => $item->getKey()]);
+                                $actions = array_filter([
+                                    //        $editAction->isVisible() ? $editAction : null,
+                                            $deleteAction->isVisible() ? $deleteAction : null,
+                                ]);
             @endphp
-            <x-filament-actions::group :actions="[
-//        $editAction->isVisible() ? $editAction : null,
-        $deleteAction->isVisible() ? $deleteAction : null,
-    ]"/>
+            @if(!empty($actions))
+                <x-filament-actions::group :actions="$actions"/>
+            @endif
         </div>
     </div>
 

@@ -129,6 +129,8 @@ it('refreshes when page:deleted event is received', function () {
 });
 
 it('refreshes when page-reordered event is received', function () {
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+
     $parent = Page::factory()->create([
         'title' => 'Parent',
         'slug' => '/parent',
@@ -164,6 +166,8 @@ it('refreshes when page-reordered event is received', function () {
 });
 
 it('reorder method updates page order and parent correctly', function () {
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+
     // Create parent page
     $parent = Page::factory()->create([
         'title' => 'Parent',
@@ -294,7 +298,7 @@ it('reorder method handles large batches (200+ pages)', function () {
 });
 
 it('reorder method handles string null from JavaScript for root level pages', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
 
     // Create 2 root pages
     $page1 = Page::factory()->create([

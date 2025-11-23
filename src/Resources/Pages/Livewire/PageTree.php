@@ -91,7 +91,7 @@ class PageTree extends Component implements HasActions, HasForms
     {
         return Action::make('delete')
             ->label(__('filament-actions::delete.single.label'))
-            ->visible(fn (): bool => auth()->check() && auth()->user()->can('delete_page'))
+            ->visible(fn (): bool => auth()->user() && auth()->user()->can('delete_page'))
             ->requiresConfirmation()
             ->modalDescription(function (array $arguments): ?string {
                 if (!isset($arguments['id'])) {
@@ -163,6 +163,7 @@ class PageTree extends Component implements HasActions, HasForms
      * Updates the order and parent_id of pages in the tree. Uses database transactions
      * and chunking to handle large numbers of pages efficiently. The order array contains
      * page IDs in their new order, and parentId indicates their new parent (null for root level).
+     * Requires update permission.
      *
      * @param  array<int, int>  $order  Array of page IDs in their new order
      * @param  string|null  $parentId  The new parent page ID (null for root level)
@@ -170,6 +171,17 @@ class PageTree extends Component implements HasActions, HasForms
     public function reorder(array $order, ?string $parentId = null): void
     {
         if (empty($order)) {
+            return;
+        }
+
+        // Check permission before reordering
+        if (auth()->user() && !auth()->user()->can('update_page')) {
+            Notification::make()
+                ->title(__('Unauthorized'))
+                ->body(__('You do not have permission to reorder pages.'))
+                ->danger()
+                ->send();
+
             return;
         }
 
@@ -242,6 +254,7 @@ class PageTree extends Component implements HasActions, HasForms
      * Configure the reorder action button for drag-and-drop.
      *
      * Returns an icon button that serves as the drag handle for reordering pages.
+     * Hidden when user lacks update permission.
      *
      * @return Action The configured reorder action
      */
@@ -254,7 +267,8 @@ class PageTree extends Component implements HasActions, HasForms
             ->iconButton()
             ->extraAttributes(['data-sortable-handle' => true, 'class' => 'cursor-move'])
             ->livewireClickHandlerEnabled(false)
-            ->size(Size::Small);
+            ->size(Size::Small)
+            ->visible(fn (): bool => auth()->user() && auth()->user()->can('update_page'));
     }
 
     /**

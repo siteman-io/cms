@@ -10,11 +10,6 @@ beforeEach(function () {
     actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
 });
 
-// Note: Actual drag-and-drop simulation with SortableJS in browser automation is complex
-// and not reliably supported by Pest's browser plugin. The reorder functionality itself
-// is thoroughly tested in Feature tests (PageTreeComponentTest.php). These browser tests
-// verify the tree UI reflects hierarchy changes correctly after reordering operations.
-
 it('displays pages in hierarchical order', function () {
     $parent = Page::factory()->create(['slug' => '/parent']);
     Page::factory()->create(['slug' => '/child-1', 'parent_id' => $parent->id]);

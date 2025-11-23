@@ -405,17 +405,6 @@ class DatabaseSeeder extends Seeder
                 'order' => 7,
             ]);
 
-        // Internal/Admin Pages (Level 1 with internal type)
-        Page::factory()
-            ->published()
-            ->create([
-                'title' => 'Dashboard',
-                'slug' => '/dashboard',
-                'author_id' => $user->id,
-                'type' => 'internal',
-                'order' => 8,
-            ]);
-
         Page::factory()
             ->published()
             ->withMarkdownBlock(true)

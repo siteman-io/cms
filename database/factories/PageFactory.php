@@ -34,7 +34,7 @@ class PageFactory extends Factory
             $children = Page::factory($children);
         }
         if (is_array($children)) {
-            $children = Page::factory()->sequence($children);
+            $children = Page::factory()->forEachSequence(...$children);
         }
 
         return $this->has($children, 'children');

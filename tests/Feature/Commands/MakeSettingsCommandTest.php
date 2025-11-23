@@ -6,7 +6,6 @@ use Siteman\Cms\Commands\MakeSettingsCommand;
 use function Pest\Laravel\artisan;
 
 it('creates a new settings class, form, and migration', function () {
-    // Mock the methods used in copyStubToApp
     File::shouldReceive('exists')
         ->andReturn(false);
 
@@ -21,7 +20,6 @@ it('creates a new settings class, form, and migration', function () {
     File::shouldReceive('put')
         ->times(3);
 
-    // Run the command
     artisan(MakeSettingsCommand::class, ['name' => 'ThemeSettings'])
         ->expectsOutputToContain('Settings class created successfully.')
         ->expectsOutputToContain('Settings Form class successfully created!')

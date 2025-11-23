@@ -11,9 +11,9 @@ beforeEach(function () {
 });
 
 it('renders tree with root and nested pages', function () {
-    $root1 = Page::factory()->create(['slug' => '/root-1']);
-    Page::factory()->create(['slug' => '/child-1', 'parent_id' => $root1->id]);
-    Page::factory()->create(['slug' => '/child-2', 'parent_id' => $root1->id]);
+    $root1 = Page::factory()
+        ->withChildren([['slug' => '/child-1'],['slug' => '/child-2']])
+        ->create(['slug' => '/root-1']);
     $root2 = Page::factory()->create(['slug' => '/root-2']);
 
     visit(PageResource::getUrl('tree'))

@@ -7,7 +7,6 @@ use Siteman\Cms\Commands\MakeThemeCommand;
 use function Pest\Laravel\artisan;
 
 it('creates a new theme', function () {
-    // Mock the methods used in copyStubToApp
     File::shouldReceive('exists')
         ->andReturn(false);
 
@@ -23,7 +22,6 @@ it('creates a new theme', function () {
             return str_contains($path, 'App/Themes/FancyTheme.php') && str_contains($content, 'stub content');
         });
 
-    // Mock the File facade
     File::shouldReceive('copyDirectory')
         ->once()
         ->withArgs(function ($source, $destination) {
@@ -46,7 +44,6 @@ it('creates a new theme', function () {
             && !str_contains($content, 'siteman::themes.blank'),
         );
 
-    // Run the command
     artisan(MakeThemeCommand::class, ['name' => 'FancyTheme'])
         ->expectsOutputToContain('Theme class created.')
         ->expectsOutputToContain('Theme views created.')

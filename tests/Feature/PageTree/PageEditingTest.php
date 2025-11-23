@@ -61,7 +61,6 @@ it('has parent selection field in edit form', function () {
         'parent_id' => null,
     ]);
 
-    // Verify we can fill the parent_id field (which proves it exists)
     Livewire::test(EditPage::class, ['record' => $page->id])
         ->fillForm([
             'parent_id' => $parentPage->id,
@@ -106,22 +105,21 @@ it('displays validation errors correctly in split view', function () {
 
     Livewire::test(EditPage::class, ['record' => $page->id])
         ->fillForm([
-            'title' => '', // Required field left empty
-            'slug' => '', // Required field left empty
+            'title' => '',
+            'slug' => '',
         ])
         ->call('save')
         ->assertHasFormErrors(['title', 'slug']);
 });
 
 it('prevents circular reference when selecting parent', function () {
-    // Create parent -> child relationship
     $parentPage = Page::factory()->create([
         'title' => 'Parent Page',
         'slug' => '/parent',
         'parent_id' => null,
     ]);
 
-    $childPage = Page::factory()->create([
+    $childPage = Page::factory()->state([
         'title' => 'Child Page',
         'slug' => '/child',
         'parent_id' => $parentPage->id,

@@ -147,6 +147,7 @@ class PageTreeSplitView extends Page implements HasForms
      *
      * Uses the PageResource form schema to ensure consistency.
      * Sets the form record to the selected page for proper relationship handling.
+     * Disables all fields if user lacks update permission.
      *
      * @param  Schema  $schema  The schema builder instance
      * @return Schema The configured form schema
@@ -159,6 +160,10 @@ class PageTreeSplitView extends Page implements HasForms
         // Set the model/record for relationship fields
         if ($this->selectedPage) {
             $schema->record($this->selectedPage);
+
+            // Disable all form fields if user lacks update permission
+            $canUpdate = auth()->check() && auth()->user()->can('update', $this->selectedPage);
+            $schema->disabled(!$canUpdate);
         } else {
             $schema->model(PageModel::class);
         }
@@ -170,10 +175,22 @@ class PageTreeSplitView extends Page implements HasForms
      * Save the form and update the selected page record.
      *
      * Validates form data, updates the page, shows notification, and refreshes the tree.
+     * Checks update permission before saving.
      */
     public function save(): void
     {
         if (!$this->selectedPage) {
+            return;
+        }
+
+        // Check permission before saving
+        if (!auth()->user()->can('update', $this->selectedPage)) {
+            Notification::make()
+                ->title(__('Unauthorized'))
+                ->body(__('You do not have permission to update this page.'))
+                ->danger()
+                ->send();
+
             return;
         }
 
@@ -252,40 +269,49 @@ class PageTreeSplitView extends Page implements HasForms
     /**
      * Get the header actions for the page.
      *
+     * Shows Create button only if user has create permission.
+     *
      * @return array<Action> Array of header actions (Create button)
      */
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->visible(fn (): bool => auth()->user()->can('create', PageModel::class)),
         ];
     }
 
     /**
-     * Get the form actions (Save, Cancel buttons).
+     * Get the form actions (Save, Cancel, Delete buttons).
+     *
+     * Buttons are hidden or disabled based on user permissions.
      *
      * @return array<Action> Array of form actions
      */
     protected function getFormActions(): array
     {
+        $canUpdate = $this->selectedPage
+            && auth()->user()->can('update', $this->selectedPage);
+
         return [
             Action::make('save')
                 ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
                 ->submit('save')
                 ->keyBindings(['mod+s'])
-                ->disabled(fn (): bool => !$this->selectedPage),
+                ->visible(fn (): bool => $canUpdate),
 
             Action::make('cancel')
                 ->label(__('filament-panels::resources/pages/edit-record.form.actions.cancel.label'))
                 ->action('cancel')
                 ->color('gray')
-                ->disabled(fn (): bool => !$this->selectedPage),
+                ->visible(fn (): bool => $canUpdate),
 
             DeleteAction::make()
                 ->record(fn (): ?Model => $this->selectedPage)
                 ->after(fn () => $this->onPageDeleted($this->selectedPage->id))
                 ->color('gray')
-                ->visible(fn (): bool => $this->selectedPage !== null),
+                ->visible(fn (): bool => $this->selectedPage
+                    && auth()->user()->can('delete', $this->selectedPage)),
         ];
     }
 
@@ -297,6 +323,20 @@ class PageTreeSplitView extends Page implements HasForms
     public function getTitle(): string
     {
         return __('siteman::page.tree.title');
+    }
+
+    /**
+     * Check if the form is read-only due to lack of permissions.
+     *
+     * @return bool True if form should be read-only
+     */
+    public function isFormReadOnly(): bool
+    {
+        if (!$this->selectedPage) {
+            return false;
+        }
+
+        return !auth()->user()->can('update', $this->selectedPage);
     }
 
     /**

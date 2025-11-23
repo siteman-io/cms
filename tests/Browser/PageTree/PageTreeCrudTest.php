@@ -30,7 +30,6 @@ it('can delete a leaf page without children via UI', function () {
         ->click('Delete')
         ->press('Confirm');
 
-    // Verify page is removed from UI
     visit(PageResource::getUrl('tree'))
         ->assertDontSee($page->slug);
 });
@@ -45,6 +44,3 @@ it('shows delete options modal for pages with children', function () {
         ->click('Delete')
         ->assertSee('This page has child pages');
 });
-
-// Note: Cascade and reassign delete logic is comprehensively tested in
-// tests/Feature/PageTree/PageRelationshipsTest.php
