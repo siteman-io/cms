@@ -13,7 +13,7 @@
     @page-reordered.window="open = {{ in_array($item->getKey(), $this->activePageIds) ? 'true' : 'false' }}"
 >
     <div
-        class="flex px-3 py-2 bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
+        class="flex px-3 py-2 fi-section"
     >
         <div class="flex grow items-center gap-2">
             {{ $this->reorderAction }}
@@ -32,7 +32,7 @@
             <button
                 wire:click="selectPage({{ $item->getKey() }})"
                 data-page-id="{{ $item->getKey() }}"
-                class="flex grow gap-2 text-left hover:text-primary-100 focus:outline-hidden focus:text-primary-500"
+                class="flex grow gap-2 text-left transition-colors hover:text-primary-600 focus:outline-none focus:text-primary-600 dark:hover:text-primary-400 dark:focus:text-primary-400"
             >
                 <div
                     class="hidden overflow-hidden text-sm text-gray-500 sm:block dark:text-gray-400 whitespace-nowrap text-ellipsis">

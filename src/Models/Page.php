@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Carbon;
@@ -99,7 +98,13 @@ class Page extends Model implements Feedable, HasMedia
     }
 
     /**
-     * Calculate the depth of the tree if this page were to have the given parent.
+     * Calculate the depth level in the tree if this page were to have the given parent.
+     *
+     * Walks up the tree from the proposed parent to count the depth level.
+     * Used to enforce the maximum nesting depth of 3 levels.
+     *
+     * @param  int|null  $parentId  The proposed parent page ID (null for root level)
+     * @return int The depth level (0 for root, 1 for first level, 2 for second level, etc.)
      */
     protected function calculateDepth(?int $parentId): int
     {
@@ -120,6 +125,13 @@ class Page extends Model implements Feedable, HasMedia
 
     /**
      * Check if setting the given parent would create a circular reference.
+     *
+     * Prevents a page from becoming its own ancestor by walking up the tree
+     * from the proposed parent to check if this page appears in the ancestry chain.
+     * Also prevents a page from being its own parent.
+     *
+     * @param  int|null  $parentId  The proposed parent page ID
+     * @return bool True if setting this parent would create a circular reference, false otherwise
      */
     protected function wouldCreateCircularReference(?int $parentId): bool
     {
@@ -178,6 +190,10 @@ class Page extends Model implements Feedable, HasMedia
 
     /**
      * Delete this page and all its descendants (cascade delete).
+     *
+     * Recursively deletes all descendant pages before deleting this page.
+     * Processes descendants in reverse order (bottom-up) to avoid foreign key issues.
+     * Skips the children check during deletion by setting the skipChildrenCheck flag.
      */
     public function cascadeDelete(): void
     {
@@ -197,6 +213,11 @@ class Page extends Model implements Feedable, HasMedia
 
     /**
      * Delete this page and reassign children to the grandparent (or root if no grandparent).
+     *
+     * Moves all direct children up one level in the hierarchy before deleting this page.
+     * Children will be reassigned to this page's parent (grandparent), or to root level
+     * if this page is at root level. The computed_slug of reassigned children will be
+     * automatically recalculated via the saving event.
      */
     public function deleteAndReassignChildren(): void
     {
@@ -273,21 +294,6 @@ class Page extends Model implements Feedable, HasMedia
     }
 
     protected static string $factory = PageFactory::class;
-    //
-    //    public function parent(): BelongsTo
-    //    {
-    //        return $this->belongsTo(static::class);
-    //    }
-    //
-    //    /**
-    //     * @return HasMany<static, $this>
-    //     */
-    //    public function children(): HasMany
-    //    {
-    //        return $this
-    //            ->hasMany(static::class, 'parent_id')
-    //            ->orderBy('order');
-    //    }
 
     public function toFeedItem(): FeedItem
     {

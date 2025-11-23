@@ -3,7 +3,7 @@
 use Livewire\Livewire;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\PageResource;
-use Siteman\Cms\Resources\Pages\Pages\PageTree;
+use Siteman\Cms\Resources\Pages\Pages\PageTreeSplitView;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -49,10 +49,11 @@ it('loads edit form when page is selected', function () {
         'parent_id' => null,
     ]);
 
-    get(PageResource::getUrl('tree', ['selectedPageId' => $page->id]))
-        ->assertOk()
-        ->assertSeeLivewire('siteman.cms.resources.pages.pages.edit-page')
-        ->assertSee($page->title);
+    // Test that the page loads with selected page and form is ready
+    Livewire::test(PageTreeSplitView::class, ['selectedPageId' => $page->id])
+        ->assertSet('selectedPageId', $page->id)
+        ->assertSet('selectedPage.id', $page->id)
+        ->assertFormExists();
 });
 
 it('updates edit panel when selecting different pages', function () {
@@ -70,17 +71,14 @@ it('updates edit panel when selecting different pages', function () {
         'parent_id' => null,
     ]);
 
-    // Verify we can select and load different pages
-    // Both titles will be visible (in tree and edit form) so we just verify each loads correctly
-    get(PageResource::getUrl('tree', ['selectedPageId' => $page1->id]))
-        ->assertOk()
-        ->assertSeeLivewire('siteman.cms.resources.pages.pages.edit-page')
-        ->assertSee($page1->title);
+    // Verify we can load different pages - check via Livewire component state
+    Livewire::test(PageTreeSplitView::class, ['selectedPageId' => $page1->id])
+        ->assertSet('selectedPageId', $page1->id)
+        ->assertSet('selectedPage.id', $page1->id);
 
-    get(PageResource::getUrl('tree', ['selectedPageId' => $page2->id]))
-        ->assertOk()
-        ->assertSeeLivewire('siteman.cms.resources.pages.pages.edit-page')
-        ->assertSee($page2->title);
+    Livewire::test(PageTreeSplitView::class, ['selectedPageId' => $page2->id])
+        ->assertSet('selectedPageId', $page2->id)
+        ->assertSet('selectedPage.id', $page2->id);
 });
 
 it('listens to page-selected event and updates selectedPageId', function () {
@@ -92,9 +90,32 @@ it('listens to page-selected event and updates selectedPageId', function () {
         'parent_id' => null,
     ]);
 
-    Livewire::test(PageTree::class)
+    Livewire::test(PageTreeSplitView::class)
         ->assertSet('selectedPageId', null)
         ->dispatch('page-selected', $page->id)
         ->assertSet('selectedPageId', $page->id)
         ->assertDispatched('update-url');
+});
+
+it('can save changes to selected page', function () {
+    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
+
+    $page = Page::factory()->create([
+        'title' => 'Original Title',
+        'slug' => '/original',
+        'parent_id' => null,
+    ]);
+
+    Livewire::test(PageTreeSplitView::class, ['selectedPageId' => $page->id])
+        ->assertSet('selectedPageId', $page->id)
+        ->fillForm([
+            'title' => 'Updated Title',
+            'slug' => '/updated',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors()
+        ->assertDispatched('page:updated');
+
+    expect($page->fresh()->title)->toBe('Updated Title');
+    expect($page->fresh()->slug)->toBe('/updated');
 });

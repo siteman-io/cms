@@ -51,8 +51,8 @@ class CreateAction extends \Filament\Actions\CreateAction
                 return $data;
             })
             ->after(function ($record) {
-                // Redirect to ListPages with the newly created page selected
-                return redirect()->to(PageResource::getUrl('index', ['selectedPageId' => $record->id]));
+                // Redirect to tree split view with the newly created page selected
+                return redirect()->to(PageResource::getUrl('tree', ['selectedPageId' => $record->id]));
             });
     }
 }

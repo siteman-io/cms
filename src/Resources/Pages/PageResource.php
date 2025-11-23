@@ -22,7 +22,7 @@ use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Pages\CreatePage;
 use Siteman\Cms\Resources\Pages\Pages\EditPage;
 use Siteman\Cms\Resources\Pages\Pages\ListPages;
-use Siteman\Cms\Resources\Pages\Pages\PageTree;
+use Siteman\Cms\Resources\Pages\Pages\PageTreeSplitView;
 use Siteman\Cms\Resources\Pages\Tables\PagesTable;
 
 class PageResource extends Resource
@@ -166,7 +166,7 @@ class PageResource extends Resource
     {
         return [
             'index' => ListPages::route('/'),
-            'tree' => PageTree::route('/tree'),
+            'tree' => PageTreeSplitView::route('/tree'),
             'create' => CreatePage::route('/create'),
             'edit' => EditPage::route('/{record}/edit'),
         ];

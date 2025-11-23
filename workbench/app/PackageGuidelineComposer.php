@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace Workbench\App;
 
 use Laravel\Boost\Install\GuidelineComposer;
@@ -8,7 +9,7 @@ use Laravel\Roster\Roster;
 
 class PackageGuidelineComposer extends GuidelineComposer
 {
-    protected string $userGuidelineDir = __DIR__ . '/../../.ai/guidelines';
+    protected string $userGuidelineDir = __DIR__.'/../../.ai/guidelines';
 
     public function __construct(protected Roster $roster, protected Herd $herd)
     {

@@ -7,15 +7,12 @@ return [
         'group' => 'Content',
         'icon' => 'heroicon-o-book-open',
     ],
-    'notifications' => [
-        'deleted' => [
-            'title' => 'Moved to trash',
-        ],
-    ],
     'tree' => [
         'title' => 'Page Tree',
+        'description' => 'Navigate and manage your page hierarchy',
         'empty' => 'No pages found.',
         'empty_selection' => 'Please select a page from the tree to edit its content.',
+        'empty_selection_title' => 'No page selected',
         'items' => [
             'collapse' => 'Collapse',
             'expand' => 'Expand',
@@ -27,6 +24,12 @@ return [
             'cascade_option' => 'Delete all child pages',
             'reassign_option' => 'Move child pages to parent level',
         ],
+    ],
+    'notifications' => [
+        'deleted' => [
+            'title' => 'Moved to trash',
+        ],
+        'not_found' => 'Page not found',
     ],
     'fields' => [
         'title' => [

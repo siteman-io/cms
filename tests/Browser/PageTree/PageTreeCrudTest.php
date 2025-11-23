@@ -26,7 +26,7 @@ it('can delete a leaf page without children', function () {
 
     visit(PageResource::getUrl('tree'))
         ->assertSee($page->slug)
-        ->click('[data-sortable-item="' . $page->id . '"] > div > div:last-child [aria-label="Actions"]')
+        ->click('[data-sortable-item="'.$page->id.'"] > div > div:last-child [aria-label="Actions"]')
         ->click('Delete')
         ->press('Confirm');
 
@@ -43,7 +43,7 @@ it('shows delete options modal for pages with children', function () {
 
     visit(PageResource::getUrl('tree'))
         ->assertSee($parent->slug)
-        ->click('[data-sortable-item="' . $parent->id . '"] > div > div:last-child [aria-label="Actions"]')
+        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:last-child [aria-label="Actions"]')
         ->click('Delete')
         ->assertSee('This page has child pages');
 });
@@ -53,7 +53,7 @@ it('can cascade delete parent and all children', function () {
     $child = Page::factory()->create(['slug' => '/child', 'parent_id' => $parent->id]);
 
     visit(PageResource::getUrl('tree'))
-        ->click('[data-sortable-item="' . $parent->id . '"] > div > div:last-child [aria-label="Actions"]')
+        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:last-child [aria-label="Actions"]')
         ->click('Delete')
         ->click('Delete all child pages') // Select cascade option
         ->press('Confirm');
@@ -72,7 +72,7 @@ it('can reassign children before deleting parent', function () {
     $child = Page::factory()->create(['slug' => '/child', 'parent_id' => $parent->id]);
 
     visit(PageResource::getUrl('tree'))
-        ->click('[data-sortable-item="' . $parent->id . '"] > div > div:last-child [aria-label="Actions"]')
+        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:last-child [aria-label="Actions"]')
         ->click('Delete')
         ->click('Move child pages to parent level') // Select reassign option
         ->press('Confirm');
