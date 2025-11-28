@@ -59,12 +59,6 @@
             </button>
         </div>
         <div class="flex items-center gap-2">
-            {{-- Depth indicator --}}
-            @if(isset($item->depth))
-                <x-filament::badge color="gray" size="xs" class="hidden lg:block p-1">
-                    L{{ $item->depth + 1 }}
-                </x-filament::badge>
-            @endif
             @if($item->published_at)
                 <x-filament::badge color="success" size="xs" class="hidden md:block p-1">
                     {{ __('siteman::page.status.published') }}
@@ -74,16 +68,16 @@
                     {{ __('siteman::page.status.draft') }}
                 </x-filament::badge>
             @endif
-            <x-filament::badge :color="$item->type === 'internal' ? 'primary' : 'gray'" size="xs" class="hidden sm:block p-1">
+            <x-filament::badge color="primary" size="xs" class="hidden sm:block p-1">
                 {{ $item->type }}
             </x-filament::badge>
             @php
-                //                $editAction = ($this->editAction)(['id' => $item->getKey()]);
-                                $deleteAction = ($this->deleteAction)(['id' => $item->getKey()]);
-                                $actions = array_filter([
-                                    //        $editAction->isVisible() ? $editAction : null,
-                                            $deleteAction->isVisible() ? $deleteAction : null,
-                                ]);
+                $createChildAction = ($this->createChildAction)(['id' => $item->getKey()]);
+                $deleteAction = ($this->deleteAction)(['id' => $item->getKey()]);
+                $actions = array_filter([
+                    $createChildAction->isVisible() ? $createChildAction : null,
+                    $deleteAction->isVisible() ? $deleteAction : null,
+                ]);
             @endphp
             @if(!empty($actions))
                 <x-filament-actions::group :actions="$actions"/>

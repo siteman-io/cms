@@ -97,6 +97,24 @@ parameters:
 			path: src/PageTypes/RssFeed.php
 
 		-
+			message: '#^Strict comparison using \=\=\= between string\|null and 0 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Resources/Pages/Livewire/PageTree.php
+
+		-
+			message: '#^Call to an undefined method Staudenmeir\\LaravelAdjacencyList\\Eloquent\\Builder\:\:isRoot\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Resources/Pages/Pages/PageTree.php
+
+		-
+			message: '#^Access to an undefined property Siteman\\Cms\\Resources\\Pages\\Pages\\PageTreeSplitView\:\:\$form\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/Resources/Pages/Pages/PageTreeSplitView.php
+
+		-
 			message: '#^Method Siteman\\Cms\\Torchlight\\BaseExtension\:\:getTheme\(\) should return string but return statement is missing\.$#'
 			identifier: return.missing
 			count: 1

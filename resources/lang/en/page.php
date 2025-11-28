@@ -27,6 +27,9 @@ return [
             'cascade_option' => 'Delete all child pages',
             'reassign_option' => 'Move child pages to parent level',
         ],
+        'actions' => [
+            'create_child' => 'Create Child Page',
+        ],
     ],
     'notifications' => [
         'deleted' => [

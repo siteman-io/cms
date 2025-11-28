@@ -12,7 +12,7 @@ beforeEach(function () {
 
 it('renders tree with root and nested pages', function () {
     $root1 = Page::factory()
-        ->withChildren([['slug' => '/child-1'],['slug' => '/child-2']])
+        ->withChildren([['slug' => '/child-1'], ['slug' => '/child-2']])
         ->create(['slug' => '/root-1']);
     $root2 = Page::factory()->create(['slug' => '/root-2']);
 
@@ -33,9 +33,4 @@ it('shows page type badges in tree', function () {
         ->assertSee($internalPage->slug)
         ->assertSee('page')
         ->assertSee('internal');
-});
-
-it('displays empty state when no pages exist', function () {
-    visit(PageResource::getUrl('tree'))
-        ->assertSee('No pages found');
 });

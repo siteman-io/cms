@@ -5,14 +5,18 @@ namespace Siteman\Cms\Resources\Pages\Livewire;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Size;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 
 /**
@@ -76,6 +80,84 @@ class PageTree extends Component implements HasActions, HasForms
     public function selectPage(int $pageId): void
     {
         $this->dispatch('page-selected', $pageId);
+    }
+
+    /**
+     * Configure the create child action for pages in the tree.
+     *
+     * Opens the create page with the parent field pre-filled.
+     * Disabled at max depth (level 3) and respects create permission.
+     *
+     * @return Action The configured create child action
+     */
+    public function createChildAction(): Action
+    {
+        return Action::make('createChild')
+            ->label(__('siteman::page.tree.actions.create_child'))
+            ->icon('heroicon-o-plus-circle')
+            ->visible(fn (array $arguments): bool => auth()->user() && auth()->user()->can('create_page'))
+            ->disabled(function (array $arguments): bool {
+                if (!isset($arguments['id'])) {
+                    return true;
+                }
+
+                $page = Page::query()
+                    ->withCount('ancestors')
+                    ->where('id', $arguments['id'])
+                    ->first();
+
+                if (!$page) {
+                    return true;
+                }
+
+                // Depth is the number of ancestors
+                // Root pages have 0 ancestors (depth 0), their children have 1 ancestor (depth 1), etc.
+                $depth = $page->ancestors_count;
+
+                // Disable if page is at max depth (level 3 = depth 2)
+                return $depth >= 2;
+            })
+            ->schema([
+                TextInput::make('title')
+                    ->label(__('siteman::page.fields.title.label'))
+                    ->required()
+                    ->maxLength(255)
+                    ->autofocus(),
+                Select::make('type')
+                    ->label(__('Type'))
+                    ->options(collect(Siteman::getPageTypes())->mapWithKeys(fn ($type, $key) => [$key => str($key)->headline()])->toArray())
+                    ->default('page')
+                    ->required(),
+            ])
+            ->action(function (array $arguments, array $data): void {
+                if (!isset($arguments['id'])) {
+                    return;
+                }
+
+                $parentPage = Page::find($arguments['id']);
+
+                if (!$parentPage) {
+                    return;
+                }
+
+                // Create the new child page
+                $newPage = Page::create([
+                    'title' => $data['title'],
+                    'slug' => '/'.Str::slug($data['title']),
+                    'type' => $data['type'],
+                    'parent_id' => $parentPage->id,
+                    'author_id' => auth()->id(),
+                    'blocks' => [],
+                ]);
+
+                // Dispatch event to select the newly created page
+                $this->dispatch('page-selected', $newPage->id);
+
+                Notification::make()
+                    ->title(__('Page created successfully'))
+                    ->success()
+                    ->send();
+            });
     }
 
     /**
@@ -205,7 +287,7 @@ class PageTree extends Component implements HasActions, HasForms
 
                     // Collect all bind values: order case pairs, parent_id, and IDs for WHERE IN
                     $caseBindings = $chunk
-                        ->flatMap(fn ($id, $index) => [(int)$id, ($chunkIndex * 200) + $index + 1])
+                        ->flatMap(fn ($id, $index) => [(int) $id, ($chunkIndex * 200) + $index + 1])
                         ->toArray();
 
                     $placeholders = implode(',', array_fill(0, count($chunk), '?'));

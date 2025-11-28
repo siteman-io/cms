@@ -52,7 +52,9 @@ class PageTreeSplitView extends Page implements HasForms
     public function mount(?int $selectedPageId = null): void
     {
         if ($selectedPageId) {
-            $page = PageModel::find($selectedPageId);
+            $page = PageModel::query()
+                ->with(['parent', 'children'])
+                ->find($selectedPageId);
 
             if ($page) {
                 $this->selectedPageId = $selectedPageId;
@@ -89,7 +91,9 @@ class PageTreeSplitView extends Page implements HasForms
      */
     protected function loadPage(int $pageId): void
     {
-        $page = PageModel::find($pageId);
+        $page = PageModel::query()
+            ->with(['parent', 'children'])
+            ->find($pageId);
 
         if (!$page) {
             Notification::make()
@@ -343,22 +347,37 @@ class PageTreeSplitView extends Page implements HasForms
      * Get breadcrumbs for the selected page.
      *
      * Builds a hierarchical breadcrumb trail showing the page's location in the tree.
+     * Returns an array with URLs as keys and page titles as values for Filament's breadcrumbs component.
      *
-     * @return array<string> Array of page titles from root to current page
+     * @return array<string, string> Array of URLs => titles from root to current page
      */
     public function getBreadcrumbs(): array
     {
-        if (!$this->selectedPage) {
-            return [];
+        $selectedPage = $this->selectedPage;
+
+        if (!$selectedPage) {
+            return [
+                static::getUrl() => static::getTitle(),
+            ];
         }
 
-        $breadcrumbs = [];
-        $page = $this->selectedPage;
+        $breadcrumbs = [
+            static::getUrl() => static::getTitle(),
+        ];
 
-        // Walk up the tree to build breadcrumb trail
+        // Collect all ancestors
+        $ancestors = [];
+        $page = $selectedPage;
+
         while ($page) {
-            array_unshift($breadcrumbs, $page->title);
+            array_unshift($ancestors, $page);
             $page = $page->parent;
+        }
+
+        // Build breadcrumb trail with clickable URLs
+        foreach ($ancestors as $ancestor) {
+            $url = static::getUrl(['selectedPageId' => $ancestor->id]);
+            $breadcrumbs[$url] = $ancestor->title;
         }
 
         return $breadcrumbs;

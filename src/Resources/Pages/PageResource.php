@@ -21,7 +21,6 @@ use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Pages\CreatePage;
 use Siteman\Cms\Resources\Pages\Pages\EditPage;
-use Siteman\Cms\Resources\Pages\Pages\ListPages;
 use Siteman\Cms\Resources\Pages\Pages\PageTreeSplitView;
 use Siteman\Cms\Resources\Pages\Tables\PagesTable;
 
@@ -165,7 +164,7 @@ class PageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListPages::route('/'),
+            'index' => PageTreeSplitView::route('/'),
             'tree' => PageTreeSplitView::route('/tree'),
             'create' => CreatePage::route('/create'),
             'edit' => EditPage::route('/{record}/edit'),

@@ -123,7 +123,7 @@ it('prevents circular reference when selecting parent', function () {
         'title' => 'Child Page',
         'slug' => '/child',
         'parent_id' => $parentPage->id,
-    ]);
+    ])->create();
 
     // Try to set child as parent of parent (circular reference)
     expect(function () use ($parentPage, $childPage) {

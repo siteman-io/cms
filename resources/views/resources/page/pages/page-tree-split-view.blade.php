@@ -59,29 +59,51 @@
         <div class="md:col-span-8 lg:col-span-9">
             @if($this->selectedPage)
                 <div class="space-y-6">
-                    {{-- Breadcrumb --}}
-                    @if($this->getBreadcrumbs())
+                    {{-- Breadcrumb Navigation --}}
+                    @if(count($this->getBreadcrumbs()) > 1)
                         <section class="fi-section">
                             <div class="fi-section-content px-6 py-3">
-                                <nav class="flex" aria-label="Breadcrumb">
-                                    <ol class="inline-flex items-center space-x-1">
-                                        @foreach($this->getBreadcrumbs() as $index => $breadcrumb)
-                                            <li class="inline-flex items-center">
-                                                @if($index > 0)
-                                                    <svg class="w-3 h-3 mx-1 text-gray-400 dark:text-gray-500"
-                                                         fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                              clip-rule="evenodd"/>
-                                                    </svg>
-                                                @endif
-                                                <span class="text-sm {{ $loop->last ? 'font-medium text-gray-950 dark:text-white' : 'text-gray-500 dark:text-gray-400' }}">
-                                                    {{ $breadcrumb }}
-                                                </span>
-                                            </li>
-                                        @endforeach
-                                    </ol>
-                                </nav>
+                                <x-filament::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
+                            </div>
+                        </section>
+                    @endif
+
+                    {{-- Quick Navigation --}}
+                    @if($this->selectedPage->parent || $this->selectedPage->children->isNotEmpty())
+                        <section class="fi-section">
+                            <div class="fi-section-content px-6 py-3">
+                                <div class="flex flex-wrap gap-3 text-sm">
+                                    @if($this->selectedPage->parent)
+                                        <button
+                                            type="button"
+                                            wire:click="$dispatch('page-selected', { pageId: {{ $this->selectedPage->parent->id }} })"
+                                            class="inline-flex items-center gap-1.5 text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                            </svg>
+                                            <span>{{ __('Go to Parent') }}: <strong>{{ $this->selectedPage->parent->title }}</strong></span>
+                                        </button>
+                                    @endif
+
+                                    @if($this->selectedPage->children->isNotEmpty())
+                                        <div class="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                            </svg>
+                                            <span>{{ __('Children') }} ({{ $this->selectedPage->children->count() }}):</span>
+                                            @foreach($this->selectedPage->children as $child)
+                                                <button
+                                                    type="button"
+                                                    wire:click="$dispatch('page-selected', { pageId: {{ $child->id }} })"
+                                                    class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium transition"
+                                                >
+                                                    {{ $child->title }}@if(!$loop->last),@endif
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </section>
                     @endif

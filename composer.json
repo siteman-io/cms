@@ -84,6 +84,7 @@
             "@build"
         ],
         "analyse": "vendor/bin/phpstan analyse",
+        "phpstan:baseline": "vendor/bin/phpstan analyse --generate-baseline --memory-limit=4G",
         "test": [
             "vendor/bin/pint --test",
             "vendor/bin/phpstan",
