@@ -25,6 +25,7 @@ class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Siteman\\Cms\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+        $this->withoutVite();
     }
 
     public function defineEnvironment($app): void

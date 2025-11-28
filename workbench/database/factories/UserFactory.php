@@ -2,11 +2,10 @@
 
 namespace Workbench\Database\Factories;
 
-use BezhanSalleh\FilamentShield\Facades\FilamentShield;
-use BezhanSalleh\FilamentShield\Support\Utils;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Siteman\Cms\Facades\Siteman;
 use Workbench\App\Models\User;
 
 /**
@@ -19,7 +18,7 @@ class UserFactory extends Factory
     /**
      * The current password being used by the factory.
      */
-    protected static ?string $password;
+    protected static ?string $password = null;
 
     /**
      * The name of the factory's corresponding model.
@@ -57,8 +56,7 @@ class UserFactory extends Factory
     public function isSuperAdmin(): static
     {
         return $this->afterCreating(function (User $user) {
-            $role = FilamentShield::createRole();
-            $user->assignRole($role);
+            $user->assignRole(Siteman::createSuperAdminRole());
             $user->refresh();
         });
     }
@@ -66,7 +64,7 @@ class UserFactory extends Factory
     public function withPermissions(string|array $permissions): static
     {
         return $this->afterCreating(function (User $user) use ($permissions) {
-            $createdPermissions = collect($permissions)->map(fn ($permission) => Utils::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard' => 'web']));
+            $createdPermissions = collect($permissions)->map(fn ($permission) => Siteman::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard_name' => 'web']));
             $user->givePermissionTo($createdPermissions);
             $user->refresh();
         });

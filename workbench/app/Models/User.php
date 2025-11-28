@@ -10,6 +10,12 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Workbench\Database\Factories\UserFactory;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ */
 class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, HasRoles, Notifiable;

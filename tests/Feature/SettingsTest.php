@@ -24,11 +24,11 @@ it('can update settings', function () {
     actingAs(User::factory()->withPermissions(['page_SettingsPage'])->create());
 
     $page = livewire(SettingsPage::class);
-    $page->assertFormExists('generalSettingsForm');
+    $page->assertSchemaExists('generalSettingsForm');
 
     $page->fillForm(['site_name' => 'test'], 'generalSettingsForm')
         ->call('save', 'general')
-        ->assertHasNoFormErrors(formName: 'generalSettingsForm');
+        ->assertHasNoFormErrors(form: 'generalSettingsForm');
 
     expect(app(\Siteman\Cms\Settings\GeneralSettings::class)->site_name)->toBe('test');
 });

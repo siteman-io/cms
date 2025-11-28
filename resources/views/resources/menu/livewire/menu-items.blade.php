@@ -1,8 +1,9 @@
 <div>
     @if($this->menuItems->isNotEmpty())
         <ul
-            ax-load
-            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('menu', 'siteman') }}"
+            x-load
+            x-load-css="[@js(\Filament\Support\Facades\FilamentAsset::getStyleHref('components', 'siteman'))]"
+            x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('menu', 'siteman') }}"
             x-data="menuBuilder({ parentId: 0 })"
             class="space-y-2"
         >
@@ -12,12 +13,6 @@
                 />
             @endforeach
         </ul>
-    @else
-        <x-filament-tables::empty-state
-            icon="heroicon-o-document"
-            :heading="__('siteman::menu.items.empty.heading')"
-        />
     @endif
-
     <x-filament-actions::modals />
 </div>

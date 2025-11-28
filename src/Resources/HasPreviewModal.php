@@ -2,12 +2,8 @@
 
 namespace Siteman\Cms\Resources;
 
-use Pboivin\FilamentPeek\Pages\Concerns\HasPreviewModal as BaseHasPreviewModal;
-
 trait HasPreviewModal
 {
-    use BaseHasPreviewModal;
-
     protected function getPreviewModalView(): ?string
     {
         return 'siteman::preview';

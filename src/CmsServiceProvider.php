@@ -11,6 +11,7 @@ use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +19,7 @@ use Livewire\Livewire;
 use RalphJSmit\Laravel\SEO\SEOManager;
 use RalphJSmit\Laravel\SEO\TagManager;
 use Siteman\Cms\Blocks\BlockRegistry;
+use Siteman\Cms\Commands\CreateAdminCommand;
 use Siteman\Cms\Commands\InstallCommand;
 use Siteman\Cms\Commands\MakeBlockCommand;
 use Siteman\Cms\Commands\MakeSettingsCommand;
@@ -31,14 +33,14 @@ use Siteman\Cms\Policies\MenuPolicy;
 use Siteman\Cms\Policies\PagePolicy;
 use Siteman\Cms\Policies\RolePolicy;
 use Siteman\Cms\Policies\UserPolicy;
-use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomLink;
-use Siteman\Cms\Resources\MenuResource\Livewire\CreateCustomText;
-use Siteman\Cms\Resources\MenuResource\Livewire\CreatePageLink;
-use Siteman\Cms\Resources\MenuResource\Livewire\MenuItems;
-use Siteman\Cms\Resources\PageResource\Livewire\PageDetails;
-use Siteman\Cms\Resources\PageResource\Livewire\PageTree;
-use Siteman\Cms\Resources\PageResource\Pages\EditPage;
-use Siteman\Cms\Resources\PageResource\Pages\ViewPage;
+use Siteman\Cms\Resources\Menus\Livewire\CreateCustomLink;
+use Siteman\Cms\Resources\Menus\Livewire\CreateCustomText;
+use Siteman\Cms\Resources\Menus\Livewire\CreatePageLink;
+use Siteman\Cms\Resources\Menus\Livewire\MenuItems;
+use Siteman\Cms\Resources\Pages\Livewire\PageDetails;
+use Siteman\Cms\Resources\Pages\Livewire\PageTree;
+use Siteman\Cms\Resources\Pages\Pages\EditPage;
+use Siteman\Cms\Resources\Pages\Pages\ViewPage;
 use Siteman\Cms\Theme\BaseLayout;
 use Siteman\Cms\Theme\ThemeInterface;
 use Siteman\Cms\Theme\ThemeRegistry;
@@ -76,6 +78,7 @@ class CmsServiceProvider extends PackageServiceProvider
                 MakeThemeCommand::class,
                 MakeBlockCommand::class,
                 MakeSettingsCommand::class,
+                CreateAdminCommand::class,
             ]);
 
     }
@@ -176,8 +179,12 @@ class CmsServiceProvider extends PackageServiceProvider
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
 
-        Gate::before(function ($user) {
-            return $user->hasRole('super_admin') ? true : null;
+        Gate::before(function (User $user) {
+            if (method_exists($user, 'hasRole')) {
+                return $user->hasRole('super-admin') ? true : null;
+            }
+
+            return null;
         });
 
         Field::macro('asPageMetaField', function () {
@@ -194,9 +201,9 @@ class CmsServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            AlpineComponent::make('menu', __DIR__.'/../resources/dist/js/menu.js'),
-            Css::make('index', __DIR__.'/../resources/dist/css/index.css'),
-            Css::make('admin-bar', __DIR__.'/../resources/dist/css/admin-bar.css'),
+            AlpineComponent::make('menu', __DIR__.'/../resources/dist/js/components/menu.js'),
+            Css::make('components', __DIR__.'/../resources/dist/css/components.css')->loadedOnRequest(),
+            Css::make('admin-bar', __DIR__.'/../resources/dist/css/admin-bar.css')->loadedOnRequest(),
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use Siteman\Cms\Resources\PageResource\Pages\CreatePage;
+use Siteman\Cms\Resources\Pages\Pages\CreatePage;
 use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;

@@ -7,18 +7,39 @@ return [
         'group' => 'Content',
         'icon' => 'heroicon-o-book-open',
     ],
-    'notifications' => [
-        'deleted' => [
-            'title' => 'Moved to trash',
-        ],
-    ],
     'tree' => [
         'title' => 'Page Tree',
+        'description' => 'Navigate and manage your page hierarchy',
         'empty' => 'No pages found.',
+        'empty_tree_title' => 'No pages yet',
+        'empty_tree_description' => 'Create your first page to get started',
+        'empty_selection' => 'Please select a page from the tree to edit its content.',
+        'empty_selection_title' => 'No page selected',
+        'reordering' => 'Reordering pages...',
         'items' => [
             'collapse' => 'Collapse',
             'expand' => 'Expand',
         ],
+        'delete' => [
+            'confirm_description' => 'Are you sure you want to delete this page?',
+            'has_children_description' => 'This page has child pages. Please choose how to handle them:',
+            'strategy_label' => 'What should happen to the child pages?',
+            'cascade_option' => 'Delete all child pages',
+            'reassign_option' => 'Move child pages to parent level',
+        ],
+        'actions' => [
+            'create_child' => 'Create Child Page',
+        ],
+    ],
+    'notifications' => [
+        'deleted' => [
+            'title' => 'Moved to trash',
+        ],
+        'not_found' => 'Page not found',
+    ],
+    'status' => [
+        'published' => 'Published',
+        'draft' => 'Draft',
     ],
     'fields' => [
         'title' => [
@@ -40,6 +61,10 @@ return [
         'published_at' => [
             'label' => 'Published at',
             'helper-text' => 'The date when the post will be published.',
+        ],
+        'parent_id' => [
+            'label' => 'Parent Page',
+            'helper-text' => 'Select a parent page to create a hierarchy. Leave empty for a root page.',
         ],
         'layout' => [
             'label' => 'Layout',

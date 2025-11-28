@@ -6,6 +6,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Http\Request;
+use Locale;
+use ResourceBundle;
 use Siteman\Cms\Models\Page as PageModel;
 use Siteman\Cms\PageTypes\Concerns\InteractsWithPageForm;
 use Siteman\Cms\Settings\GeneralSettings;
@@ -46,8 +48,8 @@ class RssFeed implements PageTypeInterface
                 ->asPageMetaField(),
             Select::make('feed_language')
                 ->options(
-                    collect(\ResourceBundle::getLocales(''))
-                        ->mapWithKeys(fn ($locale) => [$locale => \Locale::getDisplayName($locale, 'en_US')])
+                    collect(ResourceBundle::getLocales(''))
+                        ->mapWithKeys(fn ($locale) => [$locale => Locale::getDisplayName($locale, 'en_US')])
                         ->sort()
                         ->all()
                 )->asPageMetaField(),

@@ -3,7 +3,9 @@
 namespace Workbench\App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Laravel\Boost\Install\GuidelineComposer;
 use Workbench\App\Models\User;
+use Workbench\App\PackageGuidelineComposer;
 
 class WorkbenchServiceProvider extends ServiceProvider
 {
@@ -13,6 +15,7 @@ class WorkbenchServiceProvider extends ServiceProvider
     public function register(): void
     {
         config()->set('siteman.models.user', User::class);
+        $this->app->bind(GuidelineComposer::class, PackageGuidelineComposer::class);
     }
 
     /**

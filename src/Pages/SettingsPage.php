@@ -2,22 +2,26 @@
 
 namespace Siteman\Cms\Pages;
 
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
-use Filament\Forms\Form;
+use Filament\Actions\Action;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Pages\Concerns\IsProtectedPage;
 use Siteman\Cms\Settings\SettingsFormInterface;
 use Spatie\LaravelSettings\Settings;
 
 class SettingsPage extends Page
 {
-    use HasPageShield;
-
-    protected static string $view = 'siteman::pages.settings';
+    use InteractsWithForms;
+    use IsProtectedPage;
 
     public ?array $data = [];
 
@@ -78,11 +82,32 @@ class SettingsPage extends Page
         return $this->getSettingForms()
             ->mapWithKeys(
                 fn (SettingsFormInterface $form, string $group) => [
-                    $this->getFormName($group) => $this->makeForm()
-                        ->schema($form->schema())
+                    $this->getFormName($group) => $this->makeSchema()
+                        ->components($form->schema())
                         ->statePath('data.'.$group),
                 ])
             ->toArray();
+    }
+
+    public function content(Schema $schema): Schema
+    {
+        return $schema->components(
+            Tabs::make()
+                ->vertical()
+                ->tabs(
+                    $this->getSettingForms()
+                        ->map(fn (SettingsFormInterface $form, string $group) => Tab::make($group)
+                            ->icon($form->icon())
+                            ->schema([
+                                Form::make($form->schema())
+                                    ->statePath('data.'.$group)
+                                    ->footer(Action::make('submit')->action(fn () => $this->save($group))),
+                            ]))
+                        ->values()
+                        ->all(),
+                )
+                ->persistTabInQueryString('group')
+        );
     }
 
     public static function getNavigationGroup(): ?string
@@ -120,7 +145,7 @@ class SettingsPage extends Page
         return $group.'SettingsForm';
     }
 
-    protected function getGroupForm(string $group): ?Form
+    protected function getGroupForm(string $group): ?Schema
     {
         $formName = $this->getFormName($group);
 

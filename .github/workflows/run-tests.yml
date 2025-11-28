@@ -40,6 +40,7 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
           composer prepare
+          npm install playwright && npx playwright install
 
       - name: Execute tests
         run: composer test:ci -- --ci --coverage-clover coverage.xml --log-junit junit.xml
