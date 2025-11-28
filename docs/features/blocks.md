@@ -3,31 +3,28 @@ outline: deep
 ---
 
 # Blocks
-Blocks are the building blocks of your content. They can be used to create complex layouts. Siteman ships with two
-blocks out of the box.
+
+Blocks are the content pieces inside pages. They're drag-and-drop components in the admin that render on the frontend.
 
 ![Page blocks](../img/siteman_page_blocks.png)
 
-## `image-block`
+## Built-in Blocks
 
-The `image-block` which uses the `Spatie\MediaLibrary` under the hood and provides responsive images out of the box.
+**Markdown Block** - A markdown editor with GitHub Flavored Markdown, optional table of contents, and syntax highlighting (if you set up Torchlight).
 
-## `markdown-block`
+**Image Block** - Uses Spatie MediaLibrary for responsive images with an image editor.
 
-The `markdown-block` allows you to write markdown in your content. It uses the `league/commonmark` under the hood.
-Siteman enabled a few extensions for it out of the box
+## Creating a Block
 
-* Render blade via `ryangjchandler/commonmark-blade-block`
-* Highlight code via `torchlight/torchlight-laravel` (You need to have a `TORCHLIGHT_TOKEN` configured in your `.env`)
-* Add HTML attributes via the `AttributesExtension` from `league/commonmark`
+```bash
+php artisan make:siteman-block HeroBlock
+```
 
-## Create your own blocks
-
-You can create your own blocks by executing `php artisan make:siteman-block`. This will create a new block in the
-`App\Blocks` namespace of your application. It will have a dummy field just as an example which you may delete.
+This creates a block class and a Blade view. Here's what a block looks like:
 
 ```php
 <?php declare(strict_types=1);
+
 namespace App\Blocks;
 
 use Filament\Forms\Components\TextInput;
@@ -35,43 +32,70 @@ use Illuminate\Contracts\View\View;
 use Siteman\Cms\Blocks\BaseBlock;
 use Siteman\Cms\Models\Page;
 
-class TitleBlock extends BaseBlock
+class HeroBlock extends BaseBlock
 {
     public function id(): string
     {
-        return 'title';
+        return 'hero';
     }
 
     protected function fields(): array
     {
         return [
-            TextInput::make('title'),
+            TextInput::make('title')->required(),
+            TextInput::make('subtitle'),
         ];
     }
 
     public function render(array $data, Page $page): View
     {
-        return view('blocks.title', ['data' => $data]);
+        return view('blocks.hero', $data);
     }
 }
 ```
 
-Additionally, it creates the needed view file to render the Block.
+And the view:
 
-```bladehtml
-{{-- `blocks.title.blade.php` --}}
-
-<div class="block">
-    <h2>{{ $data['title'] }}</h2>
-</div>
+```blade
+{{-- resources/views/blocks/hero.blade.php --}}
+<section class="hero">
+    <h1>{{ $title }}</h1>
+    @if($subtitle)
+        <p>{{ $subtitle }}</p>
+    @endif
+</section>
 ```
 
-A block needs to be registered via the Themes `configure` method.
+## Registering Blocks
+
+Register blocks in your theme's `configure` method:
 
 ```php
-    public function configure(Siteman $siteman): void
-    {
-        //...
-        $siteman->registerBlock(TitleBlock::class);
-    }
+public function configure(Siteman $siteman): void
+{
+    $siteman->registerBlock(HeroBlock::class);
+}
 ```
+
+## Rendering Blocks
+
+In your theme views, use the `BlockRenderer`:
+
+```blade
+@php
+    $renderer = app(\Siteman\Cms\Blocks\BlockRenderer::class);
+@endphp
+
+@foreach($page->blocks ?? [] as $block)
+    {!! $renderer->render($block, $page) !!}
+@endforeach
+```
+
+## Disabling Blocks
+
+Blocks can be toggled on/off in the admin without deleting them. Disabled blocks have `'disabled' => true` in their data.
+
+## Related
+
+- [Themes](/features/themes)
+- [Layouts](/features/layouts)
