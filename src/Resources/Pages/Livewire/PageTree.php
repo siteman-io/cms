@@ -11,6 +11,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Size;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -94,7 +95,7 @@ class PageTree extends Component implements HasActions, HasForms
     {
         return Action::make('createChild')
             ->label(__('siteman::page.tree.actions.create_child'))
-            ->icon('heroicon-o-plus-circle')
+            ->icon(Heroicon::OutlinedPlusCircle)
             ->visible(fn (array $arguments): bool => auth()->user() && auth()->user()->can('create_page'))
             ->disabled(function (array $arguments): bool {
                 if (!isset($arguments['id'])) {
@@ -236,6 +237,7 @@ class PageTree extends Component implements HasActions, HasForms
                 }
 
                 $this->dispatch('page:deleted', $page->id);
+                Notification::make()->danger()->title('Page deleted successfully')->send();
             });
     }
 
@@ -344,7 +346,7 @@ class PageTree extends Component implements HasActions, HasForms
     {
         return Action::make('reorder')
             ->label(__('filament-forms::components.builder.actions.reorder.label'))
-            ->icon('heroicon-m-arrows-up-down')
+            ->icon(Heroicon::ArrowsUpDown)
             ->color('gray')
             ->iconButton()
             ->extraAttributes(['data-sortable-handle' => true, 'class' => 'cursor-move'])

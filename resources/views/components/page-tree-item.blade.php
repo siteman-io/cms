@@ -26,6 +26,8 @@
                     class="transition duration-200 ease-in-out"
                     x-bind:class="{ 'rotate-90': open }"
                     size="sm"
+                    data-testid="expand-toggle"
+                    data-page-expand="{{ $item->getKey() }}"
                 />
             @endif
 
@@ -80,7 +82,11 @@
                 ]);
             @endphp
             @if(!empty($actions))
-                <x-filament-actions::group :actions="$actions"/>
+                <x-filament-actions::group
+                    :actions="$actions"
+                    data-testid="page-actions"
+                    data-page-actions="{{ $item->getKey() }}"
+                />
             @endif
         </div>
     </div>

@@ -165,7 +165,6 @@ class PageResource extends Resource
     {
         return [
             'index' => PageTreeSplitView::route('/'),
-            'tree' => PageTreeSplitView::route('/tree'),
             'create' => CreatePage::route('/create'),
             'edit' => EditPage::route('/{record}/edit'),
         ];

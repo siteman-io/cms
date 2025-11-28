@@ -11,12 +11,12 @@ beforeEach(function () {
 });
 
 it('can verify create button exists in tree header', function () {
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee('New Page');
 });
 
 it('can navigate to create page via button', function () {
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->click('New Page')
         ->assertSee('Create Page');
 });
@@ -24,21 +24,22 @@ it('can navigate to create page via button', function () {
 it('can delete a leaf page without children via UI', function () {
     $page = Page::factory()->create(['slug' => '/to-delete']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($page->slug)
         ->click('[data-sortable-item="'.$page->id.'"] > div > div:last-child [aria-label="Actions"]')
         ->click('Delete')
         ->press('Confirm');
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertDontSee($page->slug);
 });
 
 it('shows delete options modal for pages with children', function () {
-    $parent = Page::factory()->create(['slug' => '/parent']);
-    Page::factory()->create(['slug' => '/child', 'parent_id' => $parent->id]);
+    $parent = Page::factory()
+        ->withChildren(1)
+        ->create(['slug' => '/parent']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
         ->click('[data-sortable-item="'.$parent->id.'"] > div > div:last-child [aria-label="Actions"]')
         ->click('Delete')

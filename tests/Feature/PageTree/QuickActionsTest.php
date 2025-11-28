@@ -82,22 +82,21 @@ describe('Create Child Action', function () {
 });
 
 describe('Parent Navigation', function () {
-    // Note: This test currently fails due to Livewire hydration limitation.
-    // The parent relationship isn't loaded in the initial HTTP response.
-    // The functional navigation test below proves this feature works correctly.
     it('shows go to parent link when page has parent', function () {
         $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
         actingAs($user);
 
-        $parent = Page::factory()->create(['title' => 'Parent Page', 'slug' => '/parent']);
-        $child = Page::factory()->create(['title' => 'Child Page', 'slug' => '/child', 'parent_id' => $parent->id]);
+        $parent = Page::factory()
+            ->withChildren(1)
+            ->create(['title' => 'Parent Page']);
+        $child = $parent->children->first();
 
-        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('tree', ['selectedPageId' => $child->id]));
-
-        $response->assertOk()
+        // Test via Livewire component - the parent relationship is loaded when selectedPage is set
+        Livewire::test(PageTreeSplitView::class, ['selectedPageId' => $child->id])
+            ->assertSet('selectedPage.parent_id', $parent->id)
             ->assertSee('Go to Parent')
             ->assertSee($parent->title);
-    })->skip('Livewire hydration limitation - relationships not in initial HTML');
+    });
 
     it('hides go to parent link when page has no parent', function () {
         $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
@@ -105,7 +104,7 @@ describe('Parent Navigation', function () {
 
         $root = Page::factory()->create(['title' => 'Root Page', 'slug' => '/root', 'parent_id' => null]);
 
-        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('tree', ['selectedPageId' => $root->id]));
+        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('index', ['selectedPageId' => $root->id]));
 
         $response->assertOk()
             ->assertDontSee('Go to Parent');
@@ -163,24 +162,23 @@ describe('Breadcrumb Navigation', function () {
 });
 
 describe('Children Navigation', function () {
-    // Note: This test currently fails due to Livewire hydration limitation.
-    // The children relationship isn't loaded in the initial HTTP response.
-    // The functional navigation test below proves this feature works correctly.
     it('shows children links when page has children', function () {
         $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
         actingAs($user);
 
-        $parent = Page::factory()->create(['title' => 'Parent Page', 'slug' => '/parent']);
-        $child1 = Page::factory()->create(['title' => 'Child 1', 'slug' => '/child-1', 'parent_id' => $parent->id]);
-        $child2 = Page::factory()->create(['title' => 'Child 2', 'slug' => '/child-2', 'parent_id' => $parent->id]);
+        $parent = Page::factory()
+            ->withChildren([
+                ['title' => 'Child 1'],
+                ['title' => 'Child 2'],
+            ])
+            ->create(['title' => 'Parent Page']);
 
-        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('tree', ['selectedPageId' => $parent->id]));
-
-        $response->assertOk()
+        // Test via Livewire component - children relationship is loaded when selectedPage is set
+        Livewire::test(PageTreeSplitView::class, ['selectedPageId' => $parent->id])
             ->assertSee('Children')
-            ->assertSee($child1->title)
-            ->assertSee($child2->title);
-    })->skip('Livewire hydration limitation - relationships not in initial HTML');
+            ->assertSee('Child 1')
+            ->assertSee('Child 2');
+    });
 
     it('hides children section when page has no children', function () {
         $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
@@ -188,7 +186,7 @@ describe('Children Navigation', function () {
 
         $leaf = Page::factory()->create(['title' => 'Leaf Page', 'slug' => '/leaf']);
 
-        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('tree', ['selectedPageId' => $leaf->id]));
+        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('index', ['selectedPageId' => $leaf->id]));
 
         $response->assertOk()
             ->assertDontSee('Children (');

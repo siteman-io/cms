@@ -11,13 +11,16 @@ beforeEach(function () {
 });
 
 it('displays pages in hierarchical order', function () {
-    $parent = Page::factory()->create(['slug' => '/parent']);
-    Page::factory()->create(['slug' => '/child-1', 'parent_id' => $parent->id]);
-    Page::factory()->create(['slug' => '/child-2', 'parent_id' => $parent->id]);
+    $parent = Page::factory()
+        ->withChildren([
+            ['slug' => '/child-1'],
+            ['slug' => '/child-2'],
+        ])
+        ->create(['slug' => '/parent']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
-        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:first-child button[title="Expand"]')
+        ->click('[data-page-expand="'.$parent->id.'"]')
         ->assertSee('/child-1')
         ->assertSee('/child-2');
 });
@@ -26,30 +29,32 @@ it('reflects hierarchy changes after moving page to different parent', function 
     $parent = Page::factory()->create(['slug' => '/parent']);
     $page = Page::factory()->create(['slug' => '/standalone']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
         ->assertSee($page->slug);
 
     $page->update(['parent_id' => $parent->id]);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
-        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:first-child button[title="Expand"]')
+        ->click('[data-page-expand="'.$parent->id.'"]')
         ->assertSee($page->slug);
 });
 
 it('shows page at root level after removing parent', function () {
-    $parent = Page::factory()->create(['slug' => '/parent']);
-    $child = Page::factory()->create(['slug' => '/child', 'parent_id' => $parent->id]);
+    $parent = Page::factory()
+        ->withChildren(Page::factory()->state(['slug' => '/child']))
+        ->create(['slug' => '/parent']);
+    $child = $parent->children->first();
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
-        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:first-child button[title="Expand"]')
+        ->click('[data-page-expand="'.$parent->id.'"]')
         ->assertSee($child->slug);
 
     $child->update(['parent_id' => null]);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
         ->assertSee($child->slug);
 });

@@ -13,7 +13,7 @@ beforeEach(function () {
 it('clicks on page in tree to select and load edit form', function () {
     $page = Page::factory()->create(['slug' => '/test']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($page->slug)
         ->click('[data-page-id="'.$page->id.'"]')
         ->assertSee($page->title);
@@ -23,7 +23,7 @@ it('switches edit context when clicking different pages', function () {
     $page1 = Page::factory()->create(['slug' => '/first']);
     $page2 = Page::factory()->create(['slug' => '/second']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($page1->slug)
         ->assertSee($page2->slug)
         ->click('[data-page-id="'.$page1->id.'"]')
@@ -33,33 +33,42 @@ it('switches edit context when clicking different pages', function () {
 });
 
 it('expands tree nodes to show nested children', function () {
-    $parent = Page::factory()->create(['slug' => '/parent']);
-    Page::factory()->create(['slug' => '/child-1', 'parent_id' => $parent->id]);
-    Page::factory()->create(['slug' => '/child-2', 'parent_id' => $parent->id]);
+    $parent = Page::factory()
+        ->withChildren([
+            ['slug' => '/child-1'],
+            ['slug' => '/child-2'],
+        ])
+        ->create(['slug' => '/parent']);
 
-    visit(PageResource::getUrl('tree'))
+    visit(PageResource::getUrl())
         ->assertSee($parent->slug)
-        ->click('[data-sortable-item="'.$parent->id.'"] > div > div:first-child button[title="Expand"]')
+        ->click('[data-page-expand="'.$parent->id.'"]')
         ->assertSee('/child-1')
         ->assertSee('/child-2');
 });
 
 it('expands deep nested pages across 3 levels', function () {
-    $level1 = Page::factory()->create(['slug' => '/level-1']);
-    $level2 = Page::factory()->create(['slug' => '/level-2', 'parent_id' => $level1->id]);
-    $level3 = Page::factory()->create(['slug' => '/level-3', 'parent_id' => $level2->id]);
+    $level1 = Page::factory()
+        ->withChildren(
+            Page::factory()
+                ->state(['slug' => '/level-2'])
+                ->withChildren(Page::factory()->state(['slug' => '/level-3']))
+        )
+        ->create(['slug' => '/level-1']);
 
-    visit(PageResource::getUrl('tree'))
+    $level2 = $level1->children->first();
+
+    visit(PageResource::getUrl())
         ->assertSee($level1->slug)
-        ->click('[data-sortable-item="'.$level1->id.'"] > div > div:first-child button[title="Expand"]')
+        ->click('[data-page-expand="'.$level1->id.'"]')
         ->assertSee($level2->slug)
-        ->click('[data-sortable-item="'.$level2->id.'"] > div > div:first-child button[title="Expand"]')
-        ->assertSee($level3->slug);
+        ->click('[data-page-expand="'.$level2->id.'"]')
+        ->assertSee('/level-3');
 });
 
 it('supports URL state with selected page ID parameter', function () {
     $page = Page::factory()->create(['slug' => '/test']);
 
-    visit(PageResource::getUrl('tree', ['selectedPageId' => $page->id]))
+    visit(PageResource::getUrl('index', ['selectedPageId' => $page->id]))
         ->assertSee($page->slug);
 });

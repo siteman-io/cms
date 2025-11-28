@@ -12,7 +12,7 @@ use function Pest\Laravel\get;
 it('loads split view page without errors', function () {
     actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
 
-    get(PageResource::getUrl('tree'))
+    get(PageResource::getUrl())
         ->assertOk()
         ->assertSeeLivewire('page-tree');
 });
@@ -20,7 +20,7 @@ it('loads split view page without errors', function () {
 it('shows empty state when no page is selected', function () {
     actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
 
-    get(PageResource::getUrl('tree'))
+    get(PageResource::getUrl())
         ->assertOk()
         ->assertSee(__('siteman::page.tree.empty_selection'));
 });
@@ -36,7 +36,7 @@ it('tracks selected page ID from URL parameter', function () {
 
     // Just verify the page loads with the parameter
     // The selectedPageId property will be available to the view
-    get(PageResource::getUrl('tree', ['selectedPageId' => $page->id]))
+    get(PageResource::getUrl('index', ['selectedPageId' => $page->id]))
         ->assertOk();
 });
 
