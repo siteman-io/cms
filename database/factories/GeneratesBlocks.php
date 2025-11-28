@@ -2,6 +2,8 @@
 
 namespace Siteman\Cms\Database\Factories;
 
+use Illuminate\Support\Str;
+
 trait GeneratesBlocks
 {
     public function withMarkdownBlock(bool $showToc = false, ?array $elements = null): static
@@ -38,6 +40,24 @@ trait GeneratesBlocks
                             fake()->markdownP(),
                         ]),
                         'show_toc' => $showToc,
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    public function withBlogPost()
+    {
+        $blogPost = fake()->blogPost();
+        return $this->state(fn (array $attributes) => [
+            'title' => $blogPost->title,
+            'slug' => '/'.Str::slug($blogPost->title),
+            'blocks' => [
+                [
+                    'type' => 'markdown-block',
+                    'data' => [
+                        'content' => $blogPost->content,
+                        'show_toc' => false,
                     ],
                 ],
             ],

@@ -18,8 +18,8 @@
     ],
     "require": {
         "php": "^8.3",
+        "bambamboole/extended-faker": "^0.3.0",
         "blade-ui-kit/blade-icons": "^1.8.0",
-        "davidbadura/faker-markdown-generator": "^1.1",
         "echolabsdev/prism": "^0.68",
         "filament/filament": "^4.0",
         "filament/spatie-laravel-media-library-plugin": "^4.0",
