@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
                 "I'm a software developer passionate about building great products and sharing what I learn along the way.",
                 "## What You'll Find Here\n",
                 "I write about programming, technology, and the occasional life update. Whether you're here to learn something new or just curious about my latest projects, I hope you find something valuable.",
-                "Feel free to explore my [blog posts](/blog) or learn more [about me](/about).",
+                'Feel free to explore my [blog posts](/blog) or learn more [about me](/about).',
             ])
             ->create([
                 'title' => 'Home',
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 "## Beyond Code\n",
                 "When I'm not coding, you'll find me reading, hiking, or experimenting with new recipes in the kitchen.",
                 "## Get in Touch\n",
-                "Feel free to reach out via [email](mailto:hello@example.com) or connect with me on [GitHub](https://github.com) and [Twitter](https://twitter.com).",
+                'Feel free to reach out via [email](mailto:hello@example.com) or connect with me on [GitHub](https://github.com) and [Twitter](https://twitter.com).',
             ])
             ->create([
                 'title' => 'About',
@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
                 "# Projects\n",
                 "Here are some of the projects I've been working on.",
                 "## Open Source\n",
-                "I contribute to various open source projects and maintain a few of my own. Check out my [GitHub profile](https://github.com) for the latest.",
+                'I contribute to various open source projects and maintain a few of my own. Check out my [GitHub profile](https://github.com) for the latest.',
                 "## Side Projects\n",
                 "- **DevTools CLI** - A collection of developer productivity tools\n- **BlogEngine** - A simple static site generator\n- **TaskFlow** - A minimalist task management app",
                 "## Collaborations\n",

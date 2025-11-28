@@ -49,6 +49,7 @@ trait GeneratesBlocks
     public function withBlogPost()
     {
         $blogPost = fake()->blogPost();
+
         return $this->state(fn (array $attributes) => [
             'title' => $blogPost->title,
             'slug' => '/'.Str::slug($blogPost->title),
