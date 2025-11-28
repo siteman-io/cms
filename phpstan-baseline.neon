@@ -13,6 +13,12 @@ parameters:
 			path: database/factories/MenuItemFactory.php
 
 		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:blogPost\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: database/factories/PageFactory.php
+
+		-
 			message: '#^Call to an undefined method Faker\\Generator\:\:markdownBlockquote\(\)\.$#'
 			identifier: method.notFound
 			count: 2

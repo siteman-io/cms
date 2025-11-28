@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'name' => 'admin',
+            'name' => 'Jane Doe',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
@@ -27,10 +27,16 @@ class DatabaseSeeder extends Seeder
         $mainMenu = Menu::create(['name' => 'Main Menu', 'is_visible' => true]);
         $mainMenu->locations()->create(['location' => 'header']);
 
-        // Root Level Pages
+        // Home Page
         $homePage = Page::factory()
             ->published()
-            ->withMarkdownBlock(true)
+            ->withMarkdownBlock(false, [
+                "# Welcome to My Blog\n",
+                "I'm a software developer passionate about building great products and sharing what I learn along the way.",
+                "## What You'll Find Here\n",
+                "I write about programming, technology, and the occasional life update. Whether you're here to learn something new or just curious about my latest projects, I hope you find something valuable.",
+                'Feel free to explore my [blog posts](/blog) or learn more [about me](/about).',
+            ])
             ->create([
                 'title' => 'Home',
                 'slug' => '/',
@@ -44,10 +50,21 @@ class DatabaseSeeder extends Seeder
             'order' => 1,
         ]);
 
-        // About Section (Level 1 with children)
+        // About Page
         $aboutPage = Page::factory()
             ->published()
-            ->withMarkdownBlock(true)
+            ->withMarkdownBlock(false, [
+                "# About Me\n",
+                "Hi, I'm Jane! I'm a software developer with a passion for clean code and thoughtful design.",
+                "## My Journey\n",
+                "I started programming in college and never looked back. Over the years, I've worked on everything from small startups to large enterprise applications.",
+                "## What I Do\n",
+                "Currently, I focus on web development using Laravel, Vue.js, and TypeScript. I love building tools that make developers' lives easier.",
+                "## Beyond Code\n",
+                "When I'm not coding, you'll find me reading, hiking, or experimenting with new recipes in the kitchen.",
+                "## Get in Touch\n",
+                'Feel free to reach out via [email](mailto:hello@example.com) or connect with me on [GitHub](https://github.com) and [Twitter](https://twitter.com).',
+            ])
             ->create([
                 'title' => 'About',
                 'slug' => '/about',
@@ -61,257 +78,7 @@ class DatabaseSeeder extends Seeder
             'order' => 2,
         ]);
 
-        // About > Team (Level 2)
-        $teamPage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Our Team',
-                'slug' => '/team',
-                'author_id' => $user->id,
-                'parent_id' => $aboutPage->id,
-                'order' => 1,
-            ]);
-
-        // About > Team > Leadership (Level 3 - max depth)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Leadership',
-                'slug' => '/leadership',
-                'author_id' => $user->id,
-                'parent_id' => $teamPage->id,
-                'order' => 1,
-            ]);
-
-        // About > Team > Developers (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Developers',
-                'slug' => '/developers',
-                'author_id' => $user->id,
-                'parent_id' => $teamPage->id,
-                'order' => 2,
-            ]);
-
-        // About > History (Level 2)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Company History',
-                'slug' => '/history',
-                'author_id' => $user->id,
-                'parent_id' => $aboutPage->id,
-                'order' => 2,
-            ]);
-
-        // About > Contact (Level 2)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Contact Us',
-                'slug' => '/contact',
-                'author_id' => $user->id,
-                'parent_id' => $aboutPage->id,
-                'order' => 3,
-            ]);
-
-        // Products Section (Level 1 with children)
-        $productsPage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Products',
-                'slug' => '/products',
-                'author_id' => $user->id,
-                'order' => 3,
-            ]);
-        $mainMenu->menuItems()->create([
-            'title' => 'Products',
-            'linkable_type' => Page::class,
-            'linkable_id' => $productsPage->id,
-            'order' => 3,
-        ]);
-
-        // Products > Software (Level 2)
-        $softwarePage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Software Solutions',
-                'slug' => '/software',
-                'author_id' => $user->id,
-                'parent_id' => $productsPage->id,
-                'order' => 1,
-            ]);
-
-        // Products > Software > CMS (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Content Management',
-                'slug' => '/cms',
-                'author_id' => $user->id,
-                'parent_id' => $softwarePage->id,
-                'order' => 1,
-            ]);
-
-        // Products > Software > Analytics (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Analytics Platform',
-                'slug' => '/analytics',
-                'author_id' => $user->id,
-                'parent_id' => $softwarePage->id,
-                'order' => 2,
-            ]);
-
-        // Products > Hardware (Level 2)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Hardware',
-                'slug' => '/hardware',
-                'author_id' => $user->id,
-                'parent_id' => $productsPage->id,
-                'order' => 2,
-            ]);
-
-        // Documentation Section (Level 1 with extensive children)
-        $docsPage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Documentation',
-                'slug' => '/docs',
-                'author_id' => $user->id,
-                'order' => 4,
-            ]);
-        $mainMenu->menuItems()->create([
-            'title' => 'Documentation',
-            'linkable_type' => Page::class,
-            'linkable_id' => $docsPage->id,
-            'order' => 4,
-        ]);
-
-        // Docs > Getting Started (Level 2)
-        $gettingStartedPage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Getting Started',
-                'slug' => '/getting-started',
-                'author_id' => $user->id,
-                'parent_id' => $docsPage->id,
-                'order' => 1,
-            ]);
-
-        // Docs > Getting Started > Installation (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Installation',
-                'slug' => '/installation',
-                'author_id' => $user->id,
-                'parent_id' => $gettingStartedPage->id,
-                'order' => 1,
-            ]);
-
-        // Docs > Getting Started > Quick Start (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Quick Start Guide',
-                'slug' => '/quick-start',
-                'author_id' => $user->id,
-                'parent_id' => $gettingStartedPage->id,
-                'order' => 2,
-            ]);
-
-        // Docs > Configuration (Level 2)
-        $configPage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Configuration',
-                'slug' => '/configuration',
-                'author_id' => $user->id,
-                'parent_id' => $docsPage->id,
-                'order' => 2,
-            ]);
-
-        // Docs > Configuration > Database (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Database Setup',
-                'slug' => '/database',
-                'author_id' => $user->id,
-                'parent_id' => $configPage->id,
-                'order' => 1,
-            ]);
-
-        // Docs > Configuration > Environment (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Environment Variables',
-                'slug' => '/environment',
-                'author_id' => $user->id,
-                'parent_id' => $configPage->id,
-                'order' => 2,
-            ]);
-
-        // Docs > API Reference (Level 2)
-        $apiPage = Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'API Reference',
-                'slug' => '/api',
-                'author_id' => $user->id,
-                'parent_id' => $docsPage->id,
-                'order' => 3,
-            ]);
-
-        // Docs > API Reference > Authentication (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Authentication',
-                'slug' => '/authentication',
-                'author_id' => $user->id,
-                'parent_id' => $apiPage->id,
-                'order' => 1,
-            ]);
-
-        // Docs > API Reference > Endpoints (Level 3)
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'API Endpoints',
-                'slug' => '/endpoints',
-                'author_id' => $user->id,
-                'parent_id' => $apiPage->id,
-                'order' => 2,
-            ]);
-
-        // Blog Section (Level 1 with blog_index type)
+        // Blog Index Page
         $blogIndexPage = Page::factory()
             ->published()
             ->create([
@@ -319,82 +86,78 @@ class DatabaseSeeder extends Seeder
                 'slug' => '/blog',
                 'type' => 'blog_index',
                 'author_id' => $user->id,
-                'order' => 5,
+                'order' => 3,
             ]);
         $mainMenu->menuItems()->create([
             'title' => 'Blog',
             'linkable_type' => Page::class,
             'linkable_id' => $blogIndexPage->id,
-            'order' => 5,
+            'order' => 3,
         ]);
 
-        // Create realistic blog posts under blog index
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock()
-            ->withTags(['laravel', 'php', 'cms'])
-            ->create([
-                'title' => 'Introducing Siteman CMS',
-                'slug' => '/introducing-siteman',
-                'parent_id' => $blogIndexPage->id,
-                'author_id' => $user->id,
-            ]);
+        // Blog posts with realistic content using extended faker
+        $blogTags = [
+            ['laravel', 'php', 'web-development'],
+            ['javascript', 'typescript', 'frontend'],
+            ['testing', 'best-practices'],
+            ['devops', 'deployment'],
+            ['career', 'personal'],
+            ['open-source', 'community'],
+            ['database', 'performance'],
+            ['api', 'rest', 'backend'],
+        ];
 
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock()
-            ->withTags(['tutorial', 'beginner'])
-            ->create([
-                'title' => 'Building Your First Page',
-                'slug' => '/building-first-page',
-                'parent_id' => $blogIndexPage->id,
-                'author_id' => $user->id,
-            ]);
+        // Create 8 blog posts with varied tags
+        foreach ($blogTags as $index => $tags) {
+            Page::factory()
+                ->published()
+                ->withBlogPost()
+                ->withTags($tags)
+                ->create([
+                    'parent_id' => $blogIndexPage->id,
+                    'author_id' => $user->id,
+                    'published_at' => now()->subDays(rand(1, 90)),
+                ]);
+        }
 
-        Page::factory()
+        // Projects Page
+        $projectsPage = Page::factory()
             ->published()
-            ->withMarkdownBlock()
-            ->withTags(['advanced', 'customization'])
+            ->withMarkdownBlock(false, [
+                "# Projects\n",
+                "Here are some of the projects I've been working on.",
+                "## Open Source\n",
+                'I contribute to various open source projects and maintain a few of my own. Check out my [GitHub profile](https://github.com) for the latest.',
+                "## Side Projects\n",
+                "- **DevTools CLI** - A collection of developer productivity tools\n- **BlogEngine** - A simple static site generator\n- **TaskFlow** - A minimalist task management app",
+                "## Collaborations\n",
+                "I'm always open to collaborating on interesting projects. If you have an idea, let's talk!",
+            ])
             ->create([
-                'title' => 'Advanced Customization Techniques',
-                'slug' => '/advanced-customization',
-                'parent_id' => $blogIndexPage->id,
+                'title' => 'Projects',
+                'slug' => '/projects',
                 'author_id' => $user->id,
+                'order' => 4,
             ]);
+        $mainMenu->menuItems()->create([
+            'title' => 'Projects',
+            'linkable_type' => Page::class,
+            'linkable_id' => $projectsPage->id,
+            'order' => 4,
+        ]);
 
+        // Tag Index Page
         Page::factory()
-            ->published()
-            ->withMarkdownBlock()
-            ->withTags(['performance', 'optimization'])
-            ->create([
-                'title' => 'Performance Optimization Tips',
-                'slug' => '/performance-tips',
-                'parent_id' => $blogIndexPage->id,
-                'author_id' => $user->id,
-            ]);
-
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock()
-            ->withTags(['security', 'best-practices'])
-            ->create([
-                'title' => 'Security Best Practices',
-                'slug' => '/security-practices',
-                'parent_id' => $blogIndexPage->id,
-                'author_id' => $user->id,
-            ]);
-
-        // Utility Pages (Level 1)
-        $tagIndexPage = Page::factory()
             ->published()
             ->create([
                 'title' => 'Tags',
                 'slug' => '/tags',
                 'author_id' => $user->id,
                 'type' => 'tag_index',
-                'order' => 6,
+                'order' => 5,
             ]);
 
+        // RSS Feed Page
         Page::factory()
             ->published()
             ->create([
@@ -402,27 +165,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => '/rss',
                 'author_id' => $user->id,
                 'type' => 'rss_feed',
-                'order' => 7,
-            ]);
-
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Privacy Policy',
-                'slug' => '/privacy',
-                'author_id' => $user->id,
-                'order' => 9,
-            ]);
-
-        Page::factory()
-            ->published()
-            ->withMarkdownBlock(true)
-            ->create([
-                'title' => 'Terms of Service',
-                'slug' => '/terms',
-                'author_id' => $user->id,
-                'order' => 10,
+                'order' => 6,
             ]);
     }
 }

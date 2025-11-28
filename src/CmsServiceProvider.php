@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms;
 
-use DavidBadura\FakerMarkdownGenerator\FakerProvider;
+use Bambamboole\ExtendedFaker\ExtendedFaker;
 use Faker\Generator;
 use Filament\Forms\Components\Field;
 use Filament\Support\Assets\AlpineComponent;
@@ -142,7 +142,7 @@ class CmsServiceProvider extends PackageServiceProvider
             );
         }
         $this->app->afterResolving(Generator::class, function (Generator $generator) {
-            $generator->addProvider(new FakerProvider($generator));
+            ExtendedFaker::extend($generator);
 
             return $generator;
         });
