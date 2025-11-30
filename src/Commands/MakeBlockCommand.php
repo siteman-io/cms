@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Siteman\Cms\Commands;
 
-use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Siteman\Cms\Commands\Generator\BlockGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\text;
@@ -12,13 +14,11 @@ use function Laravel\Prompts\text;
 #[AsCommand(name: 'make:siteman-block')]
 class MakeBlockCommand extends Command
 {
-    use CanManipulateFiles;
-
     public $signature = 'make:siteman-block {name?}';
 
     public $description = 'Create siteman block';
 
-    public function handle(): int
+    public function handle(BlockGenerator $generator): int
     {
         $block = (string) str(
             $this->argument('name') ??
@@ -34,35 +34,23 @@ class MakeBlockCommand extends Command
             ->replace('/', '\\');
 
         $blockClass = (string) str($block)->afterLast('\\');
-        $blockNamespace = str($block)->contains('\\') ?
-            (string) str($block)->beforeLast('\\') :
-            app()->getNamespace().'Blocks';
+        $blockNamespace = str($block)->contains('\\')
+            ? (string) str($block)->beforeLast('\\')
+            : app()->getNamespace().'Blocks';
 
-        $blockId = str($blockClass)->beforeLast('Block')->kebab();
+        $blockId = (string) str($blockClass)->beforeLast('Block')->kebab();
 
-        // Create the block class
-        $this->copyStubToApp('Block', base_path(str($blockNamespace)->replace('\\', '/').'/'.$blockClass.'.php'), [
-            'class' => $blockClass,
-            'namespace' => $blockNamespace,
-            'id' => $blockId,
-        ]);
+        $classPath = base_path(str($blockNamespace)->replace('\\', '/').'/'.$blockClass.'.php');
+        File::ensureDirectoryExists(dirname($classPath));
+        File::put($classPath, $generator->generate($blockClass, $blockNamespace, $blockId));
+
         $this->components->info('Block class created successfully.');
 
-        // Create the view file
         $viewsPath = resource_path('views/blocks');
-        if (!File::exists($viewsPath)) {
-            File::makeDirectory($viewsPath, 0755, true);
-        }
+        File::ensureDirectoryExists($viewsPath);
+        File::put("{$viewsPath}/{$blockId}.blade.php", $generator->generateView($blockId));
 
-        $viewContent = <<<'BLADE'
-<div class="block">
-    <h2>{{ $data['title'] }}</h2>
-</div>
-BLADE;
-
-        File::put("{$viewsPath}/{$blockId}.blade.php", $viewContent);
         $this->components->info("View file created at: resources/views/blocks/{$blockId}.blade.php");
-
         $this->components->info('Remember to register your block in the configure method of your theme.');
 
         return self::SUCCESS;
