@@ -2,67 +2,69 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\File;
 use Siteman\Cms\Commands\Generator\SettingsGenerator;
+use Siteman\Cms\Settings\SettingsFormInterface;
+use Spatie\LaravelSettings\Settings;
 
-it('generates a valid settings class', function () {
+it('generates a working settings class', function () {
     $generator = new SettingsGenerator;
+    $className = 'TestSettings_'.uniqid();
+    $namespace = 'Tests\\Generated';
 
-    $output = $generator->generateSettings('ThemeSettings', 'App\\Settings', 'theme');
+    $code = $generator->generateSettings($className, $namespace, 'test');
 
-    expect($output)
-        ->toContain('declare(strict_types=1);')
-        ->toContain('namespace App\\Settings;')
-        ->toContain('use Spatie\\LaravelSettings\\Settings;')
-        ->toContain('class ThemeSettings extends Settings')
-        ->toContain('public ?string $description')
-        ->toContain('public static function group(): string')
-        ->toContain("return 'theme';");
+    $tempFile = sys_get_temp_dir()."/{$className}.php";
+    File::put($tempFile, $code);
+
+    require_once $tempFile;
+
+    $fqcn = "{$namespace}\\{$className}";
+
+    expect(class_exists($fqcn))->toBeTrue();
+    expect(is_subclass_of($fqcn, Settings::class))->toBeTrue();
+    expect($fqcn::group())->toBe('test');
+
+    File::delete($tempFile);
 });
 
-it('generates a valid settings form class', function () {
+it('generates a working settings form class', function () {
     $generator = new SettingsGenerator;
+    $formClassName = 'TestSettingsForm_'.uniqid();
+    $settingsClassName = 'TestSettings_'.uniqid();
+    $namespace = 'Tests\\Generated';
 
-    $output = $generator->generateSettingsForm(
-        'ThemeSettingsForm',
-        'App\\Settings',
-        'ThemeSettings',
-        'App\\Settings'
-    );
+    // First generate the settings class that the form references
+    $settingsCode = $generator->generateSettings($settingsClassName, $namespace, 'test');
+    $settingsTempFile = sys_get_temp_dir()."/{$settingsClassName}.php";
+    File::put($settingsTempFile, $settingsCode);
+    require_once $settingsTempFile;
 
-    expect($output)
-        ->toContain('declare(strict_types=1);')
-        ->toContain('namespace App\\Settings;')
-        ->toContain('use Filament\\Forms\\Components\\Textarea;')
-        ->toContain('use Siteman\\Cms\\Settings\\SettingsFormInterface;')
-        ->toContain('class ThemeSettingsForm implements SettingsFormInterface')
-        ->toContain('public static function getSettingsClass(): string')
-        ->toContain('return ThemeSettings::class;')
-        ->toContain('public function icon(): string')
-        ->toContain("return 'heroicon-o-globe-alt';")
-        ->toContain('public function schema(): array')
-        ->toContain("Textarea::make('description')->rows(2)");
+    // Generate the form class
+    $formCode = $generator->generateSettingsForm($formClassName, $namespace, $settingsClassName, $namespace);
+    $formTempFile = sys_get_temp_dir()."/{$formClassName}.php";
+    File::put($formTempFile, $formCode);
+    require_once $formTempFile;
+
+    $fqcn = "{$namespace}\\{$formClassName}";
+    $instance = new $fqcn;
+
+    expect($instance)->toBeInstanceOf(SettingsFormInterface::class);
+    expect($instance->icon())->toBe('heroicon-o-globe-alt');
+    expect($instance->schema())->toBeArray();
+
+    File::delete($settingsTempFile);
+    File::delete($formTempFile);
 });
 
 it('generates a valid migration', function () {
     $generator = new SettingsGenerator;
 
-    $output = $generator->generateMigration('theme');
+    $code = $generator->generateMigration('test');
 
-    expect($output)
-        ->toContain('declare(strict_types=1);')
-        ->toContain('use Spatie\\LaravelSettings\\Migrations\\SettingsMigration;')
-        ->toContain('return new class extends SettingsMigration')
-        ->toContain('public function up(): void')
-        ->toContain("\$this->migrator->add('theme.description', 'Default value');");
-});
+    // Verify it's valid PHP by evaluating it
+    $migration = eval(str_replace('<?php declare(strict_types=1);', '', $code));
 
-it('generates settings with custom group name', function () {
-    $generator = new SettingsGenerator;
-
-    $output = $generator->generateSettings('SeoSettings', 'Acme\\Config', 'seo');
-
-    expect($output)
-        ->toContain('namespace Acme\\Config;')
-        ->toContain('class SeoSettings extends Settings')
-        ->toContain("return 'seo';");
+    expect($migration)->toBeObject();
+    expect(method_exists($migration, 'up'))->toBeTrue();
 });

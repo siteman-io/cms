@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
 use Siteman\Cms\Commands\MakeThemeCommand;
+use Siteman\Cms\Theme\ThemeInterface;
 
 use function Pest\Laravel\artisan;
 
@@ -46,12 +47,12 @@ it('creates a new theme', function () {
 
     expect(File::exists($themePath))->toBeTrue();
 
-    $themeContent = File::get($themePath);
-    expect($themeContent)
-        ->toContain('class TestTheme implements ThemeInterface')
-        ->toContain("return 'TestTheme';")
-        ->toContain('public function configure(Siteman $siteman): void')
-        ->toContain("->registerMenuLocation('header', 'Header')");
+    require_once $themePath;
+
+    $instance = new \App\Themes\TestTheme;
+
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect(\App\Themes\TestTheme::getName())->toBe('TestTheme');
 });
 
 it('generates the theme name properly with suffix', function () {
@@ -61,8 +62,12 @@ it('generates the theme name properly with suffix', function () {
     $themePath = app_path('Themes/FancyTheme.php');
     expect(File::exists($themePath))->toBeTrue();
 
-    $content = File::get($themePath);
-    expect($content)->toContain('class FancyTheme implements ThemeInterface');
+    require_once $themePath;
+
+    $instance = new \App\Themes\FancyTheme;
+
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect(\App\Themes\FancyTheme::getName())->toBe('FancyTheme');
 
     // Cleanup
     File::delete($themePath);
@@ -75,8 +80,12 @@ it('generates the theme name properly when already has suffix', function () {
     $themePath = app_path('Themes/FancyTheme.php');
     expect(File::exists($themePath))->toBeTrue();
 
-    $content = File::get($themePath);
-    expect($content)->toContain('class FancyTheme implements ThemeInterface');
+    require_once $themePath;
+
+    $instance = new \App\Themes\FancyTheme;
+
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect(\App\Themes\FancyTheme::getName())->toBe('FancyTheme');
 
     // Cleanup
     File::delete($themePath);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
 use Siteman\Cms\Commands\MakeSettingsCommand;
+use Siteman\Cms\Settings\SettingsFormInterface;
+use Spatie\LaravelSettings\Settings;
 
 use function Pest\Laravel\artisan;
 
@@ -58,15 +60,16 @@ it('creates a new settings class, form, and migration', function () {
     expect(File::exists($settingsPath))->toBeTrue();
     expect(File::exists($settingsFormPath))->toBeTrue();
 
-    $settingsContent = File::get($settingsPath);
-    expect($settingsContent)
-        ->toContain('class TestSettings extends Settings')
-        ->toContain("return 'test';")
-        ->toContain('public ?string $description');
+    require_once $settingsPath;
+    require_once $settingsFormPath;
 
-    $formContent = File::get($settingsFormPath);
-    expect($formContent)
-        ->toContain('class TestSettingsForm implements SettingsFormInterface')
-        ->toContain('return TestSettings::class;')
-        ->toContain("Textarea::make('description')->rows(2)");
+    expect(class_exists(\App\Settings\TestSettings::class))->toBeTrue();
+    expect(is_subclass_of(\App\Settings\TestSettings::class, Settings::class))->toBeTrue();
+    expect(\App\Settings\TestSettings::group())->toBe('test');
+
+    $formInstance = new \App\Settings\TestSettingsForm;
+
+    expect($formInstance)->toBeInstanceOf(SettingsFormInterface::class);
+    expect($formInstance->icon())->toBe('heroicon-o-globe-alt');
+    expect($formInstance->schema())->toBeArray();
 });

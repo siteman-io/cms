@@ -1,59 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
+use Illuminate\Support\Facades\File;
+use Siteman\Cms\Blocks\BlockInterface;
 use Siteman\Cms\Commands\Generator\BlockGenerator;
 
-it('generates a valid block class', function () {
+it('generates a working block class', function () {
     $generator = new BlockGenerator;
+    $className = 'TestBlock_'.uniqid();
+    $namespace = 'Tests\\Generated';
 
-    $output = $generator->generate('TestBlock', 'App\\Blocks', 'test');
+    $code = $generator->generate($className, $namespace, 'test');
 
-    expect($output)
-        ->toContain('declare(strict_types=1);')
-        ->toContain('namespace App\\Blocks;')
-        ->toContain('use Filament\\Forms\\Components\\TextInput;')
-        ->toContain('use Illuminate\\Contracts\\View\\View;')
-        ->toContain('use Siteman\\Cms\\Blocks\\BaseBlock;')
-        ->toContain('use Siteman\\Cms\\Models\\Page;')
-        ->toContain('class TestBlock extends BaseBlock')
-        ->toContain('public function id(): string')
-        ->toContain("return 'test';")
-        ->toContain('protected function fields(): array')
-        ->toContain("TextInput::make('title')")
-        ->toContain('public function render(array $data, Page $page): View')
-        ->toContain("return view('blocks.test', ['data' => \$data]);");
+    $tempFile = sys_get_temp_dir()."/{$className}.php";
+    File::put($tempFile, $code);
+
+    require_once $tempFile;
+
+    $fqcn = "{$namespace}\\{$className}";
+    $instance = new $fqcn;
+
+    expect($instance)->toBeInstanceOf(BlockInterface::class);
+    expect($instance->id())->toBe('test');
+
+    File::delete($tempFile);
 });
 
-it('generates block with custom namespace', function () {
+it('generates a valid view template', function () {
     $generator = new BlockGenerator;
+    $view = $generator->generateView();
 
-    $output = $generator->generate('HeroBlock', 'Acme\\Cms\\Blocks', 'hero');
+    $html = \Illuminate\Support\Facades\Blade::render($view, ['data' => ['title' => 'FooBar']]);
 
-    expect($output)
-        ->toContain('namespace Acme\\Cms\\Blocks;')
-        ->toContain('class HeroBlock extends BaseBlock')
-        ->toContain("return 'hero';")
-        ->toContain("return view('blocks.hero', ['data' => \$data]);");
-});
-
-it('generates a view template', function () {
-    $generator = new BlockGenerator;
-
-    $output = $generator->generateView('hero');
-
-    expect($output)
-        ->toContain('<div class="block">')
-        ->toContain("{{ \$data['title'] }}")
-        ->toContain('</div>');
-});
-
-it('escapes block id correctly in generated code', function () {
-    $generator = new BlockGenerator;
-
-    $output = $generator->generate('MySpecialBlock', 'App\\Blocks', 'my-special');
-
-    expect($output)
-        ->toContain("return 'my-special';")
-        ->toContain("return view('blocks.my-special', ['data' => \$data]);");
+    expect($html)->toContain('FooBar');
 });

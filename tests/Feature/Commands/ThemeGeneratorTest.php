@@ -2,37 +2,29 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\File;
 use Siteman\Cms\Commands\Generator\ThemeGenerator;
+use Siteman\Cms\Theme\ThemeInterface;
 
-it('generates a valid theme class', function () {
+it('generates a working theme class', function () {
     $generator = new ThemeGenerator;
+    $className = 'TestTheme_'.uniqid();
+    $namespace = 'Tests\\Generated';
 
-    $output = $generator->generate('FancyTheme', 'App\\Themes');
+    $code = $generator->generate($className, $namespace);
 
-    expect($output)
-        ->toContain('declare(strict_types=1);')
-        ->toContain('namespace App\\Themes;')
-        ->toContain('use Siteman\\Cms\\Siteman;')
-        ->toContain('use Siteman\\Cms\\Theme\\ThemeInterface;')
-        ->toContain('use Siteman\\Cms\\Theme\\BaseLayout;')
-        ->toContain('class FancyTheme implements ThemeInterface')
-        ->toContain('public static function getName(): string')
-        ->toContain("return 'FancyTheme';")
-        ->toContain('public function configure(Siteman $siteman): void')
-        ->toContain("->registerMenuLocation('header', 'Header')")
-        ->toContain("->registerMenuLocation('footer', 'Footer')")
-        ->toContain('$siteman->registerLayout(BaseLayout::class);');
-});
+    $tempFile = sys_get_temp_dir()."/{$className}.php";
+    File::put($tempFile, $code);
 
-it('generates theme with custom namespace', function () {
-    $generator = new ThemeGenerator;
+    require_once $tempFile;
 
-    $output = $generator->generate('DarkTheme', 'Acme\\Cms\\Themes');
+    $fqcn = "{$namespace}\\{$className}";
+    $instance = new $fqcn;
 
-    expect($output)
-        ->toContain('namespace Acme\\Cms\\Themes;')
-        ->toContain('class DarkTheme implements ThemeInterface')
-        ->toContain("return 'DarkTheme';");
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect($fqcn::getName())->toBe($className);
+
+    File::delete($tempFile);
 });
 
 it('calculates correct class file path', function () {

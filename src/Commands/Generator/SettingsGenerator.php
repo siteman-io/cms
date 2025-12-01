@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms\Commands\Generator;
 
@@ -8,6 +6,9 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PsrPrinter;
+use Siteman\Cms\Settings\SettingsFormInterface;
+use Spatie\LaravelSettings\Migrations\SettingsMigration;
+use Spatie\LaravelSettings\Settings;
 
 class SettingsGenerator
 {
@@ -17,10 +18,9 @@ class SettingsGenerator
         $file->setStrictTypes();
 
         $ns = $file->addNamespace($namespace);
-        $ns->addUse('Spatie\LaravelSettings\Settings');
 
         $class = $ns->addClass($className);
-        $class->setExtends('Spatie\LaravelSettings\Settings');
+        $class->setExtends(Settings::class);
 
         $class->addProperty('description')
             ->setPublic()
@@ -51,7 +51,7 @@ class SettingsGenerator
         $ns->addUse($settingsNamespace.'\\'.$settingsClassName);
 
         $class = $ns->addClass($className);
-        $class->addImplement('Siteman\Cms\Settings\SettingsFormInterface');
+        $class->addImplement(SettingsFormInterface::class);
 
         $class->addMethod('getSettingsClass')
             ->setPublic()
@@ -67,7 +67,7 @@ class SettingsGenerator
         $class->addMethod('schema')
             ->setPublic()
             ->setReturnType('array')
-            ->setBody("return [\n    Textarea::make('description')->rows(2),\n];");
+            ->setBody("return [Textarea::make('description')->rows(2)];");
 
         return (new PsrPrinter)->printFile($file);
     }
@@ -76,26 +76,16 @@ class SettingsGenerator
     {
         $file = new PhpFile;
         $file->setStrictTypes();
-        $file->addUse('Spatie\LaravelSettings\Migrations\SettingsMigration');
 
         $class = new ClassType(null);
-        $class->setExtends('Spatie\LaravelSettings\Migrations\SettingsMigration');
+        $class->setExtends(SettingsMigration::class);
 
         $class->addMethod('up')
             ->setPublic()
             ->setReturnType('void')
             ->setBody("\$this->migrator->add(?, 'Default value');", ["{$group}.description"]);
 
-        $printer = new PsrPrinter;
-
-        return "<?php\n\ndeclare(strict_types=1);\n\n"
-            ."use Spatie\\LaravelSettings\\Migrations\\SettingsMigration;\n\n"
-            ."return new class extends SettingsMigration\n"
-            ."{\n"
-            ."    public function up(): void\n"
-            ."    {\n"
-            ."        \$this->migrator->add('{$group}.description', 'Default value');\n"
-            ."    }\n"
-            ."};\n";
+        return "<?php declare(strict_types=1);\n\n"
+            .'return new class '.$class.';';
     }
 }

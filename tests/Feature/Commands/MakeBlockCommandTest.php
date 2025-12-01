@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
+use Siteman\Cms\Blocks\BlockInterface;
 use Siteman\Cms\Commands\MakeBlockCommand;
 
 use function Pest\Laravel\artisan;
@@ -54,14 +55,13 @@ it('creates a new block', function () {
     expect(File::exists($blockPath))->toBeTrue();
     expect(File::exists($viewPath))->toBeTrue();
 
-    $blockContent = File::get($blockPath);
-    expect($blockContent)
-        ->toContain('class TestBlock extends BaseBlock')
-        ->toContain("return 'test';")
-        ->toContain('public function render(array $data, Page $page): View');
+    require_once $blockPath;
+
+    $instance = new \App\Blocks\TestBlock;
+
+    expect($instance)->toBeInstanceOf(BlockInterface::class);
+    expect($instance->id())->toBe('test');
 
     $viewContent = File::get($viewPath);
-    expect($viewContent)
-        ->toContain('<div class="block">')
-        ->toContain("{{ \$data['title'] }}");
+    expect($viewContent)->toBeString()->not->toBeEmpty();
 });

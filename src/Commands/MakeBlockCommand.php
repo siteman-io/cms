@@ -48,7 +48,7 @@ class MakeBlockCommand extends Command
 
         $viewsPath = resource_path('views/blocks');
         File::ensureDirectoryExists($viewsPath);
-        File::put("{$viewsPath}/{$blockId}.blade.php", $generator->generateView($blockId));
+        File::put("{$viewsPath}/{$blockId}.blade.php", $generator->generateView());
 
         $this->components->info("View file created at: resources/views/blocks/{$blockId}.blade.php");
         $this->components->info('Remember to register your block in the configure method of your theme.');

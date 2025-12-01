@@ -1,12 +1,13 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms\Commands\Generator;
 
 use Illuminate\Support\Facades\File;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PsrPrinter;
+use Siteman\Cms\Siteman;
+use Siteman\Cms\Theme\BaseLayout;
+use Siteman\Cms\Theme\ThemeInterface;
 
 class ThemeGenerator
 {
@@ -16,12 +17,9 @@ class ThemeGenerator
         $file->setStrictTypes();
 
         $ns = $file->addNamespace($themeNamespace);
-        $ns->addUse('Siteman\Cms\Siteman');
-        $ns->addUse('Siteman\Cms\Theme\ThemeInterface');
-        $ns->addUse('Siteman\Cms\Theme\BaseLayout');
 
         $class = $ns->addClass($themeClass);
-        $class->addImplement('Siteman\Cms\Theme\ThemeInterface');
+        $class->addImplement(ThemeInterface::class);
 
         $class->addMethod('getName')
             ->setPublic()
@@ -32,12 +30,15 @@ class ThemeGenerator
         $configureMethod = $class->addMethod('configure')
             ->setPublic()
             ->setReturnType('void');
-        $configureMethod->addParameter('siteman')->setType('Siteman\Cms\Siteman');
+        $configureMethod->addParameter('siteman')->setType(Siteman::class);
         $configureMethod->setBody(
-            "\$siteman\n".
-            "    ->registerMenuLocation('header', 'Header')\n".
-            "    ->registerMenuLocation('footer', 'Footer');\n\n".
-            '$siteman->registerLayout(BaseLayout::class);'
+            implode(PHP_EOL, [
+                '$siteman',
+                "   ->registerMenuLocation('header', 'Header')",
+                "   ->registerMenuLocation('footer', 'Footer');",
+                '$siteman->registerLayout(?);',
+            ]),
+            [BaseLayout::class],
         );
 
         return (new PsrPrinter)->printFile($file);
