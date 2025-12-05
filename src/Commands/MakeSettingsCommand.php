@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Siteman\Cms\Commands;
 
 use Carbon\Carbon;
-use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Siteman\Cms\Commands\Concerns\ResolvesClassPath;
+use Siteman\Cms\Commands\Generator\SettingsGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\text;
@@ -15,13 +18,13 @@ use function Laravel\Prompts\text;
 #[AsCommand(name: 'make:siteman-settings')]
 class MakeSettingsCommand extends Command
 {
-    use CanManipulateFiles;
+    use ResolvesClassPath;
 
     public $signature = 'make:siteman-settings {name?}';
 
     public $description = 'Create Siteman SettingsForm besides Settings class and migration';
 
-    public function handle(): int
+    public function handle(SettingsGenerator $generator): int
     {
         $name = (string) str(
             $this->argument('name') ??
@@ -37,47 +40,43 @@ class MakeSettingsCommand extends Command
             ->replace('/', '\\');
 
         $settingsClass = (string) str($name)->afterLast('\\');
-        $settingsNamespace = str($name)->contains('\\') ?
-            (string) str($name)->beforeLast('\\') :
-            app()->getNamespace().'Settings';
+        $settingsNamespace = str($name)->contains('\\')
+            ? (string) str($name)->beforeLast('\\')
+            : app()->getNamespace().'Settings';
 
-        $this->copyStubToApp('Settings', base_path(str($settingsNamespace)->replace('\\', '/').'/'.$settingsClass.'.php'), [
-            'namespace' => $settingsNamespace,
-            'class' => $settingsClass,
-            'group' => str($settingsClass)->lower()->before('settings'),
-        ]);
+        $group = (string) str($settingsClass)->lower()->before('settings');
+
+        $settingsPath = $this->getClassPath($settingsNamespace, $settingsClass);
+        File::ensureDirectoryExists(dirname($settingsPath));
+        File::put($settingsPath, $generator->generateSettings($settingsClass, $settingsNamespace, $group));
 
         $this->components->info('Settings class created successfully.');
 
         $settingsFormClass = $settingsClass.'Form';
-
-        $this->copyStubToApp('SettingsForm', base_path(str($settingsNamespace)->replace('\\', '/').'/'.$settingsFormClass.'.php'), [
-            'namespace' => $settingsNamespace,
-            'class' => $settingsFormClass,
-            'settingsClass' => '\\'.$settingsNamespace.'\\'.$settingsClass,
-        ]);
+        $settingsFormPath = $this->getClassPath($settingsNamespace, $settingsFormClass);
+        File::put(
+            $settingsFormPath,
+            $generator->generateSettingsForm($settingsFormClass, $settingsNamespace, $settingsClass, $settingsNamespace)
+        );
 
         $this->components->info('Settings Form class successfully created!');
 
         $path = $this->resolveMigrationPaths()[0];
-
         $migrationName = 'Create'.$settingsClass;
+
         $this->ensureMigrationDoesntAlreadyExist($migrationName, $path);
 
         File::ensureDirectoryExists($path);
+        $migrationFile = $this->getPath($migrationName, $path);
+        File::put($migrationFile, $generator->generateMigration($group));
 
-        $this->copyStubToApp('SettingsMigration', $file = $this->getPath($migrationName, $path), [
-            'group' => str($settingsClass)->lower()->before('settings'),
-        ]);
-
-        $this->components->info(sprintf('Setting migration [%s] created successfully.', $file));
-
+        $this->components->info(sprintf('Setting migration [%s] created successfully.', $migrationFile));
         $this->components->info('Remember to register the SettingsForm via the configure method in your Theme');
 
         return self::SUCCESS;
     }
 
-    protected function ensureMigrationDoesntAlreadyExist($name, $migrationPath = null): void
+    protected function ensureMigrationDoesntAlreadyExist(string $name, ?string $migrationPath = null): void
     {
         if (!empty($migrationPath)) {
             $migrationFiles = File::glob($migrationPath.'/*.php');
@@ -92,11 +91,14 @@ class MakeSettingsCommand extends Command
         }
     }
 
-    protected function getPath($name, $path): string
+    protected function getPath(string $name, string $path): string
     {
         return $path.'/'.Carbon::now()->format('Y_m_d_His').'_'.Str::snake($name).'.php';
     }
 
+    /**
+     * @return array<string>
+     */
     protected function resolveMigrationPaths(): array
     {
         return !empty(config('settings.migrations_path'))

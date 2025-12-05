@@ -1,66 +1,92 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
-use Siteman\Cms\Commands\Generator\ThemeGenerator;
 use Siteman\Cms\Commands\MakeThemeCommand;
+use Siteman\Cms\Theme\ThemeInterface;
 
 use function Pest\Laravel\artisan;
 
+beforeEach(function () {
+    $themePath = app_path('Themes/TestTheme.php');
+    $viewsPath = resource_path('views/themes/test');
+
+    if (File::exists($themePath)) {
+        File::delete($themePath);
+    }
+    if (File::isDirectory($viewsPath)) {
+        File::deleteDirectory($viewsPath);
+    }
+});
+
+afterEach(function () {
+    $themePath = app_path('Themes/TestTheme.php');
+    $viewsPath = resource_path('views/themes/test');
+    $themesDir = app_path('Themes');
+
+    if (File::exists($themePath)) {
+        File::delete($themePath);
+    }
+    if (File::isDirectory($viewsPath)) {
+        File::deleteDirectory($viewsPath);
+    }
+    if (File::isDirectory($themesDir) && count(File::files($themesDir)) === 0) {
+        File::deleteDirectory($themesDir);
+    }
+});
+
 it('creates a new theme', function () {
-    File::shouldReceive('exists')
-        ->andReturn(false);
-
-    File::shouldReceive('get')
-        ->andReturn('stub content');
-
-    File::shouldReceive('ensureDirectoryExists')
-        ->once();
-
-    File::shouldReceive('put')
-        ->once()
-        ->withArgs(function ($path, $content) {
-            return str_contains($path, 'App/Themes/FancyTheme.php') && str_contains($content, 'stub content');
-        });
-
-    File::shouldReceive('copyDirectory')
-        ->once()
-        ->withArgs(function ($source, $destination) {
-            return str_contains($source, 'resources/views/themes/blank') && str_contains($destination, 'resources/views/themes/fancy');
-        });
-
-    $file = mock(\Symfony\Component\Finder\SplFileInfo::class);
-    $file->shouldReceive('getContents')
-        ->andReturn('siteman::themes.blank test-content');
-    $file->shouldReceive('getPathname')
-        ->andReturn('resources/views/themes/fancy/index.blade.php');
-    File::shouldReceive('allFiles')
-        ->once()
-        ->andReturn(collect([$file]));
-
-    File::shouldReceive('put')
-        ->once()
-        ->withArgs(
-            fn ($path, $content) => $path === 'resources/views/themes/fancy/index.blade.php'
-            && !str_contains($content, 'siteman::themes.blank'),
-        );
-
-    artisan(MakeThemeCommand::class, ['name' => 'FancyTheme'])
+    artisan(MakeThemeCommand::class, ['name' => 'TestTheme'])
         ->expectsOutputToContain('Theme class created.')
         ->expectsOutputToContain('Theme views created.')
         ->expectsOutputToContain('You may add the theme in your config/siteman.php')
         ->assertExitCode(0);
+
+    $themePath = app_path('Themes/TestTheme.php');
+
+    expect(File::exists($themePath))->toBeTrue();
+
+    require_once $themePath;
+
+    $instance = new \App\Themes\TestTheme;
+
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect(\App\Themes\TestTheme::getName())->toBe('TestTheme');
 });
 
-it('it generates the theme name properly', function (string $providedName, string $themeName, string $themeNamespace) {
+it('generates the theme name properly with suffix', function () {
+    artisan(MakeThemeCommand::class, ['name' => 'Fancy'])
+        ->assertExitCode(0);
 
-    $generator = mock(ThemeGenerator::class);
-    $generator->shouldReceive('generate')
-        ->with($themeName, $themeNamespace);
-    $this->swap(ThemeGenerator::class, $generator);
+    $themePath = app_path('Themes/FancyTheme.php');
+    expect(File::exists($themePath))->toBeTrue();
 
-    artisan(MakeThemeCommand::class, ['name' => $providedName])->assertExitCode(0);
-})->with([
-    ['FancyTheme', 'FancyTheme', 'App\\Themes'],
-    ['Fancy', 'FancyTheme', 'App\\Themes'],
-    ['Custom\\Namespace\\MyTheme', 'MyTheme', 'Custom\\Namespace'],
-]);
+    require_once $themePath;
+
+    $instance = new \App\Themes\FancyTheme;
+
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect(\App\Themes\FancyTheme::getName())->toBe('FancyTheme');
+
+    // Cleanup
+    File::delete($themePath);
+});
+
+it('generates the theme name properly when already has suffix', function () {
+    artisan(MakeThemeCommand::class, ['name' => 'FancyTheme'])
+        ->assertExitCode(0);
+
+    $themePath = app_path('Themes/FancyTheme.php');
+    expect(File::exists($themePath))->toBeTrue();
+
+    require_once $themePath;
+
+    $instance = new \App\Themes\FancyTheme;
+
+    expect($instance)->toBeInstanceOf(ThemeInterface::class);
+    expect(\App\Themes\FancyTheme::getName())->toBe('FancyTheme');
+
+    // Cleanup
+    File::delete($themePath);
+});
