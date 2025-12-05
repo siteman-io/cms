@@ -54,14 +54,6 @@ export default defineConfig({
                 ],
             },
             {
-                text: "Advanced",
-                collapsed: false,
-                items: [
-                    { text: "Architecture", link: "/advanced/architecture" },
-                    { text: "Facades & Helpers", link: "/advanced/facades-helpers" },
-                ],
-            },
-            {
                 text: "Contributing",
                 collapsed: false,
                 items: [

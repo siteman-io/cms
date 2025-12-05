@@ -92,12 +92,41 @@ class ThemeSettingsForm implements SettingsFormInterface
 
 It contains the dummy field `description` which you may delete. You can add more fields to the schema to fit your needs.
 
-The settings need to be registered via the Themes `configure` method.
+The settings form needs to be registered via the Themes `configure` method.
 
 ```php
-    public function configure(Siteman $siteman): void
-    {
-        //...
-        $siteman->registerSettings(ThemeSettingsForm::class);
-    }
+public function configure(Siteman $siteman): void
+{
+    $siteman->registerSettingsForm(ThemeSettingsForm::class);
+}
 ```
+
+## Accessing Settings
+
+Use the Siteman facade to access settings:
+
+```php
+use Siteman\Cms\Facades\Siteman;
+
+// Get general settings
+$settings = Siteman::getGeneralSettings();
+$siteName = $settings->site_name;
+$description = $settings->description;
+```
+
+In Blade templates:
+
+```blade
+<title>{{ Siteman::getGeneralSettings()->site_name }}</title>
+```
+
+For custom settings:
+
+```php
+$themeSettings = app(\App\Settings\ThemeSettings::class);
+$description = $themeSettings->description;
+```
+
+## Related
+
+- [Themes](/features/themes) - Registering settings forms

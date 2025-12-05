@@ -4,54 +4,107 @@ outline: deep
 
 # Themes
 
-Siteman ships with a default BlankTheme, which is not very exciting. But you can easily create your own theme by
-executing
-`php artisan make:siteman-theme`. This will create a new theme in the `App\Themes` namespace of your application
-alongside some basic views to kickstart your theme development.
+Themes control how your frontend looks. A theme registers menu locations, layouts, blocks, and provides Blade views.
 
-The theme can be enabled via your `config/siteman.php` file.
+## Creating a Theme
 
-```php 
-return [
-    // ...
-    'themes' => [
-        \Siteman\Cms\Theme\BlankTheme::class,
-    ],
-    // ...
-];
-``` 
+```bash
+php artisan make:siteman-theme MyTheme
+```
 
-A Siteman theme is a PHP class which implements the `Siteman\Cms\Theme\ThemeInterface`. It defines two methods:
+This gives you a theme class and some starter views.
 
-## `getName` method
+## Theme Structure
 
-The `getName` method is used to return a human-readable name of the theme.
+A theme implements `ThemeInterface` with two methods:
 
-## `configure` method
+```php
+<?php declare(strict_types=1);
 
-The Themes `configure` method is used to define the theme's configuration. It gets the `Siteman\Cms\Siteman` instance as
-a dependency, which allows for easy access and manipulation of the Siteman configuration.
+namespace App\Siteman\Themes;
 
-> [!IMPORTANT]  
-> If you are proving a theme via a composer package you need to implement a `getViewPrefix` method.
+use Siteman\Cms\Siteman;
+use Siteman\Cms\Theme\ThemeInterface;
 
-## Default view files
+class MyTheme implements ThemeInterface
+{
+    public static function getName(): string
+    {
+        return 'My Theme';
+    }
 
-Siteman renders different content through different cascades of view options. The first existing one is taken.
+    public function configure(Siteman $siteman): void
+    {
+        $siteman->registerMenuLocation('header', 'Header');
+        $siteman->registerMenuLocation('footer', 'Footer');
 
-* Pages
-    1. Layout if set on the Page
-    2. `{theme}.pages.{slug}`
-    3. `{theme}.pages.show`
-    4. `siteman::themes.blank.pages.show`
-* Posts
-    1. `{theme}.posts.{slug}`
-    2. `{theme}.posts.show`
-    3. `siteman::themes.blank.posts.show`
-* Post Index
-    1. `{theme}.posts.index`
-    2. `siteman::themes.blank.posts.index`
-* Tags
-    1. `{theme}.tags.{slug}`
-    2. `{theme}.tags.show`
-    3. `siteman::themes.blank.tags.show`
+        $siteman->registerLayout(MyLayout::class);
+        $siteman->registerBlock(HeroBlock::class);
+    }
+}
+```
+
+Register it in `config/siteman.php`:
+
+```php
+'themes' => [
+    \App\Siteman\Themes\MyTheme::class,
+],
+```
+
+## View Structure
+
+Put your views in `resources/views/siteman/themes/{theme-name}/`:
+
+```
+my-theme/
+├── pages/
+│   └── show.blade.php
+├── posts/
+│   └── index.blade.php
+└── tags/
+    └── show.blade.php
+```
+
+## View Resolution
+
+Siteman looks for views in order and uses the first one that exists:
+
+**Pages:**
+1. `{theme}.pages.{slug}` (specific to that page)
+2. `{theme}.pages.show` (generic)
+3. `siteman::themes.blank.pages.show` (fallback)
+
+**Blog:** `{theme}.posts.index` → fallback
+
+**Tags:** `{theme}.tags.show` → fallback
+
+## Optional: Panel Customization
+
+You can customize the Filament admin panel from your theme:
+
+```php
+public function configurePanel(Panel $panel): void
+{
+    $panel
+        ->brandName('My Site')
+        ->colors(['primary' => Color::Blue]);
+}
+```
+
+## Package Themes
+
+If you're distributing a theme as a package, add a `getViewPrefix()` method:
+
+```php
+public function getViewPrefix(): string
+{
+    return 'my-package::themes.my-theme';
+}
+```
+
+## Related
+
+- [Blocks](/features/blocks)
+- [Layouts](/features/layouts)
+- [Menus](/features/menus)
