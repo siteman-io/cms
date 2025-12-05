@@ -55,13 +55,11 @@ class Page extends Model implements Feedable, HasMedia
 
     protected $guarded = [];
 
-    public static function boot(): void
+    protected static function booted(): void
     {
-        parent::boot();
-
-        static::creating(function (self $post) {
-            if (!$post->author_id) {
-                $post->author_id = auth()->id();
+        static::creating(function (self $page) {
+            if (!$page->author_id) {
+                $page->author_id = auth()->id();
             }
         });
 
