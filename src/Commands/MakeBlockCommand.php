@@ -40,7 +40,7 @@ class MakeBlockCommand extends Command
 
         $blockId = (string) str($blockClass)->beforeLast('Block')->kebab();
 
-        $classPath = base_path(str($blockNamespace)->replace('\\', '/').'/'.$blockClass.'.php');
+        $classPath = $this->getClassPath($blockNamespace, $blockClass);
         File::ensureDirectoryExists(dirname($classPath));
         File::put($classPath, $generator->generate($blockClass, $blockNamespace, $blockId));
 
@@ -54,5 +54,21 @@ class MakeBlockCommand extends Command
         $this->components->info('Remember to register your block in the configure method of your theme.');
 
         return self::SUCCESS;
+    }
+
+    private function getClassPath(string $namespace, string $class): string
+    {
+        $appNamespace = trim(app()->getNamespace(), '\\');
+
+        if (str_starts_with($namespace, $appNamespace)) {
+            $relativePath = str($namespace)
+                ->after($appNamespace)
+                ->trim('\\')
+                ->replace('\\', '/');
+
+            return app_path($relativePath.'/'.$class.'.php');
+        }
+
+        return base_path(str($namespace)->replace('\\', '/').'/'.$class.'.php');
     }
 }

@@ -43,14 +43,14 @@ class MakeSettingsCommand extends Command
 
         $group = (string) str($settingsClass)->lower()->before('settings');
 
-        $settingsPath = base_path(str($settingsNamespace)->replace('\\', '/').'/'.$settingsClass.'.php');
+        $settingsPath = $this->getClassPath($settingsNamespace, $settingsClass);
         File::ensureDirectoryExists(dirname($settingsPath));
         File::put($settingsPath, $generator->generateSettings($settingsClass, $settingsNamespace, $group));
 
         $this->components->info('Settings class created successfully.');
 
         $settingsFormClass = $settingsClass.'Form';
-        $settingsFormPath = base_path(str($settingsNamespace)->replace('\\', '/').'/'.$settingsFormClass.'.php');
+        $settingsFormPath = $this->getClassPath($settingsNamespace, $settingsFormClass);
         File::put(
             $settingsFormPath,
             $generator->generateSettingsForm($settingsFormClass, $settingsNamespace, $settingsClass, $settingsNamespace)
@@ -101,5 +101,21 @@ class MakeSettingsCommand extends Command
         return !empty(config('settings.migrations_path'))
             ? [config('settings.migrations_path')]
             : config('settings.migrations_paths');
+    }
+
+    private function getClassPath(string $namespace, string $class): string
+    {
+        $appNamespace = trim(app()->getNamespace(), '\\');
+
+        if (str_starts_with($namespace, $appNamespace)) {
+            $relativePath = str($namespace)
+                ->after($appNamespace)
+                ->trim('\\')
+                ->replace('\\', '/');
+
+            return app_path($relativePath.'/'.$class.'.php');
+        }
+
+        return base_path(str($namespace)->replace('\\', '/').'/'.$class.'.php');
     }
 }
