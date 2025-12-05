@@ -6,8 +6,8 @@ namespace Siteman\Cms\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Siteman\Cms\Commands\Generator\BlockGenerator;
 use Siteman\Cms\Commands\Concerns\ResolvesClassPath;
+use Siteman\Cms\Commands\Generator\BlockGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\text;
@@ -16,6 +16,7 @@ use function Laravel\Prompts\text;
 class MakeBlockCommand extends Command
 {
     use ResolvesClassPath;
+
     public $signature = 'make:siteman-block {name?}';
 
     public $description = 'Create siteman block';

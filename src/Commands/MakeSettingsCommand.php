@@ -19,6 +19,7 @@ use function Laravel\Prompts\text;
 class MakeSettingsCommand extends Command
 {
     use ResolvesClassPath;
+
     public $signature = 'make:siteman-settings {name?}';
 
     public $description = 'Create Siteman SettingsForm besides Settings class and migration';
