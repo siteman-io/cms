@@ -58,20 +58,4 @@ class ThemeGenerator
             File::put($viewFile->getPathname(), $content->toString());
         }
     }
-
-    public function getClassFilePath(string $themeNamespace, string $themeClass): string
-    {
-        $appNamespace = trim(app()->getNamespace(), '\\');
-
-        if (str_starts_with($themeNamespace, $appNamespace)) {
-            $relativePath = str($themeNamespace)
-                ->after($appNamespace)
-                ->trim('\\')
-                ->replace('\\', '/');
-
-            return app_path($relativePath.'/'.$themeClass.'.php');
-        }
-
-        return base_path(str($themeNamespace)->replace('\\', '/').'/'.$themeClass.'.php');
-    }
 }

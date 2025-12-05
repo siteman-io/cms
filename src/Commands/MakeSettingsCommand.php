@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Siteman\Cms\Commands\Concerns\ResolvesClassPath;
 use Siteman\Cms\Commands\Generator\SettingsGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 
@@ -17,6 +18,7 @@ use function Laravel\Prompts\text;
 #[AsCommand(name: 'make:siteman-settings')]
 class MakeSettingsCommand extends Command
 {
+    use ResolvesClassPath;
     public $signature = 'make:siteman-settings {name?}';
 
     public $description = 'Create Siteman SettingsForm besides Settings class and migration';
@@ -101,21 +103,5 @@ class MakeSettingsCommand extends Command
         return !empty(config('settings.migrations_path'))
             ? [config('settings.migrations_path')]
             : config('settings.migrations_paths');
-    }
-
-    private function getClassPath(string $namespace, string $class): string
-    {
-        $appNamespace = trim(app()->getNamespace(), '\\');
-
-        if (str_starts_with($namespace, $appNamespace)) {
-            $relativePath = str($namespace)
-                ->after($appNamespace)
-                ->trim('\\')
-                ->replace('\\', '/');
-
-            return app_path($relativePath.'/'.$class.'.php');
-        }
-
-        return base_path(str($namespace)->replace('\\', '/').'/'.$class.'.php');
     }
 }

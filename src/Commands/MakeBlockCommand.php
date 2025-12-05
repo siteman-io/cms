@@ -7,6 +7,7 @@ namespace Siteman\Cms\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Siteman\Cms\Commands\Generator\BlockGenerator;
+use Siteman\Cms\Commands\Concerns\ResolvesClassPath;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\text;
@@ -14,6 +15,7 @@ use function Laravel\Prompts\text;
 #[AsCommand(name: 'make:siteman-block')]
 class MakeBlockCommand extends Command
 {
+    use ResolvesClassPath;
     public $signature = 'make:siteman-block {name?}';
 
     public $description = 'Create siteman block';
@@ -54,21 +56,5 @@ class MakeBlockCommand extends Command
         $this->components->info('Remember to register your block in the configure method of your theme.');
 
         return self::SUCCESS;
-    }
-
-    private function getClassPath(string $namespace, string $class): string
-    {
-        $appNamespace = trim(app()->getNamespace(), '\\');
-
-        if (str_starts_with($namespace, $appNamespace)) {
-            $relativePath = str($namespace)
-                ->after($appNamespace)
-                ->trim('\\')
-                ->replace('\\', '/');
-
-            return app_path($relativePath.'/'.$class.'.php');
-        }
-
-        return base_path(str($namespace)->replace('\\', '/').'/'.$class.'.php');
     }
 }

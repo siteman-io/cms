@@ -6,6 +6,7 @@ namespace Siteman\Cms\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Siteman\Cms\Commands\Concerns\ResolvesClassPath;
 use Siteman\Cms\Commands\Generator\ThemeGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 
@@ -14,6 +15,8 @@ use function Laravel\Prompts\text;
 #[AsCommand(name: 'make:siteman-theme')]
 class MakeThemeCommand extends Command
 {
+    use ResolvesClassPath;
+
     public $signature = 'make:siteman-theme {name?}';
 
     public $description = 'Create new Siteman Theme';
@@ -38,7 +41,7 @@ class MakeThemeCommand extends Command
             ? (string) str($theme)->beforeLast('\\')
             : app()->getNamespace().'Themes';
 
-        $classPath = $generator->getClassFilePath($themeNamespace, $themeClass);
+        $classPath = $this->getClassPath($themeNamespace, $themeClass);
         File::ensureDirectoryExists(dirname($classPath));
         File::put($classPath, $generator->generate($themeClass, $themeNamespace));
 

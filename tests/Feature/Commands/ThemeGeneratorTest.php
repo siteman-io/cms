@@ -26,19 +26,3 @@ it('generates a working theme class', function () {
 
     File::delete($tempFile);
 });
-
-it('calculates correct class file path', function () {
-    $generator = new ThemeGenerator;
-
-    $path = $generator->getClassFilePath('App\\Themes', 'FancyTheme');
-
-    expect($path)->toEndWith('App/Themes/FancyTheme.php');
-});
-
-it('calculates correct class file path for nested namespace', function () {
-    $generator = new ThemeGenerator;
-
-    $path = $generator->getClassFilePath('Acme\\Cms\\Themes', 'DarkTheme');
-
-    expect($path)->toEndWith('Acme/Cms/Themes/DarkTheme.php');
-});
