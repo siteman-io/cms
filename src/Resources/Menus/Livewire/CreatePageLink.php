@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Siteman\Cms\Resources\Menus\Livewire;
 
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
@@ -23,6 +24,8 @@ class CreatePageLink extends Component implements HasForms
 
     public ?int $pageId = null;
 
+    public bool $includeChildren = false;
+
     public function save(): void
     {
         $this->validate([
@@ -38,6 +41,7 @@ class CreatePageLink extends Component implements HasForms
                 'linkable_type' => Page::class,
                 'linkable_id' => $page->id,
                 'target' => LinkTarget::Self->value,
+                'meta' => ['include_children' => $this->includeChildren],
                 'order' => $this->menu->menuItems->max('order') + 1,
             ]);
 
@@ -46,7 +50,7 @@ class CreatePageLink extends Component implements HasForms
             ->success()
             ->send();
 
-        $this->reset('pageId');
+        $this->reset(['pageId', 'includeChildren']);
         $this->dispatch('menu:created');
     }
 
@@ -57,10 +61,23 @@ class CreatePageLink extends Component implements HasForms
                 Select::make('pageId')
                     ->hiddenLabel()
                     ->searchable()
+                    ->live()
                     ->getSearchResultsUsing(fn (string $search): array => Page::where('title', 'like', "%{$search}%")->limit(50)->pluck('title', 'id')->toArray())
                     ->getOptionLabelUsing(fn ($value): ?string => Page::find($value)?->title)
                     ->options(Page::published()->latest()->limit(10)->pluck('title', 'id')),
+                Toggle::make('includeChildren')
+                    ->label(__('siteman::menu.form.include_children'))
+                    ->visible(fn ($get): bool => $this->selectedPageHasChildren($get('pageId'))),
             ]);
+    }
+
+    protected function selectedPageHasChildren(?int $pageId): bool
+    {
+        if ($pageId === null) {
+            return false;
+        }
+
+        return Page::where('parent_id', $pageId)->exists();
     }
 
     public function render(): View

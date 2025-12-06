@@ -47,7 +47,7 @@ class Menu extends Model
             ->whereNull('parent_id')
             ->orderBy('parent_id')
             ->orderBy('order')
-            ->with('children');
+            ->with('menuItemChildren');
     }
 
     public static function location(string $location): ?self

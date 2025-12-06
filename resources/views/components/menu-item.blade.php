@@ -1,12 +1,14 @@
-@php use Siteman\Cms\Models\MenuItem; @endphp
+@php use Siteman\Cms\Models\MenuItem; use Siteman\Cms\Models\Page; @endphp
 @props(['item'])
 
 @php
     /** @var MenuItem $item */
-    $hasChildren = $item->children->isNotEmpty();
+    $hasMenuItemChildren = $item->menuItemChildren->isNotEmpty();
     $isPageLink = $item->linkable_type !== null;
     $isCustomLink = $item->linkable_type === null && $item->url !== null;
     $isCustomText = $item->linkable_type === null && $item->url === null;
+    $hasPageChildren = $item->include_children && $item->linkable instanceof Page && $item->linkable->children->isNotEmpty();
+    $showToggle = $hasMenuItemChildren || $hasPageChildren;
 @endphp
 
 <li
@@ -18,7 +20,7 @@
         <div class="flex grow items-center gap-2">
             {{ $this->reorderAction }}
 
-            @if($hasChildren)
+            @if($showToggle)
                 <x-filament::icon-button
                     icon="heroicon-o-chevron-right"
                     x-on:click.stop="open = !open"
@@ -80,15 +82,25 @@
         </div>
     </div>
 
-    <ul
-        x-collapse
-        x-show="open"
-        wire:key="{{ $item->getKey() }}.children"
-        x-data="menuBuilder({ parentId: {{ $item->getKey()  }} })"
-        class="mt-2 space-y-2 ms-4"
-    >
-        @foreach($item->children as $child)
-            <x-siteman::menu-item :item="$child" />
-        @endforeach
-    </ul>
+    @if($showToggle)
+        <ul
+            x-collapse
+            x-show="open"
+            wire:key="{{ $item->getKey() }}.children"
+            @if($hasMenuItemChildren) x-data="menuBuilder({ parentId: {{ $item->getKey() }} })" @endif
+            class="mt-2 space-y-2 ms-4"
+        >
+            {{-- Menu item children (actual MenuItem records) --}}
+            @foreach($item->menuItemChildren as $child)
+                <x-siteman::menu-item :item="$child" />
+            @endforeach
+
+            {{-- Dynamic page children (virtual, read-only) --}}
+            @if($hasPageChildren)
+                @foreach($item->linkable->children as $page)
+                    <x-siteman::page-menu-item :page="$page" />
+                @endforeach
+            @endif
+        </ul>
+    @endif
 </li>

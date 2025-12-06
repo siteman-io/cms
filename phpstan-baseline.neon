@@ -67,6 +67,12 @@ parameters:
 			path: src/CmsServiceProvider.php
 
 		-
+			message: '#^Method Siteman\\Cms\\Models\\Page\:\:getChildren\(\) should return Illuminate\\Support\\Collection\<int, Siteman\\Cms\\Contracts\\MenuItemInterface\> but returns Staudenmeir\\LaravelAdjacencyList\\Eloquent\\Collection\<int, static\(Siteman\\Cms\\Models\\Page\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Models/Page.php
+
+		-
 			message: '#^Offset ''description'' on string\|null on left side of \?\? does not exist\.$#'
 			identifier: nullCoalesce.offset
 			count: 1

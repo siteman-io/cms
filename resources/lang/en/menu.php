@@ -48,6 +48,7 @@ return [
         'url' => 'URL',
         'linkable_type' => 'Type',
         'linkable_id' => 'ID',
+        'include_children' => 'Include child pages',
     ],
     'resource' => [
         'navigation-group' => 'Content',

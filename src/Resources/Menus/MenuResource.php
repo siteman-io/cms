@@ -60,12 +60,11 @@ class MenuResource extends Resource
         return $schema
             ->columns(1)
             ->components([
-                Grid::make(4)
+                Grid::make()
                     ->schema([
                         TextInput::make('name')
                             ->label(__('siteman::menu.resource.fields.name.label'))
-                            ->required()
-                            ->columnSpan(3),
+                            ->required(),
 
                         ToggleButtons::make('is_visible')
                             ->grouped()
