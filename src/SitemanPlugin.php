@@ -8,8 +8,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
-use Filament\View\PanelsRenderHook;
-use Illuminate\Support\Facades\Blade;
+use Siteman\Cms\Models\Page;
 use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\Menus\MenuResource;
@@ -46,10 +45,6 @@ class SitemanPlugin implements Plugin
         ]);
 
         $panel->profile(EditProfile::class, false);
-        $panel->renderHook(
-            PanelsRenderHook::TOPBAR_START,
-            fn () => Blade::render(sprintf('<x-filament::link href="/">%s</x-filament::link>', __('siteman::dashboard.go-to-site'))),
-        );
         $panel->globalSearch(SitemanSearchProvider::class);
 
         $panel->renderHook('panels::global-search.before', function () {
@@ -65,6 +60,10 @@ class SitemanPlugin implements Plugin
                 'environment' => $env,
             ]);
         });
+        $panel->renderHook(
+            'panels::global-search.before',
+            fn () => view('siteman::snippets.homepage-link', ['page' => Page::getHomePage()]),
+        );
 
         $panel->sidebarFullyCollapsibleOnDesktop()
             ->sidebarWidth('14rem')

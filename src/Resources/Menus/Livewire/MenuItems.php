@@ -73,7 +73,6 @@ class MenuItems extends Component implements HasActions, HasForms
     {
         return Action::make('edit')
             ->label(__('filament-actions::edit.single.label'))
-            ->iconButton()
             ->size(Size::Small)
             ->modalHeading(fn (array $arguments): string => __('filament-actions::edit.single.modal.heading', ['label' => $arguments['title']]))
             ->icon('heroicon-m-pencil-square')
@@ -119,7 +118,6 @@ class MenuItems extends Component implements HasActions, HasForms
             ->color('danger')
             ->groupedIcon(FilamentIcon::resolve('actions::delete-action.grouped') ?? 'heroicon-m-trash')
             ->icon('heroicon-s-trash')
-            ->iconButton()
             ->size(Size::Small)
             ->requiresConfirmation()
             ->modalHeading(fn (array $arguments): string => __('filament-actions::delete.single.modal.heading', ['label' => $arguments['title']]))

@@ -55,6 +55,11 @@ class Page extends Model implements Feedable, HasMedia
 
     protected $guarded = [];
 
+    public static function getHomePage(): ?self
+    {
+        return Page::published()->where('computed_slug', '/')->first();
+    }
+
     protected static function booted(): void
     {
         static::creating(function (self $page) {

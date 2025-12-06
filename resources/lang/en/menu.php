@@ -6,6 +6,13 @@ return [
         'custom_link' => 'Custom Link',
         'custom_text' => 'Custom Text',
     ],
+    'items' => [
+        'collapse' => 'Collapse',
+        'expand' => 'Expand',
+        'reordering' => 'Reordering...',
+        'empty_title' => 'No menu items',
+        'empty_description' => 'Add items using the options on the left.',
+    ],
     'page_link' => 'Page Link',
     'custom_link' => 'Custom Link',
     'custom_text' => 'Custom Text',

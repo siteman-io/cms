@@ -46,9 +46,9 @@ class EditMenu extends EditRecord
                     Section::make()
                         ->columns(1)
                         ->schema([
-                            Livewire::make(CreatePageLink::class),
-                            Livewire::make(CreateCustomLink::class),
-                            Livewire::make(CreateCustomText::class),
+                            Livewire::make(CreatePageLink::class, ['menu' => $this->getRecord()]),
+                            Livewire::make(CreateCustomLink::class, ['menu' => $this->getRecord()]),
+                            Livewire::make(CreateCustomText::class, ['menu' => $this->getRecord()]),
                         ]),
                     Section::make()
                         ->columnSpan(2)
