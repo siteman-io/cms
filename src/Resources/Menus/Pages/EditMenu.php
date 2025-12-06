@@ -46,14 +46,14 @@ class EditMenu extends EditRecord
                     Section::make()
                         ->columns(1)
                         ->schema([
-                            Livewire::make(CreatePageLink::class, ['menu' => $this->getRecord()]),
-                            Livewire::make(CreateCustomLink::class, ['menu' => $this->getRecord()]),
-                            Livewire::make(CreateCustomText::class, ['menu' => $this->getRecord()]),
+                            Livewire::make(CreatePageLink::class, ['menu' => $this->getRecord()])->key('create-page-link'),
+                            Livewire::make(CreateCustomLink::class, ['menu' => $this->getRecord()])->key('create-custom-link'),
+                            Livewire::make(CreateCustomText::class, ['menu' => $this->getRecord()])->key('create-custom-text-link'),
                         ]),
                     Section::make()
                         ->columnSpan(2)
                         ->schema([
-                            Livewire::make(MenuItems::class, ['menu' => $this->getRecord()]),
+                            Livewire::make(MenuItems::class, ['menu' => $this->getRecord()])->key('menu-items'),
                         ]),
                 ]),
         ]);
