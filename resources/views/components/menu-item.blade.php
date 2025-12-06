@@ -8,29 +8,27 @@
     $isCustomLink = $item->linkable_type === null && $item->url !== null;
     $isCustomText = $item->linkable_type === null && $item->url === null;
     $hasPageChildren = $item->include_children && $item->linkable instanceof Page && $item->linkable->children->isNotEmpty();
-    $showToggle = $hasMenuItemChildren || $hasPageChildren;
+    $hasAnyChildren = $hasMenuItemChildren || $hasPageChildren;
 @endphp
 
 <li
     wire:key="{{ $item->getKey() }}"
     data-sortable-item="{{ $item->getKey() }}"
-    x-data="{ open: $persist(true).as('menu-item-' + {{ $item->getKey() }}) }"
+    x-data="{ open: $persist({{ $hasAnyChildren ? 'true' : 'false' }}).as('menu-item-' + {{ $item->getKey() }}) }"
 >
     <div class="flex px-3 py-2 fi-section transition-colors">
         <div class="flex grow items-center gap-2">
             {{ $this->reorderAction }}
 
-            @if($showToggle)
-                <x-filament::icon-button
-                    icon="heroicon-o-chevron-right"
-                    x-on:click.stop="open = !open"
-                    x-bind:title="open ? '{{ trans('siteman::menu.items.collapse') }}' : '{{ trans('siteman::menu.items.expand') }}'"
-                    color="gray"
-                    class="transition duration-200 ease-in-out"
-                    x-bind:class="{ 'rotate-90': open }"
-                    size="sm"
-                />
-            @endif
+            <x-filament::icon-button
+                icon="heroicon-o-chevron-right"
+                x-on:click.stop="open = !open"
+                x-bind:title="open ? '{{ trans('siteman::menu.items.collapse') }}' : '{{ trans('siteman::menu.items.expand') }}'"
+                color="gray"
+                class="transition duration-200 ease-in-out"
+                x-bind:class="{ 'rotate-90': open }"
+                size="sm"
+            />
 
             {{-- Type icon --}}
             <div class="flex-shrink-0 mt-0.5">
@@ -82,25 +80,24 @@
         </div>
     </div>
 
-    @if($showToggle)
-        <ul
-            x-collapse
-            x-show="open"
-            wire:key="{{ $item->getKey() }}.children"
-            @if($hasMenuItemChildren) x-data="menuBuilder({ parentId: {{ $item->getKey() }} })" @endif
-            class="mt-2 space-y-2 ms-4"
-        >
-            {{-- Menu item children (actual MenuItem records) --}}
-            @foreach($item->menuItemChildren as $child)
-                <x-siteman::menu-item :item="$child" />
-            @endforeach
+    {{-- Always render the nested ul for drag-and-drop nesting to work --}}
+    <ul
+        x-collapse
+        x-show="open"
+        wire:key="{{ $item->getKey() }}.children"
+        x-data="menuBuilder({ parentId: {{ $item->getKey() }} })"
+        class="mt-2 space-y-2 ms-4 min-h-2"
+    >
+        {{-- Menu item children (actual MenuItem records) --}}
+        @foreach($item->menuItemChildren as $child)
+            <x-siteman::menu-item :item="$child" />
+        @endforeach
 
-            {{-- Dynamic page children (virtual, read-only) --}}
-            @if($hasPageChildren)
-                @foreach($item->linkable->children as $page)
-                    <x-siteman::page-menu-item :page="$page" />
-                @endforeach
-            @endif
-        </ul>
-    @endif
+        {{-- Dynamic page children (virtual, read-only) --}}
+        @if($hasPageChildren)
+            @foreach($item->linkable->children as $page)
+                <x-siteman::page-menu-item :page="$page" />
+            @endforeach
+        @endif
+    </ul>
 </li>

@@ -60,13 +60,20 @@ it('can create a custom text as a menu item', function () {
 it('can update menu items', function () {
     actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
     $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
+    $menuItem = $menu->menuItems->first();
 
     livewire(MenuItems::class, ['menu' => $menu])
-        ->callAction('edit', data: ['title' => 'updated'], arguments: ['id' => $menu->menuItems->first()->id, 'title' => 'siteman'])
+        ->callAction('edit', data: [
+            'title' => 'updated',
+            'url' => 'https://example.com',
+            'target' => '_blank',
+        ], arguments: ['id' => $menuItem->id, 'title' => $menuItem->title])
         ->assertHasNoActionErrors();
 
-    expect($menu->refresh())->menuItems->first()->title->toBe('updated');
-})->skip('Test hangs - needs investigation');
+    expect($menu->refresh()->menuItems->first())
+        ->title->toBe('updated')
+        ->target->toBe('_blank');
+});
 
 it('can delete menu items', function () {
     actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
@@ -181,4 +188,29 @@ it('children returns empty when include_children is disabled', function () {
     // children should return empty (no MenuItem children, include_children is false)
     expect($menuItem->children)->toHaveCount(0);
     expect($menuItem->include_children)->toBeFalse();
+});
+
+it('can update include_children via edit action', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->create(['name' => 'Test Menu']);
+    $page = Page::factory()->published()->withChildren(2)->create();
+
+    // Create page link without includeChildren
+    livewire(CreatePageLink::class, ['menu' => $menu])
+        ->fillForm(['pageId' => $page->id])
+        ->call('save');
+
+    $menuItem = $menu->refresh()->menuItems->first();
+    expect($menuItem->include_children)->toBeFalse();
+
+    // Update to enable includeChildren
+    livewire(MenuItems::class, ['menu' => $menu])
+        ->callAction('edit', data: [
+            'title' => $menuItem->title,
+            'target' => '_self',
+            'includeChildren' => true,
+        ], arguments: ['id' => $menuItem->id, 'title' => $menuItem->title])
+        ->assertHasNoActionErrors();
+
+    expect($menuItem->refresh()->include_children)->toBeTrue();
 });

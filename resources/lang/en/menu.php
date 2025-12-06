@@ -48,6 +48,7 @@ return [
         'url' => 'URL',
         'linkable_type' => 'Type',
         'linkable_id' => 'ID',
+        'linked_page' => 'Linked page',
         'include_children' => 'Include child pages',
     ],
     'resource' => [
