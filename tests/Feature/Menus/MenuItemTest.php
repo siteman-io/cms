@@ -214,3 +214,66 @@ it('can update include_children via edit action', function () {
 
     expect($menuItem->refresh()->include_children)->toBeTrue();
 });
+
+it('can create a child page link via createChildAction', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
+    $parentItem = $menu->menuItems->first();
+    $page = Page::factory()->published()->create();
+
+    livewire(MenuItems::class, ['menu' => $menu])
+        ->callAction('createChild', data: [
+            'type' => 'page_link',
+            'pageId' => $page->id,
+        ], arguments: ['id' => $parentItem->id])
+        ->assertHasNoActionErrors();
+
+    $childItem = $parentItem->refresh()->menuItemChildren->first();
+    expect($childItem)
+        ->not->toBeNull()
+        ->parent_id->toBe($parentItem->id)
+        ->linkable_id->toBe($page->id)
+        ->linkable_type->toBe(Page::class);
+});
+
+it('can create a child custom link via createChildAction', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
+    $parentItem = $menu->menuItems->first();
+
+    livewire(MenuItems::class, ['menu' => $menu])
+        ->callAction('createChild', data: [
+            'type' => 'custom_link',
+            'title' => 'External Link',
+            'url' => 'https://example.com',
+            'target' => '_blank',
+        ], arguments: ['id' => $parentItem->id])
+        ->assertHasNoActionErrors();
+
+    $childItem = $parentItem->refresh()->menuItemChildren->first();
+    expect($childItem)->not->toBeNull();
+    expect($childItem->parent_id)->toBe($parentItem->id);
+    expect($childItem->title)->toBe('External Link');
+    expect($childItem->getAttributes()['url'])->toBe('https://example.com');
+    expect($childItem->target)->toBe('_blank');
+});
+
+it('can create a child custom text via createChildAction', function () {
+    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
+    $parentItem = $menu->menuItems->first();
+
+    livewire(MenuItems::class, ['menu' => $menu])
+        ->callAction('createChild', data: [
+            'type' => 'custom_text',
+            'title' => 'Section Header',
+        ], arguments: ['id' => $parentItem->id])
+        ->assertHasNoActionErrors();
+
+    $childItem = $parentItem->refresh()->menuItemChildren->first();
+    expect($childItem)->not->toBeNull();
+    expect($childItem->parent_id)->toBe($parentItem->id);
+    expect($childItem->title)->toBe('Section Header');
+    // Custom text items use the database default target ('_self')
+    expect($childItem->target)->toBe('_self');
+});

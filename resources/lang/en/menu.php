@@ -83,6 +83,12 @@ return [
             'add' => [
                 'label' => 'Add to Menu',
             ],
+            'create_child' => [
+                'label' => 'Add Child',
+                'heading' => 'Add Child Item',
+                'type' => 'Item Type',
+                'page' => 'Select Page',
+            ],
             'locations' => [
                 'label' => 'Locations',
                 'heading' => 'Manage Locations',

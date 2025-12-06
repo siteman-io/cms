@@ -66,9 +66,11 @@
             </x-filament::badge>
 
             @php
+                $createChildAction = ($this->createChildAction)(['id' => $item->getKey()]);
                 $editAction = ($this->editAction)(['id' => $item->getKey(), 'title' => $item->title]);
                 $deleteAction = ($this->deleteAction)(['id' => $item->getKey(), 'title' => $item->title]);
                 $actions = array_filter([
+                    $createChildAction->isVisible() ? $createChildAction : null,
                     $editAction->isVisible() ? $editAction : null,
                     $deleteAction->isVisible() ? $deleteAction : null,
                 ]);

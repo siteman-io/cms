@@ -11,11 +11,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\Size;
 use Filament\Support\Enums\Width;
 use Filament\Support\Facades\FilamentIcon;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -149,6 +151,107 @@ class MenuItems extends Component implements HasActions, HasForms
 
                 $menuItem?->delete();
             });
+    }
+
+    public function createChildAction(): Action
+    {
+        return Action::make('createChild')
+            ->label(__('siteman::menu.resource.actions.create_child.label'))
+            ->icon(Heroicon::OutlinedPlusCircle)
+            ->visible(fn (): bool => auth()->user()?->can('update_menu') ?? false)
+            ->modalHeading(__('siteman::menu.resource.actions.create_child.heading'))
+            ->schema([
+                Select::make('type')
+                    ->label(__('siteman::menu.resource.actions.create_child.type'))
+                    ->options([
+                        'page_link' => __('siteman::menu.page_link'),
+                        'custom_link' => __('siteman::menu.custom_link'),
+                        'custom_text' => __('siteman::menu.custom_text'),
+                    ])
+                    ->default('page_link')
+                    ->live()
+                    ->required(),
+                Select::make('pageId')
+                    ->label(__('siteman::menu.resource.actions.create_child.page'))
+                    ->searchable()
+                    ->live()
+                    ->getSearchResultsUsing(fn (string $search): array => Page::where('title', 'like', "%{$search}%")->limit(50)->pluck('title', 'id')->toArray())
+                    ->getOptionLabelUsing(fn ($value): ?string => Page::find($value)?->title)
+                    ->options(Page::published()->latest()->limit(10)->pluck('title', 'id'))
+                    ->visible(fn (Get $get): bool => $get('type') === 'page_link')
+                    ->required(fn (Get $get): bool => $get('type') === 'page_link'),
+                Toggle::make('includeChildren')
+                    ->label(__('siteman::menu.form.include_children'))
+                    ->visible(fn (Get $get): bool => $get('type') === 'page_link' && $this->selectedPageHasChildren($get('pageId'))),
+                TextInput::make('title')
+                    ->label(__('siteman::menu.form.title'))
+                    ->visible(fn (Get $get): bool => $get('type') !== 'page_link')
+                    ->required(fn (Get $get): bool => $get('type') !== 'page_link'),
+                TextInput::make('url')
+                    ->label(__('siteman::menu.form.url'))
+                    ->visible(fn (Get $get): bool => $get('type') === 'custom_link')
+                    ->required(fn (Get $get): bool => $get('type') === 'custom_link'),
+                Select::make('target')
+                    ->label(__('siteman::menu.open_in.label'))
+                    ->options(LinkTarget::class)
+                    ->default(LinkTarget::Self)
+                    ->visible(fn (Get $get): bool => $get('type') !== 'custom_text'),
+            ])
+            ->action(function (array $data, array $arguments): void {
+                $parentId = $arguments['id'];
+                $parent = MenuItem::find($parentId);
+
+                if (!$parent) {
+                    return;
+                }
+
+                $maxOrder = MenuItem::where('parent_id', $parentId)->max('order') ?? 0;
+
+                $itemData = [
+                    'menu_id' => $this->menu->id,
+                    'parent_id' => $parentId,
+                    'order' => $maxOrder + 1,
+                ];
+
+                if ($data['type'] === 'page_link') {
+                    $page = Page::find($data['pageId']);
+                    if (!$page) {
+                        return;
+                    }
+                    $itemData['title'] = $page->title;
+                    $itemData['linkable_type'] = Page::class;
+                    $itemData['linkable_id'] = $page->id;
+                    $itemData['target'] = $data['target'] ?? LinkTarget::Self->value;
+                    $itemData['meta'] = ['include_children' => $data['includeChildren'] ?? false];
+                } elseif ($data['type'] === 'custom_link') {
+                    $itemData['title'] = $data['title'];
+                    $itemData['url'] = $data['url'];
+                    $itemData['target'] = $data['target'] ?? LinkTarget::Self->value;
+                } else {
+                    // Custom text - no target needed
+                    $itemData['title'] = $data['title'];
+                }
+
+                MenuItem::create($itemData);
+
+                $this->dispatch('menu:created');
+
+                Notification::make()
+                    ->title(__('siteman::menu.notifications.created.title'))
+                    ->success()
+                    ->send();
+            })
+            ->modalWidth(Width::Medium)
+            ->slideOver();
+    }
+
+    protected function selectedPageHasChildren(?int $pageId): bool
+    {
+        if ($pageId === null) {
+            return false;
+        }
+
+        return Page::where('parent_id', $pageId)->exists();
     }
 
     protected function pageHasChildren(?string $linkableType, ?int $linkableId): bool
