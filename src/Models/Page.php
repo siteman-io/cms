@@ -15,6 +15,7 @@ use Overtrue\LaravelVersionable\VersionStrategy;
 use RalphJSmit\Laravel\SEO\Models\SEO;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Siteman\Cms\Contracts\MenuItemInterface;
 use Siteman\Cms\Database\Factories\PageFactory;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
@@ -39,7 +40,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
  * @property User $author
  * @property SEO $seo
  */
-class Page extends Model implements Feedable, HasMedia
+class Page extends Model implements Feedable, HasMedia, MenuItemInterface
 {
     use HasFactory;
     use HasRecursiveRelationships;
@@ -55,13 +56,16 @@ class Page extends Model implements Feedable, HasMedia
 
     protected $guarded = [];
 
-    public static function boot(): void
+    public static function getHomePage(): ?self
     {
-        parent::boot();
+        return Page::published()->where('computed_slug', '/')->first();
+    }
 
-        static::creating(function (self $post) {
-            if (!$post->author_id) {
-                $post->author_id = auth()->id();
+    protected static function booted(): void
+    {
+        static::creating(function (self $page) {
+            if (!$page->author_id) {
+                $page->author_id = auth()->id();
             }
         });
 
@@ -314,5 +318,25 @@ class Page extends Model implements Feedable, HasMedia
     public function getMeta(string $key, mixed $default = null): mixed
     {
         return $this->meta[$key] ?? $default;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->computed_slug;
+    }
+
+    public function getTarget(): string
+    {
+        return '_self';
+    }
+
+    public function getChildren(): \Illuminate\Support\Collection
+    {
+        return $this->children;
     }
 }

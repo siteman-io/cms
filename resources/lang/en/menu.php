@@ -6,6 +6,13 @@ return [
         'custom_link' => 'Custom Link',
         'custom_text' => 'Custom Text',
     ],
+    'items' => [
+        'collapse' => 'Collapse',
+        'expand' => 'Expand',
+        'reordering' => 'Reordering...',
+        'empty_title' => 'No menu items',
+        'empty_description' => 'Add items using the options on the left.',
+    ],
     'page_link' => 'Page Link',
     'custom_link' => 'Custom Link',
     'custom_text' => 'Custom Text',
@@ -41,6 +48,8 @@ return [
         'url' => 'URL',
         'linkable_type' => 'Type',
         'linkable_id' => 'ID',
+        'linked_page' => 'Linked page',
+        'include_children' => 'Include child pages',
     ],
     'resource' => [
         'navigation-group' => 'Content',
@@ -73,6 +82,12 @@ return [
             ],
             'add' => [
                 'label' => 'Add to Menu',
+            ],
+            'create_child' => [
+                'label' => 'Add Child',
+                'heading' => 'Add Child Item',
+                'type' => 'Item Type',
+                'page' => 'Select Page',
             ],
             'locations' => [
                 'label' => 'Locations',

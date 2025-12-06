@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->json('meta')->nullable();
             $table->boolean('is_visible')->default(true);
             $table->timestamps();
         });
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('url')->nullable();
             $table->string('target', 10)->default('_self');
+            $table->json('meta')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();
         });

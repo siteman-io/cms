@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Siteman\Cms\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
+use Siteman\Cms\Contracts\MenuItemInterface;
 use Siteman\Cms\Database\Factories\MenuItemFactory;
 
 /**
@@ -22,16 +22,18 @@ use Siteman\Cms\Database\Factories\MenuItemFactory;
  * @property string|null $url
  * @property string|null $type
  * @property string|null $target
+ * @property \Illuminate\Support\Collection|null $meta
  * @property int $order
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property-read Collection|MenuItem[] $children
+ * @property-read bool $include_children
+ * @property-read \Illuminate\Support\Collection<int, MenuItemInterface> $children
  * @property-read int|null $children_count
  * @property-read Model|null $linkable
  * @property-read Menu $menu
  * @property-read MenuItem|null $parent
  */
-class MenuItem extends Model
+class MenuItem extends Model implements MenuItemInterface
 {
     use HasFactory;
 
@@ -41,10 +43,17 @@ class MenuItem extends Model
 
     protected $with = ['linkable'];
 
+    protected function casts(): array
+    {
+        return [
+            'meta' => 'collection',
+        ];
+    }
+
     protected static function booted(): void
     {
         static::deleted(function (self $menuItem) {
-            $menuItem->children->each->delete();
+            $menuItem->menuItemChildren->each->delete();
         });
     }
 
@@ -58,11 +67,24 @@ class MenuItem extends Model
         return $this->belongsTo(static::class);
     }
 
-    public function children(): HasMany
+    public function menuItemChildren(): HasMany
     {
         return $this->hasMany(static::class, 'parent_id')
-            ->with('children')
+            ->with('menuItemChildren')
             ->orderBy('order');
+    }
+
+    protected function children(): Attribute
+    {
+        return Attribute::get(function (): \Illuminate\Support\Collection {
+            $children = collect($this->menuItemChildren);
+
+            if ($this->include_children && $this->linkable instanceof Page) {
+                $children = $children->merge($this->linkable->children);
+            }
+
+            return $children;
+        });
     }
 
     public function linkable(): MorphTo
@@ -91,5 +113,35 @@ class MenuItem extends Model
 
             return __('siteman::menu.item.custom_link');
         });
+    }
+
+    protected function includeChildren(): Attribute
+    {
+        return Attribute::get(fn (): bool => (bool) $this->getMeta('include_children', false));
+    }
+
+    public function getMeta(string $key, mixed $default = null): mixed
+    {
+        return $this->meta[$key] ?? $default;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function getTarget(): string
+    {
+        return $this->target ?? '_self';
+    }
+
+    public function getChildren(): \Illuminate\Support\Collection
+    {
+        return $this->children;
     }
 }

@@ -8,10 +8,10 @@
     >
         {{ $this->form }}
 
-        <x-slot:footerActions>
+        <x-slot:footer>
             <x-filament::button type="submit">
                 {{ __('siteman::menu.resource.actions.add.label') }}
             </x-filament::button>
-        </x-slot:footerActions>
+        </x-slot:footer>
     </x-filament::section>
 </form>
