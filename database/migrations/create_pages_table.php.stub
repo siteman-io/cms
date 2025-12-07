@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('site_id')->constrained()->cascadeOnDelete();
             $table->foreignId('parent_id')->nullable()->references('id')->on($table->getTable())->nullOnDelete();
             $table->string('type')->default('page');
             $table->string('title');
