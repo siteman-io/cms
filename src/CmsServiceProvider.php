@@ -66,6 +66,7 @@ class CmsServiceProvider extends PackageServiceProvider
             ->hasViews('siteman')
             ->hasRoute('web')
             ->hasMigrations([
+                'create_sites_table',
                 'create_menus_table',
                 'create_pages_table',
                 '../settings/create_general_settings',
@@ -110,6 +111,9 @@ class CmsServiceProvider extends PackageServiceProvider
         ));
 
         $config->set('tags.tag_model', Tag::class);
+        $config->set('permission.teams', true);
+        $config->set('permission.models.role', Models\Role::class);
+        $config->set('permission.column_names.team_foreign_key', 'site_id');
         $config->set('filament-shield.shield_resource.show_model_path', false);
         $config->set('filament-shield.permission_prefixes.resource', [
             'view_any',

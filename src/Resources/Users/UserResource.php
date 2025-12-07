@@ -6,6 +6,7 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Siteman\Cms\Resources\Users\Pages\CreateUser;
 use Siteman\Cms\Resources\Users\Pages\EditUser;
 use Siteman\Cms\Resources\Users\Pages\ListUsers;
@@ -20,10 +22,23 @@ use Siteman\Cms\Resources\Users\Pages\ListUsers;
 class UserResource extends Resource
 {
     protected static ?string $recordTitleAttribute = 'name';
+    protected static bool $isScopedToTenant = false;
 
     public static function getModel(): string
     {
         return config('siteman.models.user');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $tenant = Filament::getTenant();
+
+        if ($tenant) {
+            return $query->whereHas('sites', fn (Builder $q) => $q->where('sites.id', $tenant->id));
+        }
+
+        return $query;
     }
 
     public static function form(Schema $schema): Schema

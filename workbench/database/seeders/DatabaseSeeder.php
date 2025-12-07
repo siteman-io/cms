@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\Models\Site;
 use Workbench\App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -16,11 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $site = Site::create(['name' => 'Workbench', 'slug' => 'workbench']);
         $user = User::factory()->create([
             'name' => 'Jane Doe',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
+        $site->users()->attach($user);
+        setPermissionsTeamId($site->id);
 
         $user->assignRole(Siteman::createSuperAdminRole());
 
