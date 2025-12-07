@@ -17,6 +17,7 @@ use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Siteman\Cms\Contracts\MenuItemInterface;
 use Siteman\Cms\Database\Factories\PageFactory;
+use Siteman\Cms\Models\Concerns\HasSite;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 use Spatie\MediaLibrary\HasMedia;
@@ -49,6 +50,7 @@ class Page extends Model implements Feedable, HasMedia, MenuItemInterface
     use InteractsWithMedia;
     use SoftDeletes;
     use Versionable;
+    use HasSite;
 
     protected array $versionable = ['title', 'slug', 'blocks', 'content', 'published_at'];
 

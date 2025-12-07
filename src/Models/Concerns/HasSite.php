@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Siteman\Cms\Models\Site;
 
+/**
+ * @property int $site_id
+ * @property Site $site
+ */
 trait HasSite
 {
     public static function bootHasSite(): void
