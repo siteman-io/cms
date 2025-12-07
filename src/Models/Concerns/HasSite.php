@@ -2,8 +2,10 @@
 
 namespace Siteman\Cms\Models\Concerns;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Site;
 
 /**
@@ -15,8 +17,14 @@ trait HasSite
     public static function bootHasSite(): void
     {
         static::creating(function (Model $model) {
-            if (!$model->site_id){
-                $model->site_id = getPermissionsTeamId();
+            if ((!$model->site_id) && $site = Siteman::getCurrentSite()) {
+                $model->site_id = $site->id;
+            }
+        });
+
+        static::addGlobalScope('site', function (Builder $query) {
+            if ($site = Siteman::getCurrentSite()) {
+                $query->where('site_id', $site->id);
             }
         });
     }

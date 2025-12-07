@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms\Commands;
 
@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Process;
 use Laravel\Prompts\Prompt;
+use Siteman\Cms\Models\Site;
 use Symfony\Component\Process\PhpExecutableFinder;
 
 use function Laravel\Prompts\confirm;
@@ -69,6 +70,8 @@ class InstallCommand extends Command
             }
         }
 
+        $site = $this->createDefaultSite();
+
         if ($userModel::count() > 0
             && !confirm('There are already users in the database. Do you want to continue?')) {
             $this->components->info('No user created. All done.');
@@ -80,7 +83,15 @@ class InstallCommand extends Command
         $email = text('Enter the admin email', default: 'admin@admin.com');
         $password = password('Enter the admin password');
 
-        Process::run([(new PhpExecutableFinder)->find(), 'artisan', 'siteman:create-admin', $name, $email, $password], function ($type, $line) {
+        Process::run([
+            (new PhpExecutableFinder)->find(),
+            'artisan',
+            'siteman:create-admin',
+            $name,
+            $email,
+            $password,
+            '--site='.$site->id,
+        ], function ($type, $line) {
             $this->output->write($line);
         });
 
@@ -93,5 +104,24 @@ class InstallCommand extends Command
         $this->components->info('All done!');
 
         return self::SUCCESS;
+    }
+
+    protected function createDefaultSite(): Site
+    {
+        if ($site = Site::first()) {
+            $this->components->info("Using existing site: {$site->name}");
+
+            return $site;
+        }
+
+        $siteName = text('Enter the site name', default: config('app.name', 'My Site'));
+        $siteDomain = text('Enter the site domain (optional)', default: '', hint: 'e.g., example.com');
+
+        $this->call('siteman:make-site', [
+            'name' => $siteName,
+            '--domain' => $siteDomain ?: null,
+        ]);
+
+        return Site::latest()->first();
     }
 }

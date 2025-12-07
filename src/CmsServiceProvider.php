@@ -23,6 +23,7 @@ use Siteman\Cms\Commands\CreateAdminCommand;
 use Siteman\Cms\Commands\InstallCommand;
 use Siteman\Cms\Commands\MakeBlockCommand;
 use Siteman\Cms\Commands\MakeSettingsCommand;
+use Siteman\Cms\Commands\MakeSiteCommand;
 use Siteman\Cms\Commands\MakeThemeCommand;
 use Siteman\Cms\Commands\PublishCommand;
 use Siteman\Cms\Commands\UpdateCommand;
@@ -79,6 +80,7 @@ class CmsServiceProvider extends PackageServiceProvider
                 MakeThemeCommand::class,
                 MakeBlockCommand::class,
                 MakeSettingsCommand::class,
+                MakeSiteCommand::class,
                 CreateAdminCommand::class,
             ]);
 

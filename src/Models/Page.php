@@ -46,11 +46,11 @@ class Page extends Model implements Feedable, HasMedia, MenuItemInterface
     use HasFactory;
     use HasRecursiveRelationships;
     use HasSEO;
+    use HasSite;
     use HasTags;
     use InteractsWithMedia;
     use SoftDeletes;
     use Versionable;
-    use HasSite;
 
     protected array $versionable = ['title', 'slug', 'blocks', 'content', 'published_at'];
 

@@ -2,10 +2,11 @@
 
 namespace Siteman\Cms\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use RalphJSmit\Helpers\Laravel\Concerns\HasFactory;
+use Siteman\Cms\Database\Factories\SiteFactory;
 
 /**
  * @property int $id
@@ -17,6 +18,9 @@ use RalphJSmit\Helpers\Laravel\Concerns\HasFactory;
 class Site extends Model
 {
     use HasFactory;
+
+    protected static string $factory = SiteFactory::class;
+
     protected $guarded = [];
 
     public function users(): BelongsToMany

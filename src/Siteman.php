@@ -6,6 +6,7 @@ use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Siteman\Cms\Blocks\BlockRegistry;
@@ -13,6 +14,7 @@ use Siteman\Cms\Blocks\ImageBlock;
 use Siteman\Cms\Blocks\MarkdownBlock;
 use Siteman\Cms\Enums\FormHook;
 use Siteman\Cms\Models\Menu;
+use Siteman\Cms\Models\Site;
 use Siteman\Cms\PageTypes\BlogIndex;
 use Siteman\Cms\PageTypes\Page;
 use Siteman\Cms\PageTypes\RssFeed;
@@ -157,7 +159,7 @@ class Siteman
 
     public function createRole(string $name): Role
     {
-        return $this->getRoleModel()::create([
+        return $this->getRoleModel()::firstOrCreate([
             'name' => $name,
             'guard_name' => 'web',
         ]);
@@ -205,6 +207,34 @@ class Siteman
     public function getLoginUrl(): string
     {
         return route('filament.admin.auth.login');
+    }
+
+    public function getCurrentSite(): ?Site
+    {
+        if ($site = Context::get('current_site')) {
+            return $site;
+        }
+        $site = Filament::getTenant();
+        if ($site instanceof Site) {
+            $this->setCurrentSite($site);
+
+            return $site;
+        }
+        if ($site = Site::where('domain', request()->getHost())->first()) {
+            $this->setCurrentSite($site);
+
+            return $site;
+        }
+
+        return null;
+    }
+
+    public function setCurrentSite(Site|int $site): void
+    {
+        if (is_int($site)) {
+            $site = Site::findOrFail($site);
+        }
+        Context::add('current_site', $site);
     }
 
     protected function getDefaultPermissionIdentifier(string $resource): string
