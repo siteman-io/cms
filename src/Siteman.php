@@ -235,6 +235,8 @@ class Siteman
             $site = Site::findOrFail($site);
         }
         Context::add('current_site', $site);
+        Filament::setTenant($site, true);
+        app(PermissionRegistrar::class)->setPermissionsTeamId($site->id);
     }
 
     protected function getDefaultPermissionIdentifier(string $resource): string

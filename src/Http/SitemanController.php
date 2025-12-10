@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
 use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
-use Siteman\Cms\Models\Site;
 use Siteman\Cms\PageTypes\PageTypeInterface;
 
 class SitemanController

@@ -18,13 +18,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $site = Site::create(['name' => 'Workbench', 'slug' => 'workbench']);
+        Siteman::setCurrentSite($site);
+
         $user = User::factory()->create([
             'name' => 'Jane Doe',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
         $site->users()->attach($user);
-        setPermissionsTeamId($site->id);
 
         $user->assignRole(Siteman::createSuperAdminRole());
 

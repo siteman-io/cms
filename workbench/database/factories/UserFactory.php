@@ -61,18 +61,11 @@ class UserFactory extends Factory
         });
     }
 
-    public function isSuperAdmin(): static
-    {
-        return $this->afterCreating(function (User $user) {
-            $user->assignRole(Siteman::createSuperAdminRole());
-            $user->refresh();
-        });
-    }
-
     public function withPermissions(string|array $permissions): static
     {
         return $this->afterCreating(function (User $user) use ($permissions) {
-            $createdPermissions = collect($permissions)->map(fn ($permission) => Siteman::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard_name' => 'web']));
+            $createdPermissions = collect($permissions)->map(fn ($permission
+            ) => Siteman::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard_name' => 'web']));
             $user->givePermissionTo($createdPermissions);
             $user->refresh();
         });

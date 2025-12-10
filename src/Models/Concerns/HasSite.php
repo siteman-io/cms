@@ -24,7 +24,8 @@ trait HasSite
 
         static::addGlobalScope('site', function (Builder $query) {
             if ($site = Siteman::getCurrentSite()) {
-                $query->where('site_id', $site->id);
+                $table = $query->getModel()->getTable();
+                $query->where("{$table}.site_id", $site->id);
             }
         });
     }

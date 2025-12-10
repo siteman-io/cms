@@ -2,12 +2,11 @@
 
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\PageResource;
-use Workbench\App\Models\User;
 
 use function Pest\Laravel\actingAs;
 
 beforeEach(function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+    actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
 });
 
 it('renders tree with root and nested pages', function () {

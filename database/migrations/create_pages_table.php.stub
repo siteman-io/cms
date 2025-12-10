@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('type')->default('page');
             $table->string('title');
             $table->string('slug');
-            $table->string('computed_slug')->unique();
+            $table->string('computed_slug');
             $table->json('blocks')->nullable();
             $table->string('layout')->nullable();
             $table->timestamp('published_at')->nullable();
@@ -25,11 +25,11 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // Indexes for tree queries and ordering
             $table->index('parent_id');
             $table->index('order');
             $table->index(['parent_id', 'order']); // Composite index for efficient sibling ordering
-            $table->index('type'); // For filtering by page type
+            $table->index('type');
+            $table->unique(['site_id', 'computed_slug']);
         });
     }
 

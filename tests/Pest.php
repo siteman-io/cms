@@ -8,7 +8,6 @@ use Siteman\Cms\Tests\TestCase;
 
 uses(TestCase::class)->in('Feature', 'Browser');
 
-
 function createSite(string $name = 'workbench'): Site
 {
     /** @var Site $site */
