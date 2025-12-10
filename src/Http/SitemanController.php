@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Siteman\Cms\Http;
 
@@ -12,6 +12,12 @@ class SitemanController
 {
     public function __invoke(Request $request): mixed
     {
+        $site = Siteman::getCurrentSite();
+
+        if (!$site) {
+            abort(404, 'Site not found');
+        }
+
         $page = Page::published()->where('computed_slug', '/'.ltrim($request->path(), '/'))->first();
         if (!$page) {
             $rootPath = '/'.str($request->path())->before('/');

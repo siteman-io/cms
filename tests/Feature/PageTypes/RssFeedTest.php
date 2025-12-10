@@ -3,6 +3,8 @@
 use Siteman\Cms\Models\Page;
 
 it('shows an rss feed', function () {
+    createSite();
+
     Page::factory()->published()->create(['type' => 'rss_feed', 'slug' => '/rss']);
 
     $posts = Page::factory()

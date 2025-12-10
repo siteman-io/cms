@@ -1,28 +1,26 @@
 <?php declare(strict_types=1);
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Resources\Menus\Pages\ListMenus;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('needs permission to list menus', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(ListMenus::getUrl())
+    $this->get(ListMenus::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions('view_any_menu')->create();
+    $this->actingAs(createUser(permissions: ['view_any_menu']));
 
-    actingAs($user2)
-        ->get(ListMenus::getUrl())
+    $this->get(ListMenus::getUrl(tenant: $site))
         ->assertOk();
 });
 
 it('can update menu location assignments', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'create_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'create_menu']));
 
     $menu = Menu::factory()->create();
     livewire(ListMenus::class)

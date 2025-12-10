@@ -13,6 +13,8 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Resources\Users\Pages\CreateUser;
 use Siteman\Cms\Resources\Users\Pages\EditUser;
 use Siteman\Cms\Resources\Users\Pages\ListUsers;
@@ -21,9 +23,22 @@ class UserResource extends Resource
 {
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static bool $isScopedToTenant = false;
+
     public static function getModel(): string
     {
         return config('siteman.models.user');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if ($site = Siteman::getCurrentSite()) {
+            return $query->whereHas('sites', fn (Builder $q) => $q->where('sites.id', $site->id));
+        }
+
+        return $query;
     }
 
     public static function form(Schema $schema): Schema

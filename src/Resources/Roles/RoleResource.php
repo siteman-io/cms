@@ -7,12 +7,12 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Siteman\Cms\Models\Role;
 use Siteman\Cms\Resources\Roles\Pages\CreateRole;
 use Siteman\Cms\Resources\Roles\Pages\EditRole;
 use Siteman\Cms\Resources\Roles\Pages\ListRoles;
 use Siteman\Cms\Resources\Roles\Schemas\RoleForm;
 use Siteman\Cms\Resources\Roles\Tables\RolesTable;
-use Spatie\Permission\Models\Role;
 use UnitEnum;
 
 class RoleResource extends Resource

@@ -8,7 +8,10 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Siteman\Cms\Http\Middleware\SitePermissionMiddleware;
 use Siteman\Cms\Models\Page;
+use Siteman\Cms\Models\Site;
+use Siteman\Cms\Pages\EditSite;
 use Siteman\Cms\Pages\SettingsPage;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Siteman\Cms\Resources\Menus\MenuResource;
@@ -32,6 +35,12 @@ class SitemanPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
+        $panel
+            ->tenant(Site::class, 'slug', 'site')
+            ->tenantMiddleware([SitePermissionMiddleware::class], true)
+            ->tenantProfile(EditSite::class)
+            ->tenantMenu();
+
         $panel->navigationGroups([
             NavigationGroup::make('Content')->collapsible(false),
             NavigationGroup::make('Admin')->collapsible()->collapsed(),

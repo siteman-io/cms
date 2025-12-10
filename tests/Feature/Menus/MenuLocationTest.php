@@ -2,13 +2,11 @@
 
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Resources\Menus\Pages\ListMenus;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('can update menu location assignments', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'create_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'create_menu']));
 
     $menu = Menu::factory()->create();
     livewire(ListMenus::class)

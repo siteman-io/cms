@@ -3,12 +3,9 @@
 use Livewire\Livewire;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Pages\EditPage;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
 
 beforeEach(function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page']));
 });
 
 it('renders edit form for selected page', function () {

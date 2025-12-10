@@ -2,18 +2,15 @@
 
 use Filament\Actions\Testing\TestAction;
 use Livewire\Livewire;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Livewire\PageTree;
+use Siteman\Cms\Resources\Pages\PageResource;
 use Siteman\Cms\Resources\Pages\Pages\PageTreeSplitView;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
 
 describe('Create Child Action', function () {
     it('shows create child action for users with create permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'create_page']));
 
         $page = Page::factory()->create(['title' => 'Parent Page', 'slug' => '/parent']);
 
@@ -22,8 +19,7 @@ describe('Create Child Action', function () {
     });
 
     it('hides create child action for users without create permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page']));
 
         $page = Page::factory()->create(['title' => 'Parent Page', 'slug' => '/parent']);
 
@@ -32,8 +28,7 @@ describe('Create Child Action', function () {
     });
 
     it('disables create child action at max depth (level 3)', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'create_page']));
 
         // Create a page at level 3 (depth = 2)
         $root = Page::factory()->create(['title' => 'Root', 'slug' => '/root', 'parent_id' => null]);
@@ -45,8 +40,7 @@ describe('Create Child Action', function () {
     });
 
     it('enables create child action below max depth', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'create_page']));
 
         // Create a page at level 2 (depth = 1)
         $root = Page::factory()->create(['title' => 'Root', 'slug' => '/root', 'parent_id' => null]);
@@ -57,8 +51,8 @@ describe('Create Child Action', function () {
     });
 
     it('creates child page with modal form', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
-        actingAs($user);
+        $user = createUser(permissions: ['view_any_page', 'create_page']);
+        $this->actingAs($user);
 
         $parent = Page::factory()->create(['title' => 'Parent Page', 'slug' => '/parent']);
 
@@ -83,8 +77,7 @@ describe('Create Child Action', function () {
 
 describe('Parent Navigation', function () {
     it('shows go to parent link when page has parent', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $parent = Page::factory()
             ->withChildren(1)
@@ -99,22 +92,20 @@ describe('Parent Navigation', function () {
     });
 
     it('hides go to parent link when page has no parent', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
+        $site = Siteman::getCurrentSite();
 
         $root = Page::factory()->create(['title' => 'Root Page', 'slug' => '/root', 'parent_id' => null]);
 
-        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('index', ['selectedPageId' => $root->id]));
-
-        $response->assertOk()
+        $this->get(PageResource::getUrl('index', ['selectedPageId' => $root->id], tenant: $site))
+            ->assertOk()
             ->assertDontSee('Go to Parent');
     });
 });
 
 describe('Breadcrumb Navigation', function () {
     it('shows clickable breadcrumbs for nested page', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $root = Page::factory()->create(['title' => 'Root Page', 'slug' => '/root']);
         $level2 = Page::factory()->create(['title' => 'Level 2', 'slug' => '/level-2', 'parent_id' => $root->id]);
@@ -138,8 +129,7 @@ describe('Breadcrumb Navigation', function () {
     });
 
     it('breadcrumb URLs are clickable and navigate to pages', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $root = Page::factory()->create(['title' => 'Root Page', 'slug' => '/root']);
         $child = Page::factory()->create(['title' => 'Child Page', 'slug' => '/child', 'parent_id' => $root->id]);
@@ -150,8 +140,7 @@ describe('Breadcrumb Navigation', function () {
     });
 
     it('hides breadcrumbs when no page is selected', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $component = Livewire::test(PageTreeSplitView::class);
         $breadcrumbs = $component->instance()->getBreadcrumbs();
@@ -163,8 +152,7 @@ describe('Breadcrumb Navigation', function () {
 
 describe('Children Navigation', function () {
     it('shows children links when page has children', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $parent = Page::factory()
             ->withChildren([
@@ -181,20 +169,18 @@ describe('Children Navigation', function () {
     });
 
     it('hides children section when page has no children', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
+        $site = Siteman::getCurrentSite();
 
         $leaf = Page::factory()->create(['title' => 'Leaf Page', 'slug' => '/leaf']);
 
-        $response = get(\Siteman\Cms\Resources\Pages\PageResource::getUrl('index', ['selectedPageId' => $leaf->id]));
-
-        $response->assertOk()
+        $this->get(PageResource::getUrl('index', ['selectedPageId' => $leaf->id], tenant: $site))
+            ->assertOk()
             ->assertDontSee('Children (');
     });
 
     it('navigates to child page when clicked', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $parent = Page::factory()->create(['title' => 'Parent Page', 'slug' => '/parent']);
         $child = Page::factory()->create(['title' => 'Child Page', 'slug' => '/child', 'parent_id' => $parent->id]);

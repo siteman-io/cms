@@ -2,13 +2,11 @@
 
 use Filament\GlobalSearch\GlobalSearchResults;
 use Filament\Livewire\GlobalSearch;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('does not find settings in search if not authorized', function () {
-    actingAs(User::factory()->create());
+    $this->actingAs(createUser());
 
     livewire(GlobalSearch::class, ['search' => 'general'])
         ->call('getResults')
@@ -16,7 +14,7 @@ it('does not find settings in search if not authorized', function () {
 });
 
 it('finds settings in search if authorized', function () {
-    actingAs(User::factory()->withPermissions(['page_SettingsPage'])->create());
+    $this->actingAs(createUser(permissions: ['page_SettingsPage']));
 
     livewire(GlobalSearch::class, ['search' => 'general'])
         ->call('getResults')

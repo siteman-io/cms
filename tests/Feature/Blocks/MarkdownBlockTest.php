@@ -3,6 +3,8 @@
 use Siteman\Cms\Models\Page;
 
 it('does not show the table of contents by default', function () {
+    createSite();
+
     Page::factory()
         ->published()
         ->withMarkdownBlock()
@@ -14,6 +16,8 @@ it('does not show the table of contents by default', function () {
 });
 
 it('can show the table of contents', function () {
+    createSite();
+
     Page::factory()
         ->published()
         ->withMarkdownBlock(true)

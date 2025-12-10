@@ -3,10 +3,15 @@
 namespace Workbench\App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Siteman\Cms\Models\Site;
 use Spatie\Permission\Traits\HasRoles;
 use Workbench\Database\Factories\UserFactory;
 
@@ -16,7 +21,7 @@ use Workbench\Database\Factories\UserFactory;
  * @property string $email
  * @property string $password
  */
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasTenants
 {
     use HasFactory, HasRoles, Notifiable;
 
@@ -56,5 +61,20 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function sites(): BelongsToMany
+    {
+        return $this->belongsToMany(Site::class)->withTimestamps();
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->sites()->where('sites.id', $tenant->id)->exists();
+    }
+
+    public function getTenants(Panel $panel): array|Collection
+    {
+        return $this->sites;
     }
 }

@@ -2,13 +2,11 @@
 
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Resources\Menus\Pages\EditMenu;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('needs permission to delete menus', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Old Name']);
 
     livewire(EditMenu::class, ['record' => $menu->id])
@@ -16,7 +14,7 @@ it('needs permission to delete menus', function () {
 });
 
 it('can delete menus', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu', 'delete_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu', 'delete_menu']));
     $menu = Menu::factory()->create(['name' => 'Old Name']);
 
     livewire(EditMenu::class, ['record' => $menu->id])

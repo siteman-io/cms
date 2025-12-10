@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Siteman\Cms\Facades\Siteman;
+use Siteman\Cms\Models\Site;
 use Workbench\App\Models\User;
 
 /**
@@ -53,18 +54,18 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function isSuperAdmin(): static
+    public function forSite(Site $site): static
     {
-        return $this->afterCreating(function (User $user) {
-            $user->assignRole(Siteman::createSuperAdminRole());
-            $user->refresh();
+        return $this->afterCreating(function (User $user) use ($site) {
+            $user->sites()->attach($site);
         });
     }
 
     public function withPermissions(string|array $permissions): static
     {
         return $this->afterCreating(function (User $user) use ($permissions) {
-            $createdPermissions = collect($permissions)->map(fn ($permission) => Siteman::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard_name' => 'web']));
+            $createdPermissions = collect($permissions)->map(fn ($permission
+            ) => Siteman::getPermissionModel()::firstOrCreate(['name' => $permission, 'guard_name' => 'web']));
             $user->givePermissionTo($createdPermissions);
             $user->refresh();
         });

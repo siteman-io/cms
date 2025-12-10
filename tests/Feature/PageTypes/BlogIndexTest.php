@@ -3,6 +3,8 @@
 use Siteman\Cms\Models\Page;
 
 it('can render a blog index page', function () {
+    createSite();
+
     $blog = Page::factory()->published()->create([
         'type' => 'blog_index',
         'title' => 'Blog Index',

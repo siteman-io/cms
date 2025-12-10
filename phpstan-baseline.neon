@@ -61,10 +61,28 @@ parameters:
 			path: database/factories/PageFactory.php
 
 		-
+			message: '#^Return type \(array\<string, mixed\>\) of method Siteman\\Cms\\Database\\Factories\\SiteFactory\:\:definition\(\) should be compatible with return type \(array\<model property of Siteman\\Cms\\Models\\Site, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<Siteman\\Cms\\Models\\Site\>\:\:definition\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: database/factories/SiteFactory.php
+
+		-
 			message: '#^PHPDoc tag @var with type Filament\\Forms\\Components\\Field is not subtype of native type \$this\(Siteman\\Cms\\CmsServiceProvider\)\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: src/CmsServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$site_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Menu.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$site_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Page.php
 
 		-
 			message: '#^Method Siteman\\Cms\\Models\\Page\:\:getChildren\(\) should return Illuminate\\Support\\Collection\<int, Siteman\\Cms\\Contracts\\MenuItemInterface\> but returns Staudenmeir\\LaravelAdjacencyList\\Eloquent\\Collection\<int, static\(Siteman\\Cms\\Models\\Page\)\>\.$#'
@@ -83,6 +101,12 @@ parameters:
 			identifier: nullCoalesce.offset
 			count: 1
 			path: src/Models/Page.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$site_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Role.php
 
 		-
 			message: '#^Call to an undefined method Filament\\Forms\\Components\\Textarea\:\:asPageMetaField\(\)\.$#'

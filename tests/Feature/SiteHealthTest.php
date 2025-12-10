@@ -1,5 +1,6 @@
 <?php
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Pages\SiteHealthPage;
 use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
@@ -9,9 +10,7 @@ use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\Facades\Health;
 use Spatie\Health\ResultStores\ResultStore;
 use Spatie\Health\ResultStores\StoredCheckResults\StoredCheckResult;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('registers the checks properly', function () {
@@ -34,21 +33,20 @@ it('runs registers the scheduler correctly', function () {
 });
 
 it('needs permission to view site health page', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(SiteHealthPage::getUrl())
+    $this->get(SiteHealthPage::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions(['page_SiteHealthPage'])->create();
+    $this->actingAs(createUser(permissions: ['page_SiteHealthPage']));
 
-    actingAs($user2)
-        ->get(SiteHealthPage::getUrl())
+    $this->get(SiteHealthPage::getUrl(tenant: $site))
         ->assertOk();
 });
 
 it('can execute the site health check', function () {
-    actingAs(User::factory()->withPermissions(['page_SiteHealthPage'])->create());
+    $this->actingAs(createUser(permissions: ['page_SiteHealthPage']));
 
     livewire(SiteHealthPage::class, [])->call('refresh');
 
@@ -56,7 +54,7 @@ it('can execute the site health check', function () {
 });
 
 it('shows when the last check was executed', function () {
-    actingAs(User::factory()->withPermissions(['page_SiteHealthPage'])->create());
+    $this->actingAs(createUser(permissions: ['page_SiteHealthPage']));
 
     Artisan::call(RunHealthChecksCommand::class);
 

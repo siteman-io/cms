@@ -1,29 +1,27 @@
 <?php declare(strict_types=1);
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Menu;
 use Siteman\Cms\Resources\Menus\Pages\EditMenu;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('needs permission to update menus', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
     $menu = Menu::factory()->create();
 
-    actingAs($user)
-        ->get(EditMenu::getUrl([$menu]))
+    $this->get(EditMenu::getUrl([$menu], tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create();
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
 
-    actingAs($user2)
-        ->get(EditMenu::getUrl([$menu]))
+    $this->get(EditMenu::getUrl([$menu], tenant: $site))
         ->assertOk();
 });
 
 it('can update menus', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Old Name']);
 
     livewire(EditMenu::class, ['record' => $menu->id])

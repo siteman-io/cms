@@ -1,20 +1,17 @@
 <?php declare(strict_types=1);
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Resources\Users\Pages\ListUsers;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
 
 it('needs permission to list users', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(ListUsers::getUrl())
+    $this->get(ListUsers::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions(['view_any_user'])->create();
+    $this->actingAs(createUser(permissions: ['view_any_user']));
 
-    actingAs($user2)
-        ->get(ListUsers::getUrl())
+    $this->get(ListUsers::getUrl(tenant: $site))
         ->assertOk();
 });

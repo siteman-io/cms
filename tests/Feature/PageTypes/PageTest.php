@@ -3,6 +3,8 @@
 use Siteman\Cms\Models\Page;
 
 it('shows only published pages', function () {
+    createSite();
+
     Page::factory()
         ->create([
             'published_at' => null,
@@ -20,6 +22,8 @@ it('shows only published pages', function () {
 });
 
 it('can render with a layout', function () {
+    createSite();
+
     Page::factory()
         ->published()
         ->create([

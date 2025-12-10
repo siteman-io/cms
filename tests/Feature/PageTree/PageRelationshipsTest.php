@@ -1,12 +1,9 @@
 <?php declare(strict_types=1);
 
 use Siteman\Cms\Models\Page;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
 
 beforeEach(function () {
-    actingAs(User::factory()->create());
+    $this->actingAs(createUser());
 });
 
 it('can have parent-child relationships', function () {

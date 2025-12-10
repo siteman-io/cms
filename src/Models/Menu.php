@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Siteman\Cms\Database\Factories\MenuFactory;
+use Siteman\Cms\Models\Concerns\HasSite;
 
 /**
  * @property int $id
@@ -24,6 +25,7 @@ use Siteman\Cms\Database\Factories\MenuFactory;
 class Menu extends Model
 {
     use HasFactory;
+    use HasSite;
 
     protected static string $factory = MenuFactory::class;
 

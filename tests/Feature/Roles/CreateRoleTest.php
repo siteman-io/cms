@@ -1,20 +1,17 @@
 <?php declare(strict_types=1);
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Resources\Roles\Pages\CreateRole;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
 
 it('needs permission to create a role', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(CreateRole::getUrl())
+    $this->get(CreateRole::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions(['view_any_role', 'create_role'])->create();
+    $this->actingAs(createUser(permissions: ['view_any_role', 'create_role']));
 
-    actingAs($user2)
-        ->get(CreateRole::getUrl())
+    $this->get(CreateRole::getUrl(tenant: $site))
         ->assertOk();
 });

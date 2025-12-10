@@ -1,27 +1,25 @@
 <?php
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Pages\SettingsPage;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('needs permission to view settings page', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(SettingsPage::getUrl())
+    $this->get(SettingsPage::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions(['page_SettingsPage'])->create();
+    $this->actingAs(createUser(permissions: ['page_SettingsPage']));
 
-    actingAs($user2)
-        ->get(SettingsPage::getUrl())
+    $this->get(SettingsPage::getUrl(tenant: $site))
         ->assertOk();
 });
 
 it('can update settings', function () {
-    actingAs(User::factory()->withPermissions(['page_SettingsPage'])->create());
+    $this->actingAs(createUser(permissions: ['page_SettingsPage']));
 
     $page = livewire(SettingsPage::class);
     $page->assertSchemaExists('generalSettingsForm');
