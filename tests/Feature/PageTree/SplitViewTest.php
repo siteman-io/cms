@@ -1,32 +1,32 @@
 <?php declare(strict_types=1);
 
 use Livewire\Livewire;
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\PageResource;
 use Siteman\Cms\Resources\Pages\Pages\PageTreeSplitView;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
 
 it('loads split view page without errors', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
+    $site = Siteman::getCurrentSite();
 
-    get(PageResource::getUrl())
+    $this->get(PageResource::getUrl(tenant: $site))
         ->assertOk()
         ->assertSeeLivewire('page-tree');
 });
 
 it('shows empty state when no page is selected', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
+    $site = Siteman::getCurrentSite();
 
-    get(PageResource::getUrl())
+    $this->get(PageResource::getUrl(tenant: $site))
         ->assertOk()
         ->assertSee(__('siteman::page.tree.empty_selection'));
 });
 
 it('tracks selected page ID from URL parameter', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page', 'delete_page']));
+    $site = Siteman::getCurrentSite();
 
     $page = Page::factory()->create([
         'title' => 'Test Page',
@@ -36,12 +36,12 @@ it('tracks selected page ID from URL parameter', function () {
 
     // Just verify the page loads with the parameter
     // The selectedPageId property will be available to the view
-    get(PageResource::getUrl('index', ['selectedPageId' => $page->id]))
+    $this->get(PageResource::getUrl('index', ['selectedPageId' => $page->id], tenant: $site))
         ->assertOk();
 });
 
 it('loads edit form when page is selected', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page', 'delete_page']));
 
     $page = Page::factory()->create([
         'title' => 'Test Page',
@@ -57,7 +57,7 @@ it('loads edit form when page is selected', function () {
 });
 
 it('updates edit panel when selecting different pages', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page', 'delete_page']));
 
     $page1 = Page::factory()->create([
         'title' => 'First Page',
@@ -82,7 +82,7 @@ it('updates edit panel when selecting different pages', function () {
 });
 
 it('listens to page-selected event and updates selectedPageId', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page', 'delete_page']));
 
     $page = Page::factory()->create([
         'title' => 'Test Page',
@@ -98,7 +98,7 @@ it('listens to page-selected event and updates selectedPageId', function () {
 });
 
 it('can save changes to selected page', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page', 'delete_page']));
 
     $page = Page::factory()->create([
         'title' => 'Original Title',

@@ -3,11 +3,10 @@
 use Siteman\Cms\Resources\Users\Pages\CreateUser;
 use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('can create a new user', function () {
-    actingAs(User::factory()->withPermissions(['view_any_user', 'create_user'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_user', 'create_user']));
 
     livewire(CreateUser::class)
         ->fillForm([

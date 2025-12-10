@@ -1,20 +1,17 @@
 <?php declare(strict_types=1);
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Resources\Roles\Pages\ListRoles;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
 
 it('needs permission to list roles', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(ListRoles::getUrl())
+    $this->get(ListRoles::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions('view_any_role')->create();
+    $this->actingAs(createUser(permissions: ['view_any_role']));
 
-    actingAs($user2)
-        ->get(ListRoles::getUrl())
+    $this->get(ListRoles::getUrl(tenant: $site))
         ->assertOk();
 });

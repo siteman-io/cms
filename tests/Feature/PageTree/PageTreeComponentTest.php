@@ -2,13 +2,11 @@
 
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Livewire\PageTree;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 beforeEach(function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
 });
 
 it('loads root pages with descendants', function () {
@@ -129,7 +127,7 @@ it('refreshes when page:deleted event is received', function () {
 });
 
 it('refreshes when page-reordered event is received', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page']));
 
     $parent = Page::factory()->create([
         'title' => 'Parent',
@@ -166,7 +164,7 @@ it('refreshes when page-reordered event is received', function () {
 });
 
 it('reorder method updates page order and parent correctly', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page']));
 
     // Create parent page
     $parent = Page::factory()->create([
@@ -298,7 +296,7 @@ it('reorder method handles large batches (200+ pages)', function () {
 });
 
 it('reorder method handles string null from JavaScript for root level pages', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'update_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'update_page']));
 
     // Create 2 root pages
     $page1 = Page::factory()->create([
@@ -334,7 +332,7 @@ it('reorder method handles string null from JavaScript for root level pages', fu
 });
 
 it('loads pages with depth attribute in tree structure', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'delete_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
 
     $level1 = Page::factory()->create(['title' => 'Level 1']);
     $level2 = Page::factory()->create([
@@ -400,8 +398,7 @@ it('enforces permissions for delete action', function () {
     ]);
 
     // Test with user WITHOUT delete permission - delete should fail silently or be unauthorized
-    $userWithoutPermission = User::factory()->withPermissions(['view_any_page'])->create();
-    actingAs($userWithoutPermission);
+    $this->actingAs(createUser(permissions: ['view_any_page']));
 
     // Attempt to call delete action should not work (action is not visible)
     // We can't use assertActionHidden because it causes rendering issues
@@ -412,8 +409,7 @@ it('enforces permissions for delete action', function () {
     expect(Page::find($page1->id))->not->toBeNull();
 
     // Test with user WITH delete permission
-    $userWithPermission = User::factory()->withPermissions(['view_any_page', 'delete_page'])->create();
-    actingAs($userWithPermission);
+    $this->actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
 
     // Verify user has permission
     expect(auth()->user()->can('delete_page'))->toBeTrue();

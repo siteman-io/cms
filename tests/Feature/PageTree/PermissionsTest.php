@@ -4,14 +4,10 @@ use Livewire\Livewire;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Livewire\PageTree;
 use Siteman\Cms\Resources\Pages\Pages\PageTreeSplitView;
-use Workbench\App\Models\User;
-
-use function Pest\Laravel\actingAs;
 
 describe('Form-Level Permissions', function () {
     it('disables form for users without update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page']));
 
         $page = Page::factory()->create([
             'title' => 'Test Page',
@@ -25,9 +21,7 @@ describe('Form-Level Permissions', function () {
     });
 
     it('enables form for users with update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
-
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
         $page = Page::factory()->create([
             'title' => 'Test Page',
             'slug' => '/test',
@@ -40,8 +34,7 @@ describe('Form-Level Permissions', function () {
     });
 
     it('blocks save attempt by user without update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page']));
 
         $page = Page::factory()->create([
             'title' => 'Original Title',
@@ -58,8 +51,7 @@ describe('Form-Level Permissions', function () {
     });
 
     it('allows save by user with update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page', 'update_page']));
 
         $page = Page::factory()->create([
             'title' => 'Original Title',
@@ -78,8 +70,7 @@ describe('Form-Level Permissions', function () {
 
 describe('Action-Level Permissions', function () {
     it('hides delete action in tree when user lacks delete permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page']));
 
         Page::factory()->create(['title' => 'Test Page', 'slug' => '/test']);
 
@@ -91,8 +82,7 @@ describe('Action-Level Permissions', function () {
     });
 
     it('shows delete action in tree when user has delete permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'delete_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'delete_page']));
 
         Page::factory()->create(['title' => 'Test Page', 'slug' => '/test']);
 
@@ -106,8 +96,7 @@ describe('Action-Level Permissions', function () {
 
 describe('Tree Operation Permissions', function () {
     it('blocks reorder attempt by user without update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page']));
 
         $page1 = Page::factory()->create(['title' => 'Page 1', 'slug' => '/page-1', 'order' => 1]);
         $page2 = Page::factory()->create(['title' => 'Page 2', 'slug' => '/page-2', 'order' => 2]);
@@ -122,8 +111,7 @@ describe('Tree Operation Permissions', function () {
     });
 
     it('allows reorder by user with update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'update_page']));
 
         $page1 = Page::factory()->create(['title' => 'Page 1', 'slug' => '/page-1', 'order' => 1]);
         $page2 = Page::factory()->create(['title' => 'Page 2', 'slug' => '/page-2', 'order' => 2]);
@@ -137,8 +125,7 @@ describe('Tree Operation Permissions', function () {
     });
 
     it('hides reorder handle when user lacks update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'view_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'view_page']));
 
         Page::factory()->create(['title' => 'Test Page', 'slug' => '/test']);
 
@@ -150,8 +137,7 @@ describe('Tree Operation Permissions', function () {
     });
 
     it('shows reorder handle when user has update permission', function () {
-        $user = User::factory()->withPermissions(['view_any_page', 'update_page'])->create();
-        actingAs($user);
+        $this->actingAs(createUser(permissions: ['view_any_page', 'update_page']));
 
         Page::factory()->create(['title' => 'Test Page', 'slug' => '/test']);
 

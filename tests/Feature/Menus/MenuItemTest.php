@@ -7,13 +7,11 @@ use Siteman\Cms\Resources\Menus\Livewire\CreateCustomLink;
 use Siteman\Cms\Resources\Menus\Livewire\CreateCustomText;
 use Siteman\Cms\Resources\Menus\Livewire\CreatePageLink;
 use Siteman\Cms\Resources\Menus\Livewire\MenuItems;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('can create a page link as a menu item', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $page = Page::factory()->create();
 
@@ -28,7 +26,7 @@ it('can create a page link as a menu item', function () {
 });
 
 it('can create a custom link as a menu item', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
 
     livewire(CreateCustomLink::class, ['menu' => $menu])
@@ -44,7 +42,7 @@ it('can create a custom link as a menu item', function () {
 });
 
 it('can create a custom text as a menu item', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
 
     livewire(CreateCustomText::class, ['menu' => $menu])
@@ -58,7 +56,7 @@ it('can create a custom text as a menu item', function () {
 });
 
 it('can update menu items', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
     $menuItem = $menu->menuItems->first();
 
@@ -76,7 +74,7 @@ it('can update menu items', function () {
 });
 
 it('can delete menu items', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
 
     livewire(MenuItems::class, ['menu' => $menu])
@@ -87,7 +85,7 @@ it('can delete menu items', function () {
 });
 
 it('can create a page link with include_children flag', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $page = Page::factory()->published()->withChildren(2)->create();
 
@@ -107,7 +105,7 @@ it('can create a page link with include_children flag', function () {
 });
 
 it('include children toggle is visible only for pages with children', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $pageWithChildren = Page::factory()->published()->withChildren(2)->create();
     $pageWithoutChildren = Page::factory()->published()->create();
@@ -124,7 +122,7 @@ it('include children toggle is visible only for pages with children', function (
 });
 
 it('menu item with include_children stores the flag in meta', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $page = Page::factory()->published()->withChildren(3)->create();
 
@@ -147,7 +145,7 @@ it('menu item with include_children stores the flag in meta', function () {
 });
 
 it('children includes page children when include_children is enabled', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $page = Page::factory()->published()->withChildren(3)->create();
 
@@ -172,7 +170,7 @@ it('children includes page children when include_children is enabled', function 
 });
 
 it('children returns empty when include_children is disabled', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $page = Page::factory()->published()->withChildren(3)->create();
 
@@ -191,7 +189,7 @@ it('children returns empty when include_children is disabled', function () {
 });
 
 it('can update include_children via edit action', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->create(['name' => 'Test Menu']);
     $page = Page::factory()->published()->withChildren(2)->create();
 
@@ -216,7 +214,7 @@ it('can update include_children via edit action', function () {
 });
 
 it('can create a child page link via createChildAction', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
     $parentItem = $menu->menuItems->first();
     $page = Page::factory()->published()->create();
@@ -237,7 +235,7 @@ it('can create a child page link via createChildAction', function () {
 });
 
 it('can create a child custom link via createChildAction', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
     $parentItem = $menu->menuItems->first();
 
@@ -259,7 +257,7 @@ it('can create a child custom link via createChildAction', function () {
 });
 
 it('can create a child custom text via createChildAction', function () {
-    actingAs(User::factory()->withPermissions(['view_any_menu', 'update_menu'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_menu', 'update_menu']));
     $menu = Menu::factory()->withItems(['https://siteman.io'])->create(['name' => 'Test Menu']);
     $parentItem = $menu->menuItems->first();
 

@@ -1,28 +1,26 @@
 <?php declare(strict_types=1);
 
+use Siteman\Cms\Facades\Siteman;
 use Siteman\Cms\Models\Page;
 use Siteman\Cms\Resources\Pages\Pages\CreatePage;
-use Workbench\App\Models\User;
 
-use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 it('needs permission to create pages', function () {
-    $user = User::factory()->create();
+    $this->actingAs(createUser());
+    $site = Siteman::getCurrentSite();
 
-    actingAs($user)
-        ->get(CreatePage::getUrl())
+    $this->get(CreatePage::getUrl(tenant: $site))
         ->assertForbidden();
 
-    $user2 = User::factory()->withPermissions(['view_any_page', 'create_page'])->create();
+    $this->actingAs(createUser(permissions: ['view_any_page', 'create_page']));
 
-    actingAs($user2)
-        ->get(CreatePage::getUrl())
+    $this->get(CreatePage::getUrl(tenant: $site))
         ->assertOk();
 });
 
 it('can create pages', function () {
-    actingAs(User::factory()->withPermissions(['view_any_page', 'create_page'])->create());
+    $this->actingAs(createUser(permissions: ['view_any_page', 'create_page']));
 
     livewire(CreatePage::class)
         ->fillForm([
