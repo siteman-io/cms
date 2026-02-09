@@ -43,7 +43,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
-        "filament/upgrade": "^4.0",
+        "filament/upgrade": "^5.2",
         "larastan/larastan": "^3.0.2",
         "laravel/boost": "^1.8",
         "laravel/pint": "^1.14",
